@@ -421,17 +421,31 @@
     const lockScreen = document.getElementById('lock-screen');
     
     let isDragging = false;
-    let startX;
-    
-    thumb.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX - thumb.offsetLeft;
-    });
+    let startX; // смещение относительно левого края thumb
 
-    document.addEventListener('mousemove', (e) => {
+    // Функция для получения координаты касания/мыши
+    function getClientX(e) {
+        if (e.touches) {
+            return e.touches[0].clientX;
+        }
+        return e.clientX;
+    }
+
+    // Начало перетаскивания
+    function startDrag(e) {
+        e.preventDefault(); // отключаем выделение текста и прокрутку
+        isDragging = true;
+        const clientX = getClientX(e);
+        startX = clientX - thumb.offsetLeft;
+    }
+
+    // Перемещение
+    function onDrag(e) {
         if (!isDragging) return;
-        
-        let newLeft = e.clientX - startX;
+        e.preventDefault(); // особенно важно для touchmove, чтобы страница не скроллилась
+
+        const clientX = getClientX(e);
+        let newLeft = clientX - startX;
         const maxLeft = track.offsetWidth - thumb.offsetWidth - 10; // 10px отступ (5+5)
         
         // Ограничиваем движение внутри "металлического жёлоба"
@@ -448,21 +462,35 @@
                 lockScreen.classList.add('unlocked');
             }, 100);
         }
-    });
+    }
 
-    document.addEventListener('mouseup', () => {
+    // Завершение перетаскивания
+    function stopDrag(e) {
         if (!isDragging) return;
+        e.preventDefault();
         isDragging = false;
-        // Если не дотянули до конца - пружинит обратно
+
         const currentLeft = parseInt(thumb.style.left || 5, 10);
         const maxLeft = track.offsetWidth - thumb.offsetWidth - 10;
         
+        // Если не дотянули до конца - пружинит обратно
         if (currentLeft < maxLeft - 5) {
             thumb.style.transition = 'left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             thumb.style.left = '5px';
             setTimeout(() => { thumb.style.transition = 'none'; }, 300);
         }
-    });
+    }
+
+    // Мышиные события
+    thumb.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('mouseup', stopDrag);
+
+    // Сенсорные события
+    thumb.addEventListener('touchstart', startDrag, { passive: false });
+    document.addEventListener('touchmove', onDrag, { passive: false });
+    document.addEventListener('touchend', stopDrag);
+    document.addEventListener('touchcancel', stopDrag); // на случай прерывания жеста
 
     // --- Логика открытия/закрытия окон ---
     const calcWindow = document.getElementById('calc-window');
