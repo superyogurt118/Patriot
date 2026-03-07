@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>patriotOS Concept</title>
+    <title>patriotOS beta</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap');
 
@@ -118,21 +118,20 @@
             text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
         }
 
-        /* РАБОЧИЙ СТОЛ с обоями из папки wallpapers */
+        /* РАБОЧИЙ СТОЛ */
         #desktop {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url('wallpapers/desktop.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* Запасной фон, если изображение не загрузится */
             background-color: #2b4b3c;
             z-index: 10;
             display: flex;
-            flex-direction: row;  /* док слева, остальное пространство свободно */
+            flex-direction: row;
             align-items: stretch;
             padding: 16px;
+            transition: background-image 0.5s ease;
         }
 
         /* Вертикальный док слева */
@@ -147,12 +146,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* иконки сверху вниз */
+            justify-content: flex-start;
             gap: 20px;
             padding: 20px 5px;
-            margin-right: 20px; /* отступ от левого края */
+            margin-right: 20px;
             height: auto;
-            align-self: center; /* вертикальное центрирование дока */
+            align-self: center;
         }
 
         .icon {
@@ -193,6 +192,27 @@
             font-size: 14px;
             font-weight: bold;
             color: #333;
+        }
+
+        .settings-icon {
+            background: linear-gradient(135deg, #8b8b8b 0%, #5a5a5a 100%);
+            border: 2px solid #444;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2px;
+        }
+        .settings-icon::before, .settings-icon::after {
+            content: '';
+            width: 30px;
+            height: 4px;
+            background: #ccc;
+            border-radius: 2px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .settings-icon::before {
+            margin-bottom: 5px;
         }
 
         .icon span {
@@ -345,7 +365,154 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 4px 8px rgba(0,0,0,0.5);
         }
 
-        /* Адаптация для узких экранов (мобильных) */
+        /* ОКНО НАСТРОЕК */
+        #settings-window {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: min(500px, 90vw);
+            max-width: 500px;
+            max-height: 80vh;
+            background: linear-gradient(to bottom, #3a3a3a, #222);
+            border-radius: 15px;
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.8),
+                inset 0 2px 3px rgba(255,255,255,0.2),
+                inset 0 -2px 5px rgba(0,0,0,0.8);
+            padding: 25px;
+            border: 1px solid #111;
+            z-index: 60;
+            opacity: 1;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow-y: auto;
+            color: #f0e6d2;
+        }
+
+        #settings-window.hidden {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .settings-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #5a3e2b;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .settings-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #5a3e2b;
+        }
+
+        .settings-section h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #d2a679;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .wallpaper-option {
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.2s;
+            aspect-ratio: 16/9;
+        }
+
+        .wallpaper-option.selected {
+            border-color: #d2a679;
+            box-shadow: 0 0 15px #d2a679;
+        }
+
+        .wallpaper-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .wallpaper-note {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .sound-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 8px;
+        }
+
+        .sound-btn {
+            background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+            font-size: 14px;
+            border: 1px solid #888;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+        }
+
+        .sound-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .sound-btn.playing {
+            background: linear-gradient(to bottom, #d2a679, #b88655);
+            border-color: #d2a679;
+        }
+
+        .patriot-message {
+            background: #8b0000;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            border: 2px solid #d2a679;
+        }
+
+        .language-warning {
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid #8b0000;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        /* Адаптация для узких экранов */
         @media (max-width: 600px) {
             .dock {
                 width: 70px;
@@ -359,9 +526,11 @@
             .icon span {
                 font-size: 12px;
             }
+            .wallpaper-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* Адаптация для очень маленькой высоты */
         @media (max-height: 500px) {
             .dock {
                 padding: 10px 3px;
@@ -378,6 +547,7 @@
 
 <div id="os-container">
     
+    <!-- Экран блокировки -->
     <div id="lock-screen">
         <div class="clock" id="time-display">10:08</div>
         <div class="slider-track" id="slider-track">
@@ -388,12 +558,18 @@
         </div>
     </div>
 
+    <!-- Рабочий стол -->
     <div id="desktop">
         
+        <!-- Док с иконками -->
         <div class="dock">
             <div class="icon" id="open-calc">
                 <div class="icon-img calc-icon"></div>
                 <span>Счётчик</span>
+            </div>
+            <div class="icon" id="open-settings">
+                <div class="icon-img settings-icon"></div>
+                <span>Настройки</span>
             </div>
             <div class="icon">
                 <div class="icon-img" style="background: linear-gradient(to bottom, #e3c48f, #cda766); border: 2px solid #a67c42; position: relative; overflow: hidden;">
@@ -403,7 +579,7 @@
             </div>
         </div>
 
-        <!-- Окно калькулятора по-прежнему по центру -->
+        <!-- Окно калькулятора -->
         <div id="calc-window" class="hidden">
             <div class="close-btn" id="close-calc">X</div>
             <div class="calc-screen-wrapper">
@@ -432,12 +608,78 @@
             </div>
         </div>
 
+        <!-- Окно настроек -->
+        <div id="settings-window" class="hidden">
+            <div class="close-btn" id="close-settings">X</div>
+            <div class="settings-header">ПАТРИОТ НАСТРОЙКИ</div>
+            
+            <!-- Раздел с обоями -->
+            <div class="settings-section">
+                <h3>🖼️ ОБОИ РАБОЧЕГО СТОЛА</h3>
+                <div class="wallpaper-grid">
+                    <div class="wallpaper-option" data-wallpaper="flag">
+                        <img src="wallpapers/flag.png" alt="Флаг РФ" onerror="this.style.backgroundColor='#8b0000'; this.alt='Флаг (загр.)'">
+                    </div>
+                    <div class="wallpaper-option" data-wallpaper="gerb">
+                        <img src="wallpapers/gerb.png" alt="Герб РФ" onerror="this.style.backgroundColor='#8b0000'; this.alt='Герб (загр.)'">
+                    </div>
+                    <div class="wallpaper-option" data-wallpaper="bereza">
+                        <img src="wallpapers/bereza.png" alt="Берёза" onerror="this.style.backgroundColor='#2b4b3c'; this.alt='Берёза (загр.)'">
+                    </div>
+                </div>
+                <div class="wallpaper-note">Выберите достойное оформление рабочего стола</div>
+            </div>
+
+            <!-- Раздел со звуками -->
+            <div class="settings-section">
+                <h3>🔊 ЗВУКОВОЕ СОПРОВОЖДЕНИЕ</h3>
+                
+                <div class="sound-control">
+                    <span>Гимн РФ (полная версия)</span>
+                    <button class="sound-btn" id="play-gimn">▶ Прослушать</button>
+                </div>
+                
+                <div class="sound-control">
+                    <span>Уведомление (отрывок гимна)</span>
+                    <button class="sound-btn" id="play-uved">▶ Прослушать</button>
+                </div>
+
+                <div class="patriot-message">
+                    ⚠️ Смена звуков невозможна<br>
+                    <small>Настоящий патриот слушает только гимн</small>
+                </div>
+            </div>
+
+            <!-- Раздел с языком (шутка про бан) -->
+            <div class="settings-section">
+                <h3>🌍 ЯЗЫК СИСТЕМЫ</h3>
+                <div style="padding: 10px; background: #111; border-radius: 5px;">
+                    <div style="color: #8b8b8b;">Текущий язык: <span style="color: #d2a679;">Русский</span></div>
+                    <div class="language-warning">
+                        ⚡ Доступные языки: Русский, Татарский, Башкирский, Чеченский, Белорусский<br>
+                        ⛔ Английский / Украинский — НЕДОПУСТИМЫ (блокировка системы)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Информация о системе -->
+            <div class="settings-section">
+                <h3>ℹ️ О СИСТЕМЕ</h3>
+                <div style="line-height: 1.6;">
+                    <div><strong>ПатриотОС 2.0</strong></div>
+                    <div>Девиз: «Своих не бросаем. Чужих не запускаем.»</div>
+                    <div style="margin-top: 10px; font-size: 12px;">Разработчик: Губкобобоамёбо</div>
+                    <div style="font-size: 12px;">Надзор: активен ✓</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
 
 <script>
-    // --- Логика экрана блокировки (Тяжёлая задвижка) ---
+    // ========== ЭКРАН БЛОКИРОВКИ ==========
     const track = document.getElementById('slider-track');
     const thumb = document.getElementById('slider-thumb');
     const lockScreen = document.getElementById('lock-screen');
@@ -474,6 +716,8 @@
 
         if (newLeft >= maxLeft - 5) {
             isDragging = false;
+            // Воспроизводим гимн при разблокировке
+            playGimn();
             setTimeout(() => {
                 lockScreen.classList.add('unlocked');
             }, 100);
@@ -504,30 +748,155 @@
     document.addEventListener('touchend', stopDrag);
     document.addEventListener('touchcancel', stopDrag);
 
-    // --- Логика открытия/закрытия окон ---
-    const calcWindow = document.getElementById('calc-window');
+    // ========== ВРЕМЯ ==========
+    function updateTime() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('time-display').innerText = `${h}:${m}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // ========== ЗВУКИ ==========
+    let gimnAudio = null;
+    let uvedAudio = null;
+
+    function playGimn() {
+        try {
+            if (gimnAudio) {
+                gimnAudio.pause();
+                gimnAudio.currentTime = 0;
+            }
+            gimnAudio = new Audio('sounds/gimn.mp3');
+            gimnAudio.volume = 0.4;
+            gimnAudio.play().catch(e => console.log('Аудио не загрузилось:', e));
+        } catch (e) {
+            console.log('Ошибка воспроизведения гимна:', e);
+        }
+    }
+
+    function playUvedomlenie() {
+        try {
+            if (uvedAudio) {
+                uvedAudio.pause();
+                uvedAudio.currentTime = 0;
+            }
+            uvedAudio = new Audio('sounds/uvedomlenie.mp3');
+            uvedAudio.volume = 0.3;
+            uvedAudio.play().catch(e => console.log('Аудио не загрузилось:', e));
+        } catch (e) {
+            console.log('Ошибка воспроизведения уведомления:', e);
+        }
+    }
+
+    // Звук уведомления при закрытии окон
+    function playNotification() {
+        playUvedomlenie();
+    }
+
+    // ========== ОБОИ ==========
+    const desktop = document.getElementById('desktop');
+    const wallpaperOptions = document.querySelectorAll('.wallpaper-option');
     
+    // Массив обоев для случайного выбора при загрузке
+    const wallpapersArray = [
+        'url("wallpapers/flag.png")',
+        'url("wallpapers/gerb.png")',
+        'url("wallpapers/bereza.png")'
+    ];
+
+    // Устанавливаем случайные обои при загрузке
+    window.addEventListener('load', function() {
+        const randomIndex = Math.floor(Math.random() * wallpapersArray.length);
+        desktop.style.backgroundImage = wallpapersArray[randomIndex];
+        
+        // Подсвечиваем выбранные обои в настройках
+        setTimeout(() => {
+            highlightSelectedWallpaper();
+        }, 100);
+    });
+
+    // Функция смены обоев
+    function setWallpaper(wallpaperName) {
+        desktop.style.backgroundImage = `url('wallpapers/${wallpaperName}.png')`;
+        playUvedomlenie(); // звук при смене обоев
+        
+        // Обновляем выделение
+        wallpaperOptions.forEach(opt => {
+            opt.classList.remove('selected');
+            if (opt.dataset.wallpaper === wallpaperName) {
+                opt.classList.add('selected');
+            }
+        });
+    }
+
+    // Подсветка текущих обоев
+    function highlightSelectedWallpaper() {
+        const currentBg = desktop.style.backgroundImage;
+        wallpaperOptions.forEach(opt => {
+            opt.classList.remove('selected');
+            if (currentBg.includes(opt.dataset.wallpaper)) {
+                opt.classList.add('selected');
+            }
+        });
+    }
+
+    // Навешиваем обработчики на обои
+    wallpaperOptions.forEach(opt => {
+        opt.addEventListener('click', function() {
+            const wallpaperName = this.dataset.wallpaper;
+            setWallpaper(wallpaperName);
+        });
+    });
+
+    // ========== УПРАВЛЕНИЕ ОКНАМИ ==========
+    const calcWindow = document.getElementById('calc-window');
+    const settingsWindow = document.getElementById('settings-window');
+    
+    // Открыть калькулятор
     document.getElementById('open-calc').addEventListener('click', () => {
         calcWindow.classList.remove('hidden');
+        playNotification(); // звук уведомления
     });
 
+    // Закрыть калькулятор
     document.getElementById('close-calc').addEventListener('click', () => {
         calcWindow.classList.add('hidden');
+        playNotification(); // звук уведомления
     });
 
-    // --- Простая логика Калькулятора ---
+    // Открыть настройки
+    document.getElementById('open-settings').addEventListener('click', () => {
+        settingsWindow.classList.remove('hidden');
+        playNotification(); // звук уведомления
+        highlightSelectedWallpaper(); // обновляем выделение обоев
+    });
+
+    // Закрыть настройки
+    document.getElementById('close-settings').addEventListener('click', () => {
+        settingsWindow.classList.add('hidden');
+        playNotification(); // звук уведомления
+    });
+
+    // Кнопки звуков в настройках
+    document.getElementById('play-gimn').addEventListener('click', function() {
+        playGimn();
+        this.classList.add('playing');
+        setTimeout(() => this.classList.remove('playing'), 300);
+    });
+
+    document.getElementById('play-uved').addEventListener('click', function() {
+        playUvedomlenie();
+        this.classList.add('playing');
+        setTimeout(() => this.classList.remove('playing'), 300);
+    });
+
+    // ========== КАЛЬКУЛЯТОР ==========
     let display = document.getElementById('calc-display');
     let currentInput = '0';
     let previousInput = '';
     let operation = null;
-
-    function updateDisplay() {
-        if (currentInput.length > 10) {
-            display.innerText = currentInput.substring(0, 10);
-        } else {
-            display.innerText = currentInput;
-        }
-    }
 
     window.appendNumber = function(number) {
         if (currentInput === '0' && number !== '.') {
@@ -574,15 +943,30 @@
         updateDisplay();
     };
 
-    function updateTime() {
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('time-display').innerText = `${h}:${m}`;
+    function updateDisplay() {
+        if (currentInput.length > 10) {
+            display.innerText = currentInput.substring(0, 10);
+        } else {
+            display.innerText = currentInput;
+        }
     }
-    setInterval(updateTime, 1000);
-    updateTime();
 
+    // ========== ДОПОЛНИТЕЛЬНО: ПРОВЕРКА ЛОЯЛЬНОСТИ (шутка) ==========
+    // При загрузке страницы (как "включение системы") играем фанфары (первые секунды гимна)
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            playGimn(); // Пусть играет как фанфары включения
+        }, 500);
+    });
+
+    // Блокировка F12 и контекстного меню (для атмосферы)
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+            e.preventDefault();
+            alert('⛔ Доступ к инструментам разработчика запрещён. Это непатриотично.');
+        }
+    });
 </script>
 </body>
 </html>
