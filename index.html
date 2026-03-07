@@ -717,7 +717,7 @@
         if (newLeft >= maxLeft - 5) {
             isDragging = false;
             // Воспроизводим гимн при разблокировке
-            playGimn();
+            playVhod();
             setTimeout(() => {
                 lockScreen.classList.add('unlocked');
             }, 100);
@@ -761,6 +761,7 @@
     // ========== ЗВУКИ ==========
     let gimnAudio = null;
     let uvedAudio = null;
+    let vhodAudio = null;  // ← ДОБАВИЛ
 
     function playGimn() {
         try {
@@ -775,6 +776,21 @@
             console.log('Ошибка воспроизведения гимна:', e);
         }
     }
+
+    // НОВАЯ ФУНКЦИЯ для входа
+    function playVhod() {
+        try {
+            if (vhodAudio) {
+                vhodAudio.pause();
+                vhodAudio.currentTime = 0;
+            }
+                vhodAudio = new Audio('sounds/vhod.mp3');
+                vhodAudio.volume = 0.4;
+                vhodAudio.play().catch(e => console.log('Аудио не загрузилось:', e));
+            } catch (e) {
+                console.log('Ошибка воспроизведения входа:', e);
+            }
+        }
 
     function playUvedomlenie() {
         try {
@@ -955,7 +971,7 @@
     // При загрузке страницы (как "включение системы") играем фанфары (первые секунды гимна)
     window.addEventListener('load', function() {
         setTimeout(() => {
-            playGimn(); // Пусть играет как фанфары включения
+            playVhod(); // Пусть играет как фанфары включения
         }, 500);
     });
 
