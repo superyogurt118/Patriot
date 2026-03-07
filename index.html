@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>patriotOS Concept</title>
+    <style>
+        /* Общие настройки и шрифты */
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Courier Prime', monospace;
+            user-select: none;
+            background-color: #000; /* Чёрный фон вне экрана */
+        }
+
+        /* Главный контейнер (экран устройства) */
+        #os-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        /* ============================
+           ЭКРАН БЛОКИРОВКИ (Кожа)
+           ============================ */
+        #lock-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            /* Тёмно-бордовая кожаная текстура через градиенты */
+            background: radial-gradient(circle at center, #4a2525 0%, #1a0b0b 100%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+        }
+
+        #lock-screen.unlocked {
+            transform: translateY(-100%);
+        }
+
+        /* Механические часы (Flip Clock стиль) */
+        .clock {
+            font-family: 'Playfair Display', serif;
+            font-size: 8rem;
+            color: #f0e6d2;
+            background: #111;
+            padding: 20px 40px;
+            border-radius: 15px;
+            border: 4px solid #2a2a2a;
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.8),
+                inset 0 10px 20px rgba(0,0,0,0.9),
+                inset 0 -2px 5px rgba(255,255,255,0.1);
+            position: relative;
+            margin-bottom: 80px;
+            text-shadow: 0 2px 4px rgba(0,0,0,1);
+        }
+        /* Горизонтальная линия разделения "пластинок" часов */
+        .clock::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; right: 0;
+            height: 2px;
+            background: #000;
+            box-shadow: 0 1px 1px rgba(255,255,255,0.1);
+        }
+
+        /* Массивная металлическая задвижка */
+        .slider-track {
+            width: 300px;
+            height: 60px;
+            background: linear-gradient(to bottom, #222, #111);
+            border-radius: 30px;
+            position: relative;
+            box-shadow: 
+                inset 0 5px 15px rgba(0,0,0,0.8),
+                0 2px 5px rgba(255,255,255,0.1);
+            border: 1px solid #000;
+        }
+
+        .slider-thumb {
+            width: 80px;
+            height: 50px;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            border-radius: 25px;
+            /* Текстура фрезерованного алюминия */
+            background: repeating-linear-gradient(
+                90deg,
+                #888, #888 2px,
+                #999 2px, #999 4px
+            );
+            cursor: pointer;
+            box-shadow: 
+                2px 5px 10px rgba(0,0,0,0.6),
+                inset 0 2px 5px rgba(255,255,255,0.8),
+                inset 0 -2px 5px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: left 0.1s;
+        }
+        /* Рифлёные полоски на ручке */
+        .slider-thumb::before {
+            content: '|||';
+            font-weight: bold;
+            color: #444;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+
+        /* ============================
+           РАБОЧИЙ СТОЛ (Дерево)
+           ============================ */
+        #desktop {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            /* Текстура полированного дерева */
+            background: linear-gradient(to bottom, #5c3a21, #311d10);
+            z-index: 10;
+        }
+
+        /* Док-станция (жёлоб в столе) */
+        .dock {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 80px;
+            background: rgba(30, 15, 5, 0.6);
+            border-radius: 10px;
+            box-shadow: 
+                inset 0 10px 20px rgba(0,0,0,0.8),
+                0 1px 2px rgba(255,255,255,0.1);
+            border-top: 2px solid #2a180d;
+            border-bottom: 1px solid #7a4f32;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* Иконки на столе/доке */
+        .icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .icon-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            box-shadow: 
+                0 15px 20px rgba(0,0,0,0.6),
+                inset 0 2px 5px rgba(255,255,255,0.5);
+            transition: transform 0.1s;
+        }
+
+        .icon:active .icon-img {
+            transform: translateY(4px) scale(0.95);
+            box-shadow: 
+                0 5px 10px rgba(0,0,0,0.8),
+                inset 0 2px 5px rgba(255,255,255,0.5);
+        }
+
+        /* Иконка калькулятора (Винтажный пластик) */
+        .calc-icon {
+            background: linear-gradient(135deg, #d4d4d2 0%, #999 100%);
+            border: 2px solid #888;
+            position: relative;
+        }
+        .calc-icon::after {
+            content: '789';
+            position: absolute;
+            top: 10px; left: 0; right: 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .icon span {
+            margin-top: 10px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            font-size: 14px;
+        }
+
+        /* ============================
+           КАЛЬКУЛЯТОР (Окно приложения)
+           ============================ */
+        #calc-window {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: 450px;
+            /* Шершавый тёмный пластик корпуса */
+            background: linear-gradient(to bottom, #3a3a3a, #222);
+            border-radius: 15px;
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.8),
+                inset 0 2px 3px rgba(255,255,255,0.2),
+                inset 0 -2px 5px rgba(0,0,0,0.8);
+            padding: 30px;
+            border: 1px solid #111;
+            z-index: 50;
+            opacity: 1;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Пружинящее появление */
+        }
+
+        #calc-window.hidden {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Выпуклое стекло экрана калькулятора */
+        .calc-screen-wrapper {
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,1);
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .calc-screen {
+            background: #8b9c84; /* Классический цвет ЖК-дисплея */
+            height: 60px;
+            border-radius: 5px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+            text-align: right;
+            padding: 10px 15px;
+            font-size: 3rem;
+            color: #1a2217; /* Тёмно-зелёные цифры */
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+            /* Эффект тени от цифр на подложку */
+            text-shadow: -1px -1px 0px rgba(0,0,0,0.2);
+        }
+
+        /* Блик света на стекле экрана */
+        .calc-screen::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 40%);
+            pointer-events: none; /* Чтобы блик не мешал кликам, хотя на экране их нет */
+        }
+
+        /* Клавиатура */
+        .calc-keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        /* Выпуклые пластиковые кнопки */
+        .calc-btn {
+            background: linear-gradient(to bottom, #f0f0f0, #d4d4d2);
+            border: none;
+            border-radius: 8px;
+            padding: 15px 0;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            color: #222;
+            cursor: pointer;
+            position: relative;
+            /* Жёсткая 3D-тень */
+            box-shadow: 
+                0 6px 10px rgba(0,0,0,0.6), /* Падающая тень */
+                inset 0 3px 5px rgba(255,255,255,0.9), /* Верхний блик фаски */
+                inset 0 -3px 5px rgba(0,0,0,0.2); /* Нижнее затемнение фаски */
+            transition: all 0.05s ease-out; /* Быстрая реакция на нажатие */
+        }
+
+        .calc-btn.op {
+            background: linear-gradient(to bottom, #d2a679, #b88655);
+            color: #fff;
+            text-shadow: 0 -1px 1px rgba(0,0,0,0.5);
+            box-shadow: 
+                0 6px 10px rgba(0,0,0,0.6),
+                inset 0 3px 5px rgba(255,255,255,0.6),
+                inset 0 -3px 5px rgba(0,0,0,0.3);
+        }
+
+        .calc-btn.clear {
+            background: linear-gradient(to bottom, #c96e6e, #a54a4a);
+            color: #fff;
+            box-shadow: 
+                0 6px 10px rgba(0,0,0,0.6),
+                inset 0 3px 5px rgba(255,255,255,0.6),
+                inset 0 -3px 5px rgba(0,0,0,0.3);
+        }
+
+        /* Анимация физического нажатия (кнопка уходит вниз) */
+        .calc-btn:active {
+            transform: translateY(4px);
+            background: #d4d4d2;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.6), /* Тень уменьшается */
+                inset 0 2px 8px rgba(0,0,0,0.4), /* Кнопка вдавливается */
+                inset 0 -1px 2px rgba(255,255,255,0.5);
+        }
+
+        .calc-btn.op:active {
+            background: #b88655;
+        }
+
+        .calc-btn.clear:active {
+            background: #a54a4a;
+        }
+
+        /* Кнопка закрытия окна (стилизована под винт или тумблер) */
+        .close-btn {
+            position: absolute;
+            top: -15px; right: -15px;
+            width: 30px; height: 30px;
+            background: radial-gradient(circle at 30% 30%, #ff5e5e, #8b0000);
+            border-radius: 50%;
+            border: 2px solid #222;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-family: sans-serif;
+            transition: all 0.1s;
+        }
+        .close-btn:active {
+            transform: scale(0.9) translateY(2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="os-container">
+    
+    <div id="lock-screen">
+        <div class="clock" id="time-display">10:08</div>
+        <div class="slider-track" id="slider-track">
+            <div class="slider-thumb" id="slider-thumb"></div>
+        </div>
+        <div style="margin-top: 20px; color: #888; font-family: sans-serif; text-shadow: -1px -1px 0 #000;">
+            Потяните задвижку вправо
+        </div>
+    </div>
+
+    <div id="desktop">
+        
+        <div id="calc-window" class="hidden">
+            <div class="close-btn" id="close-calc">X</div>
+            <div class="calc-screen-wrapper">
+                <div class="calc-screen" id="calc-display">0</div>
+            </div>
+            <div class="calc-keys">
+                <button class="calc-btn clear" onclick="clearDisplay()">С</button>
+                <button class="calc-btn" onclick="appendNumber('7')">7</button>
+                <button class="calc-btn" onclick="appendNumber('8')">8</button>
+                <button class="calc-btn op" onclick="setOp('/')">÷</button>
+                
+                <button class="calc-btn" onclick="appendNumber('4')">4</button>
+                <button class="calc-btn" onclick="appendNumber('5')">5</button>
+                <button class="calc-btn" onclick="appendNumber('6')">6</button>
+                <button class="calc-btn op" onclick="setOp('*')">×</button>
+                
+                <button class="calc-btn" onclick="appendNumber('1')">1</button>
+                <button class="calc-btn" onclick="appendNumber('2')">2</button>
+                <button class="calc-btn" onclick="appendNumber('3')">3</button>
+                <button class="calc-btn op" onclick="setOp('-')">−</button>
+                
+                <button class="calc-btn" onclick="appendNumber('0')">0</button>
+                <button class="calc-btn" onclick="appendNumber('.')">.</button>
+                <button class="calc-btn op" onclick="calculate()">=</button>
+                <button class="calc-btn op" onclick="setOp('+')">+</button>
+            </div>
+        </div>
+
+        <div class="dock">
+            <div class="icon" id="open-calc">
+                <div class="icon-img calc-icon"></div>
+                <span>Счётчик</span>
+            </div>
+            <div class="icon">
+                <div class="icon-img" style="background: linear-gradient(to bottom, #e3c48f, #cda766); border: 2px solid #a67c42; position: relative; overflow: hidden;">
+                    <div style="position:absolute; top:0; left:10px; width:20px; height:8px; background:#ccc; border-bottom: 1px solid #888;"></div>
+                </div>
+                <span>Документы</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- Логика экрана блокировки (Тяжёлая задвижка) ---
+    const track = document.getElementById('slider-track');
+    const thumb = document.getElementById('slider-thumb');
+    const lockScreen = document.getElementById('lock-screen');
+    
+    let isDragging = false;
+    let startX;
+    
+    thumb.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - thumb.offsetLeft;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        let newLeft = e.clientX - startX;
+        const maxLeft = track.offsetWidth - thumb.offsetWidth - 10; // 10px отступ (5+5)
+        
+        // Ограничиваем движение внутри "металлического жёлоба"
+        if (newLeft < 5) newLeft = 5;
+        if (newLeft > maxLeft) newLeft = maxLeft;
+        
+        thumb.style.left = newLeft + 'px';
+
+        // Если дотянули до конца - разблокируем (с небольшим запасом)
+        if (newLeft >= maxLeft - 5) {
+            isDragging = false;
+            // Звук металлического щелчка (эмуляция через задержку)
+            setTimeout(() => {
+                lockScreen.classList.add('unlocked');
+            }, 100);
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        // Если не дотянули до конца - пружинит обратно
+        const currentLeft = parseInt(thumb.style.left || 5, 10);
+        const maxLeft = track.offsetWidth - thumb.offsetWidth - 10;
+        
+        if (currentLeft < maxLeft - 5) {
+            thumb.style.transition = 'left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            thumb.style.left = '5px';
+            setTimeout(() => { thumb.style.transition = 'none'; }, 300);
+        }
+    });
+
+    // --- Логика открытия/закрытия окон ---
+    const calcWindow = document.getElementById('calc-window');
+    
+    document.getElementById('open-calc').addEventListener('click', () => {
+        calcWindow.classList.remove('hidden');
+    });
+
+    document.getElementById('close-calc').addEventListener('click', () => {
+        calcWindow.classList.add('hidden');
+    });
+
+    // --- Простая логика Калькулятора ---
+    let display = document.getElementById('calc-display');
+    let currentInput = '0';
+    let previousInput = '';
+    let operation = null;
+
+    function updateDisplay() {
+        // Ограничиваем длину, чтобы имитировать реальный дисплей
+        if (currentInput.length > 10) {
+            display.innerText = currentInput.substring(0, 10);
+        } else {
+            display.innerText = currentInput;
+        }
+    }
+
+    window.appendNumber = function(number) {
+        if (currentInput === '0' && number !== '.') {
+            currentInput = number;
+        } else {
+            if (number === '.' && currentInput.includes('.')) return;
+            currentInput += number;
+        }
+        updateDisplay();
+    };
+
+    window.clearDisplay = function() {
+        currentInput = '0';
+        previousInput = '';
+        operation = null;
+        updateDisplay();
+    };
+
+    window.setOp = function(op) {
+        if (operation !== null) calculate();
+        previousInput = currentInput;
+        operation = op;
+        currentInput = '0';
+    };
+
+    window.calculate = function() {
+        if (operation === null || previousInput === '') return;
+        let result;
+        const prev = parseFloat(previousInput);
+        const current = parseFloat(currentInput);
+        
+        switch(operation) {
+            case '+': result = prev + current; break;
+            case '-': result = prev - current; break;
+            case '*': result = prev * current; break;
+            case '/': 
+                if (current === 0) { result = 'Ошибка'; break; }
+                result = prev / current; break;
+        }
+        
+        currentInput = result.toString();
+        operation = null;
+        previousInput = '';
+        updateDisplay();
+    };
+
+    // Обновление времени на экране блокировки
+    function updateTime() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('time-display').innerText = `${h}:${m}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+</script>
+</body>
+</html>
