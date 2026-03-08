@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>patriotOS 0.4.0beta</title>
+    <title>PatriotOS 0.4.1beta</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap');
 
@@ -27,21 +27,20 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+            background: #000;
         }
 
         /* ЭКРАН БЛОКИРОВКИ */
         #lock-screen {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at center, #4a2525 0%, #1a0b0b 100%);
+            background: #4a2525;
             z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+            transition: transform 0.5s ease;
             padding: 16px;
         }
 
@@ -52,59 +51,30 @@
         .clock {
             font-family: 'Playfair Display', serif;
             font-size: clamp(3rem, 15vw, 8rem);
-            color: #f0e6d2;
-            background: #111;
+            color: #fff;
+            background: #1a0b0b;
             padding: 0.2em 0.5em;
-            border-radius: 15px;
-            border: 4px solid #2a2a2a;
-            box-shadow: 
-                0 20px 50px rgba(0,0,0,0.8),
-                inset 0 10px 20px rgba(0,0,0,0.9),
-                inset 0 -2px 5px rgba(255,255,255,0.1);
-            position: relative;
+            border: 2px solid #2a2a2a;
             margin-bottom: min(5vh, 40px);
-            text-shadow: 0 2px 4px rgba(0,0,0,1);
             white-space: nowrap;
-        }
-
-        .clock::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 0; right: 0;
-            height: 2px;
-            background: #000;
-            box-shadow: 0 1px 1px rgba(255,255,255,0.1);
         }
 
         .slider-track {
             width: min(300px, 80vw);
             height: 60px;
-            background: linear-gradient(to bottom, #222, #111);
-            border-radius: 30px;
+            background: #111;
+            border: 2px solid #2a2a2a;
             position: relative;
-            box-shadow: 
-                inset 0 5px 15px rgba(0,0,0,0.8),
-                0 2px 5px rgba(255,255,255,0.1);
-            border: 1px solid #000;
         }
 
         .slider-thumb {
             width: 80px;
             height: 50px;
             position: absolute;
-            top: 5px;
-            left: 5px;
-            border-radius: 25px;
-            background: repeating-linear-gradient(
-                90deg,
-                #888, #888 2px,
-                #999 2px, #999 4px
-            );
+            top: 3px;
+            left: 3px;
+            background: #888;
             cursor: pointer;
-            box-shadow: 
-                2px 5px 10px rgba(0,0,0,0.6),
-                inset 0 2px 5px rgba(255,255,255,0.8),
-                inset 0 -2px 5px rgba(0,0,0,0.5);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -115,7 +85,6 @@
             content: '|||';
             font-weight: bold;
             color: #444;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
         }
 
         /* РАБОЧИЙ СТОЛ */
@@ -137,20 +106,14 @@
         /* Вертикальный док слева */
         .dock {
             width: 100px;
-            background: rgba(30, 15, 5, 0.7);
-            border-radius: 15px;
-            box-shadow: 
-                inset 0 5px 15px rgba(0,0,0,0.8),
-                0 4px 10px rgba(0,0,0,0.5);
-            border: 1px solid #5a3e2b;
+            background: #1a0f0a;
+            border: 2px solid #5a3e2b;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
             gap: 20px;
             padding: 20px 5px;
             margin-right: 20px;
-            height: auto;
             align-self: center;
         }
 
@@ -165,39 +128,31 @@
         .icon-img {
             width: 60px;
             height: 60px;
-            border-radius: 12px;
-            box-shadow: 
-                0 15px 20px rgba(0,0,0,0.6),
-                inset 0 2px 5px rgba(255,255,255,0.5);
-            transition: transform 0.1s;
-            position: relative;
+            border: 2px solid #5a3e2b;
             background-size: cover;
             background-position: center;
+            transition: all 0.1s;
         }
 
         .icon:active .icon-img {
-            transform: translateY(4px) scale(0.95);
-            box-shadow: 
-                0 5px 10px rgba(0,0,0,0.8),
-                inset 0 2px 5px rgba(255,255,255,0.5);
+            transform: translateY(4px);
         }
 
         .calc-icon {
-            background: linear-gradient(135deg, #d4d4d2 0%, #999 100%);
+            background: #d4d4d2;
             border: 2px solid #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #333;
         }
         .calc-icon::after {
             content: '789';
-            position: absolute;
-            top: 10%; left: 0; right: 0;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
         }
 
         .settings-icon {
-            background: linear-gradient(135deg, #8b8b8b 0%, #5a5a5a 100%);
+            background: #8b8b8b;
             border: 2px solid #444;
             display: flex;
             flex-direction: column;
@@ -210,8 +165,6 @@
             width: 30px;
             height: 4px;
             background: #ccc;
-            border-radius: 2px;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
         }
         .settings-icon::before {
             margin-bottom: 5px;
@@ -219,18 +172,9 @@
 
         /* Иконка браузера */
         .browser-icon {
-            background: linear-gradient(135deg, #2b5f8a 0%, #1a3f5a 100%);
+            background-image: url('images/yandex.png');
+            background-size: cover;
             border: 2px solid #0f2a3a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            color: white;
-            font-weight: bold;
-        }
-        .browser-icon::after {
-            content: 'Я';
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         /* Иконка RuStore */
@@ -243,7 +187,6 @@
         .icon span {
             margin-top: 8px;
             color: #fff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             font-size: 14px;
             white-space: nowrap;
         }
@@ -266,77 +209,126 @@
             cursor: pointer;
             width: 80px;
             padding: 10px 5px;
-            border-radius: 10px;
-            transition: all 0.2s;
-        }
-
-        .desktop-icon:hover {
-            background: rgba(210, 166, 121, 0.3);
         }
 
         .desktop-icon:active .desktop-icon-img {
-            transform: translateY(4px) scale(0.95);
+            transform: translateY(4px);
         }
 
         .desktop-icon-img {
             width: 60px;
             height: 60px;
-            border-radius: 15px;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.5);
-            transition: transform 0.1s;
+            border: 2px solid #5a3e2b;
             background-size: cover;
             background-position: center;
             background-color: #8b6b4d;
+            transition: transform 0.1s;
         }
 
         .desktop-icon-name {
             margin-top: 5px;
             color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             font-size: 12px;
             text-align: center;
-            word-break: break-word;
+        }
+
+        /* ОКНО (общие стили для всех окон) */
+        .window {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2a2a2a;
+            border: 2px solid #d2a679;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+            color: #f0e6d2;
+        }
+
+        .window.maximized {
+            top: 0; left: 0;
+            transform: none;
+            width: 100vw !important;
+            height: 100vh !important;
+            border: none;
+        }
+
+        .window.minimized {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .window.hidden {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .window-header {
+            background: #1a1a1a;
+            padding: 8px 12px;
+            border-bottom: 2px solid #d2a679;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+
+        .window-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            color: #d2a679;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .window-btn {
+            width: 24px;
+            height: 24px;
+            border: 1px solid #888;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .window-btn:hover {
+            background: #444;
+        }
+
+        .window-btn.close {
+            background: #8b0000;
+            border-color: #d2a679;
+        }
+
+        .window-content {
+            flex: 1;
+            overflow: auto;
+            background: #222;
         }
 
         /* ОКНО КАЛЬКУЛЯТОРА */
         #calc-window {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(1);
             width: min(450px, 90vw);
-            max-width: 450px;
-            background: linear-gradient(to bottom, #3a3a3a, #222);
-            border-radius: 15px;
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.8),
-                inset 0 2px 3px rgba(255,255,255,0.2),
-                inset 0 -2px 5px rgba(0,0,0,0.8);
-            padding: clamp(15px, 4vw, 30px);
-            border: 1px solid #111;
-            z-index: 50;
-            opacity: 1;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #calc-window.hidden {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0;
-            pointer-events: none;
         }
 
         .calc-screen-wrapper {
             background: #111;
             padding: 8px;
-            border-radius: 10px;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,1);
-            margin-bottom: 20px;
+            margin: 15px;
         }
 
         .calc-screen {
             background: #8b9c84;
             height: 60px;
-            border-radius: 5px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
             text-align: right;
             padding: 8px 12px;
             font-size: clamp(2rem, 8vw, 3rem);
@@ -344,147 +336,55 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            position: relative;
-            overflow: hidden;
-            text-shadow: -1px -1px 0px rgba(0,0,0,0.2);
-        }
-
-        .calc-screen::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 40%);
-            pointer-events: none;
         }
 
         .calc-keys {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: clamp(8px, 2vw, 15px);
+            gap: 8px;
+            padding: 15px;
         }
 
         .calc-btn {
-            background: linear-gradient(to bottom, #f0f0f0, #d4d4d2);
-            border: none;
-            border-radius: 8px;
-            padding: clamp(10px, 2vh, 15px) 0;
-            font-size: clamp(1rem, 5vw, 1.5rem);
+            background: #f0f0f0;
+            border: 1px solid #888;
+            padding: 10px 0;
+            font-size: 1.2rem;
             font-family: 'Playfair Display', serif;
-            font-weight: bold;
             color: #222;
             cursor: pointer;
-            box-shadow: 
-                0 6px 10px rgba(0,0,0,0.6),
-                inset 0 3px 5px rgba(255,255,255,0.9),
-                inset 0 -3px 5px rgba(0,0,0,0.2);
-            transition: all 0.05s ease-out;
-        }
-
-        .calc-btn.op {
-            background: linear-gradient(to bottom, #d2a679, #b88655);
-            color: #fff;
-            text-shadow: 0 -1px 1px rgba(0,0,0,0.5);
-            box-shadow: 
-                0 6px 10px rgba(0,0,0,0.6),
-                inset 0 3px 5px rgba(255,255,255,0.6),
-                inset 0 -3px 5px rgba(0,0,0,0.3);
-        }
-
-        .calc-btn.clear {
-            background: linear-gradient(to bottom, #c96e6e, #a54a4a);
-            color: #fff;
-            box-shadow: 
-                0 6px 10px rgba(0,0,0,0.6),
-                inset 0 3px 5px rgba(255,255,255,0.6),
-                inset 0 -3px 5px rgba(0,0,0,0.3);
         }
 
         .calc-btn:active {
-            transform: translateY(4px);
-            background: #d4d4d2;
-            box-shadow: 
-                0 2px 4px rgba(0,0,0,0.6),
-                inset 0 2px 8px rgba(0,0,0,0.4),
-                inset 0 -1px 2px rgba(255,255,255,0.5);
+            transform: translateY(2px);
         }
 
-        .calc-btn.op:active {
-            background: #b88655;
+        .calc-btn.op {
+            background: #d2a679;
+            color: #fff;
         }
 
-        .calc-btn.clear:active {
-            background: #a54a4a;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle at 30% 30%, #ff5e5e, #8b0000);
-            border-radius: 50%;
-            border: 2px solid #222;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            font-family: sans-serif;
-            transition: all 0.1s;
-        }
-        .close-btn:active {
-            transform: scale(0.9) translateY(2px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 4px 8px rgba(0,0,0,0.5);
+        .calc-btn.clear {
+            background: #c96e6e;
+            color: #fff;
         }
 
         /* ОКНО RuStore */
         #rustore-window {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(1);
             width: min(600px, 90vw);
             height: min(500px, 70vh);
-            background: linear-gradient(to bottom, #3a3a3a, #222);
-            border-radius: 15px;
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.8),
-                inset 0 2px 3px rgba(255,255,255,0.2),
-                inset 0 -2px 5px rgba(0,0,0,0.8);
-            border: 1px solid #111;
-            z-index: 90;
-            opacity: 1;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            color: #f0e6d2;
-        }
-
-        #rustore-window.hidden {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0;
-            pointer-events: none;
         }
 
         .rustore-header {
-            background: #2a2a2a;
             padding: 15px;
             border-bottom: 2px solid #d2a679;
             font-family: 'Playfair Display', serif;
             font-size: 24px;
             color: #d2a679;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .rustore-content {
-            flex: 1;
             padding: 20px;
-            overflow-y: auto;
         }
 
         .rustore-grid {
@@ -495,34 +395,30 @@
         }
 
         .rustore-item {
-            background: rgba(0,0,0,0.5);
+            background: #1a1a1a;
             border: 1px solid #5a3e2b;
-            border-radius: 10px;
             padding: 15px;
             cursor: pointer;
-            transition: all 0.2s;
             text-align: center;
         }
 
         .rustore-item:hover {
-            background: rgba(210, 166, 121, 0.3);
-            border-color: #d2a679;
+            background: #2a2a2a;
         }
 
         .rustore-item-icon {
             width: 60px;
             height: 60px;
-            border-radius: 15px;
             margin: 0 auto 10px;
             background-size: cover;
             background-position: center;
             background-color: #8b6b4d;
+            border: 1px solid #5a3e2b;
         }
 
         .rustore-item-name {
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 5px;
         }
 
         .rustore-item-url {
@@ -531,17 +427,15 @@
         }
 
         .rustore-add {
-            background: rgba(0,0,0,0.5);
+            background: #1a1a1a;
             border: 2px dashed #d2a679;
-            border-radius: 10px;
             padding: 20px;
             margin-top: 20px;
         }
 
         .rustore-add h3 {
             color: #d2a679;
-            margin-top: 0;
-            margin-bottom: 15px;
+            margin: 0 0 15px 0;
         }
 
         .rustore-add input {
@@ -549,25 +443,17 @@
             padding: 10px;
             background: #111;
             border: 1px solid #5a3e2b;
-            border-radius: 5px;
             color: white;
             font-family: 'Courier Prime', monospace;
             margin-bottom: 10px;
         }
 
-        .rustore-add input:focus {
-            border-color: #d2a679;
-            outline: none;
-        }
-
         .rustore-add button {
-            background: linear-gradient(to bottom, #d2a679, #b88655);
+            background: #d2a679;
             border: none;
-            color: white;
+            color: #000;
             padding: 10px 20px;
-            border-radius: 20px;
             cursor: pointer;
-            font-family: 'Courier Prime', monospace;
             font-weight: bold;
             width: 100%;
         }
@@ -578,59 +464,28 @@
 
         /* ОКНО НАСТРОЕК */
         #settings-window {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(1);
             width: min(500px, 90vw);
-            max-width: 500px;
             max-height: 80vh;
-            background: linear-gradient(to bottom, #3a3a3a, #222);
-            border-radius: 15px;
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.8),
-                inset 0 2px 3px rgba(255,255,255,0.2),
-                inset 0 -2px 5px rgba(0,0,0,0.8);
-            padding: 25px;
-            border: 1px solid #111;
-            z-index: 60;
-            opacity: 1;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow-y: auto;
-            color: #f0e6d2;
-        }
-
-        #settings-window.hidden {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0;
-            pointer-events: none;
         }
 
         .settings-header {
             font-family: 'Playfair Display', serif;
             font-size: 28px;
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            padding: 20px;
             border-bottom: 2px solid #5a3e2b;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .settings-section {
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+            background: #1a1a1a;
             border: 1px solid #5a3e2b;
+            padding: 15px;
+            margin: 15px;
         }
 
         .settings-section h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 18px;
+            margin: 0 0 15px 0;
             color: #d2a679;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .wallpaper-grid {
@@ -643,29 +498,20 @@
         .wallpaper-option {
             cursor: pointer;
             border: 3px solid transparent;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: all 0.2s;
-            aspect-ratio: 16/9;
         }
 
         .wallpaper-option.selected {
             border-color: #d2a679;
-            box-shadow: 0 0 15px #d2a679;
         }
 
         .wallpaper-option img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
             display: block;
         }
 
         .wallpaper-note {
             font-size: 12px;
             color: #aaa;
-            margin-top: 10px;
-            font-style: italic;
             text-align: center;
         }
 
@@ -675,110 +521,66 @@
             justify-content: space-between;
             margin-bottom: 15px;
             padding: 10px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 8px;
+            background: #111;
         }
 
         .sound-btn {
-            background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
-            border: none;
+            background: #5a5a5a;
+            border: 1px solid #888;
             color: white;
             padding: 8px 20px;
-            border-radius: 20px;
             cursor: pointer;
-            font-family: 'Courier Prime', monospace;
-            font-size: 14px;
-            border: 1px solid #888;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            transition: all 0.1s;
         }
 
         .sound-btn:active {
             transform: translateY(2px);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
         .sound-btn.playing {
-            background: linear-gradient(to bottom, #d2a679, #b88655);
-            border-color: #d2a679;
+            background: #d2a679;
         }
 
         .patriot-message {
             background: #8b0000;
+            border: 2px solid #d2a679;
             color: white;
             padding: 12px;
-            border-radius: 8px;
             text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-            border: 2px solid #d2a679;
         }
 
         .language-warning {
-            background: rgba(139, 0, 0, 0.3);
+            background: #1a0000;
             border: 1px solid #8b0000;
             padding: 10px;
-            border-radius: 5px;
-            font-size: 13px;
             margin-top: 10px;
         }
 
         /* ОКНО БРАУЗЕРА */
         #browser-window {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(1);
             width: min(800px, 90vw);
             height: min(600px, 80vh);
-            background: linear-gradient(to bottom, #3a3a3a, #222);
-            border-radius: 15px;
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.8),
-                inset 0 2px 3px rgba(255,255,255,0.2),
-                inset 0 -2px 5px rgba(0,0,0,0.8);
-            border: 1px solid #111;
-            z-index: 70;
-            opacity: 1;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        #browser-window.hidden {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0;
-            pointer-events: none;
         }
 
         .browser-header {
-            background: #2a2a2a;
+            background: #1a1a1a;
             padding: 12px;
             border-bottom: 2px solid #5a3e2b;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
         }
 
         .browser-nav-row {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 8px;
         }
 
         .browser-nav-btn {
-            background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+            background: #5a5a5a;
             border: 1px solid #444;
             color: white;
             width: 30px;
             height: 30px;
-            border-radius: 15px;
             cursor: pointer;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .browser-nav-btn:active {
@@ -789,53 +591,32 @@
             flex: 1;
             background: #111;
             border: 1px solid #5a3e2b;
-            border-radius: 20px;
             padding: 8px 15px;
             color: #f0e6d2;
             font-family: 'Courier Prime', monospace;
-            font-size: 14px;
-            outline: none;
         }
 
-        .browser-address-bar:focus {
-            border-color: #d2a679;
-        }
-
-        /* ПОИСКОВАЯ СТРОКА */
         .browser-search-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 5px 0;
         }
 
         .browser-search-bar {
             flex: 1;
             background: #111;
             border: 1px solid #5a3e2b;
-            border-radius: 20px;
             padding: 8px 15px;
             color: #f0e6d2;
-            font-family: 'Courier Prime', monospace;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .browser-search-bar:focus {
-            border-color: #d2a679;
         }
 
         .browser-search-btn {
-            background: linear-gradient(to bottom, #d2a679, #b88655);
+            background: #d2a679;
             border: 1px solid #8b5a2b;
-            color: white;
+            color: #000;
             padding: 8px 20px;
-            border-radius: 20px;
             cursor: pointer;
-            font-family: 'Courier Prime', monospace;
-            font-size: 14px;
             font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .browser-search-btn:active {
@@ -846,7 +627,6 @@
             flex: 1;
             background: white;
             position: relative;
-            overflow: hidden;
         }
 
         #browser-frame {
@@ -858,105 +638,52 @@
         .browser-home {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, #f0f0f0, #d4d4d2);
+            background: #f0f0f0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            text-align: center;
         }
 
         .browser-home h1 {
             font-family: 'Playfair Display', serif;
             font-size: 48px;
             color: #1a3f5a;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .browser-home .yandex-logo {
             font-size: 72px;
             font-weight: bold;
             color: #ff0000;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .browser-home p {
-            font-size: 18px;
-            color: #333;
-            max-width: 500px;
-            line-height: 1.6;
-        }
-
-        .browser-home .patriot-note {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #666;
-            font-style: italic;
         }
 
         /* ОКНО ПРОВОДНИКА */
         #files-window {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(1);
             width: min(800px, 90vw);
             height: min(500px, 70vh);
-            background: linear-gradient(to bottom, #3a3a3a, #222);
-            border-radius: 15px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 2px 3px rgba(255,255,255,0.2);
-            border: 1px solid #111;
-            z-index: 80;
-            opacity: 1;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            color: #f0e6d2;
-        }
-
-        #files-window.hidden {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .window-header {
-            background: #2a2a2a;
-            padding: 12px 15px;
-            border-bottom: 2px solid #5a3e2b;
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            color: #d2a679;
         }
 
         .files-content {
             display: flex;
-            flex: 1;
-            overflow: hidden;
+            height: 100%;
         }
 
         .files-sidebar {
             width: 180px;
-            background: rgba(0,0,0,0.5);
+            background: #1a1a1a;
             border-right: 1px solid #5a3e2b;
             padding: 10px;
-            overflow-y: auto;
         }
 
         .files-sidebar-item {
             padding: 8px 10px;
             margin-bottom: 5px;
-            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.2s;
-            color: #ddd;
         }
 
         .files-sidebar-item:hover {
-            background: rgba(210, 166, 121, 0.3);
+            background: #2a2a2a;
         }
 
         .files-sidebar-item.active {
@@ -968,7 +695,6 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
         .files-toolbar {
@@ -979,14 +705,11 @@
         }
 
         .files-btn {
-            background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+            background: #5a5a5a;
             border: 1px solid #888;
             color: white;
             padding: 5px 15px;
-            border-radius: 15px;
             cursor: pointer;
-            font-family: 'Courier Prime', monospace;
-            font-size: 12px;
         }
 
         .files-btn:active {
@@ -1000,7 +723,6 @@
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 15px;
             overflow-y: auto;
-            align-content: start;
         }
 
         .files-item {
@@ -1008,68 +730,39 @@
             flex-direction: column;
             align-items: center;
             padding: 10px;
-            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
             text-align: center;
         }
 
         .files-item:hover {
-            background: rgba(210, 166, 121, 0.3);
+            background: #2a2a2a;
         }
 
         .files-item.folder .files-item-icon {
             font-size: 40px;
-            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
         }
 
         .files-item.file .files-item-icon {
             font-size: 32px;
-            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
         }
 
         .files-item-name {
             margin-top: 5px;
             font-size: 12px;
-            word-break: break-word;
-            max-width: 100%;
         }
 
-        /* Адаптация для узких экранов */
+        /* Адаптация */
         @media (max-width: 600px) {
             .dock {
                 width: 70px;
                 gap: 15px;
-                padding: 15px 3px;
             }
             .icon-img {
                 width: 50px;
                 height: 50px;
             }
-            .icon span {
-                font-size: 12px;
-            }
             .desktop-icons {
                 grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 10px;
-                padding: 10px;
-            }
-            .desktop-icon {
-                width: 70px;
-            }
-            .wallpaper-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-height: 500px) {
-            .dock {
-                padding: 10px 3px;
-                gap: 10px;
-            }
-            .icon-img {
-                width: 40px;
-                height: 40px;
             }
         }
     </style>
@@ -1084,7 +777,7 @@
         <div class="slider-track" id="slider-track">
             <div class="slider-thumb" id="slider-thumb"></div>
         </div>
-        <div style="margin-top: 10px; color: #888; font-family: sans-serif; text-shadow: -1px -1px 0 #000; font-size: clamp(12px, 3vw, 16px);">
+        <div style="margin-top: 10px; color: #888;">
             Потяните задвижку вправо
         </div>
     </div>
@@ -1099,7 +792,7 @@
                 <span>Счётчик</span>
             </div>
             <div class="icon" id="open-browser">
-                 <div class="icon-img" style="background-image: url('images/yandex.png'); background-size: cover;"></div>
+                 <div class="icon-img browser-icon"></div>
                  <span>Браузер</span>
             </div>
             <div class="icon" id="open-rustore">
@@ -1111,192 +804,203 @@
                 <span>Настройки</span>
             </div>
             <div class="icon" id="open-files">
-                <div class="icon-img" style="background: linear-gradient(to bottom, #e3c48f, #cda766); border: 2px solid #a67c42; position: relative; overflow: hidden;">
-                    <div style="position:absolute; top:0; left:10px; width:20px; height:8px; background:#ccc; border-bottom: 1px solid #888;"></div>
-                </div>
+                <div class="icon-img" style="background: linear-gradient(135deg, #8b6b4d, #5a3e2b); border: 2px solid #a67c42;"></div>
                 <span>Документы</span>
             </div>
         </div>
 
         <!-- Область для иконок приложений на рабочем столе -->
-        <div class="desktop-icons" id="desktop-icons">
-            <!-- Сюда будут добавляться приложения из RuStore -->
-        </div>
+        <div class="desktop-icons" id="desktop-icons"></div>
 
         <!-- Окно калькулятора -->
-        <div id="calc-window" class="hidden">
-            <div class="close-btn" id="close-calc">X</div>
-            <div class="calc-screen-wrapper">
-                <div class="calc-screen" id="calc-display">0</div>
+        <div id="calc-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">🧮 Счётчик</span>
+                <div class="window-controls">
+                    <div class="window-btn" onclick="toggleMaximize('calc-window')">□</div>
+                    <div class="window-btn" onclick="minimizeWindow('calc-window')">–</div>
+                    <div class="window-btn close" onclick="closeWindow('calc-window')">✕</div>
+                </div>
             </div>
-            <div class="calc-keys">
-                <button class="calc-btn clear" onclick="clearDisplay()">С</button>
-                <button class="calc-btn" onclick="appendNumber('7')">7</button>
-                <button class="calc-btn" onclick="appendNumber('8')">8</button>
-                <button class="calc-btn op" onclick="setOp('/')">÷</button>
-                
-                <button class="calc-btn" onclick="appendNumber('4')">4</button>
-                <button class="calc-btn" onclick="appendNumber('5')">5</button>
-                <button class="calc-btn" onclick="appendNumber('6')">6</button>
-                <button class="calc-btn op" onclick="setOp('*')">×</button>
-                
-                <button class="calc-btn" onclick="appendNumber('1')">1</button>
-                <button class="calc-btn" onclick="appendNumber('2')">2</button>
-                <button class="calc-btn" onclick="appendNumber('3')">3</button>
-                <button class="calc-btn op" onclick="setOp('-')">−</button>
-                
-                <button class="calc-btn" onclick="appendNumber('0')">0</button>
-                <button class="calc-btn" onclick="appendNumber('.')">.</button>
-                <button class="calc-btn op" onclick="calculate()">=</button>
-                <button class="calc-btn op" onclick="setOp('+')">+</button>
+            <div class="window-content">
+                <div class="calc-screen-wrapper">
+                    <div class="calc-screen" id="calc-display">0</div>
+                </div>
+                <div class="calc-keys">
+                    <button class="calc-btn clear" onclick="clearDisplay()">С</button>
+                    <button class="calc-btn" onclick="appendNumber('7')">7</button>
+                    <button class="calc-btn" onclick="appendNumber('8')">8</button>
+                    <button class="calc-btn op" onclick="setOp('/')">÷</button>
+                    
+                    <button class="calc-btn" onclick="appendNumber('4')">4</button>
+                    <button class="calc-btn" onclick="appendNumber('5')">5</button>
+                    <button class="calc-btn" onclick="appendNumber('6')">6</button>
+                    <button class="calc-btn op" onclick="setOp('*')">×</button>
+                    
+                    <button class="calc-btn" onclick="appendNumber('1')">1</button>
+                    <button class="calc-btn" onclick="appendNumber('2')">2</button>
+                    <button class="calc-btn" onclick="appendNumber('3')">3</button>
+                    <button class="calc-btn op" onclick="setOp('-')">−</button>
+                    
+                    <button class="calc-btn" onclick="appendNumber('0')">0</button>
+                    <button class="calc-btn" onclick="appendNumber('.')">.</button>
+                    <button class="calc-btn op" onclick="calculate()">=</button>
+                    <button class="calc-btn op" onclick="setOp('+')">+</button>
+                </div>
             </div>
         </div>
 
         <!-- Окно браузера -->
-        <div id="browser-window" class="hidden">
-            <div class="close-btn" id="close-browser">X</div>
-            <div class="browser-header">
-                <div class="browser-nav-row">
-                    <button class="browser-nav-btn" id="browser-back">←</button>
-                    <button class="browser-nav-btn" id="browser-forward">→</button>
-                    <button class="browser-nav-btn" id="browser-refresh">↻</button>
-                    <input type="text" class="browser-address-bar" id="browser-address" placeholder="yandex.ru" value="yandex.ru">
-                    <button class="browser-nav-btn" id="browser-go">▶</button>
-                </div>
-                
-                <!-- ПОИСКОВАЯ СТРОКА -->
-                <div class="browser-search-row">
-                    <input type="text" class="browser-search-bar" id="browser-search" placeholder="Поиск в Яндексе...">
-                    <button class="browser-search-btn" id="browser-search-btn">Найти</button>
+        <div id="browser-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">🌐 Браузер (Яндекс)</span>
+                <div class="window-controls">
+                    <div class="window-btn" onclick="toggleMaximize('browser-window')">□</div>
+                    <div class="window-btn" onclick="minimizeWindow('browser-window')">–</div>
+                    <div class="window-btn close" onclick="closeWindow('browser-window')">✕</div>
                 </div>
             </div>
-            <div class="browser-content">
-                <iframe id="browser-frame" src="about:blank"></iframe>
-                <div class="browser-home" id="browser-home">
-                    <div class="yandex-logo">Я</div>
-                    <h1>Яндекс</h1>
-                    <p>Поисковая система №1 в России</p>
-                    <p>Найдётся всё. Только у нас.</p>
-                    <div class="patriot-note">Браузер ПатриотОС — только проверенные сайты</div>
+            <div class="window-content" style="display: flex; flex-direction: column;">
+                <div class="browser-header">
+                    <div class="browser-nav-row">
+                        <button class="browser-nav-btn" id="browser-back">←</button>
+                        <button class="browser-nav-btn" id="browser-forward">→</button>
+                        <button class="browser-nav-btn" id="browser-refresh">↻</button>
+                        <input type="text" class="browser-address-bar" id="browser-address" placeholder="yandex.ru" value="yandex.ru">
+                        <button class="browser-nav-btn" id="browser-go">▶</button>
+                    </div>
+                    <div class="browser-search-row">
+                        <input type="text" class="browser-search-bar" id="browser-search" placeholder="Поиск в Яндексе...">
+                        <button class="browser-search-btn" id="browser-search-btn">Найти</button>
+                    </div>
+                </div>
+                <div style="flex: 1; position: relative;">
+                    <iframe id="browser-frame" src="about:blank" style="width: 100%; height: 100%; border: none;"></iframe>
+                    <div class="browser-home" id="browser-home">
+                        <div class="yandex-logo">Я</div>
+                        <h1>Яндекс</h1>
+                        <p>Поисковая система №1 в России</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Окно RuStore -->
-        <div id="rustore-window" class="hidden">
-            <div class="close-btn" id="close-rustore">X</div>
-            <div class="rustore-header">
-                <span>📦 RuStore — Магазин приложений</span>
-            </div>
-            <div class="rustore-content">
-                <div class="rustore-grid" id="rustore-grid">
-                    <!-- Предустановленные приложения будут загружены сюда -->
+        <div id="rustore-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">📦 RuStore</span>
+                <div class="window-controls">
+                    <div class="window-btn" onclick="toggleMaximize('rustore-window')">□</div>
+                    <div class="window-btn" onclick="minimizeWindow('rustore-window')">–</div>
+                    <div class="window-btn close" onclick="closeWindow('rustore-window')">✕</div>
                 </div>
-                
-                <div class="rustore-add">
-                    <h3>➕ Добавить приложение на рабочий стол</h3>
-                    <input type="text" id="rustore-name" placeholder="Название (например, ВКонтакте)">
-                    <input type="text" id="rustore-url" placeholder="Ссылка (например, vk.com)">
-                    <button id="rustore-add-btn">Добавить на рабочий стол</button>
-                    <p style="font-size: 12px; color: #aaa; margin-top: 10px;">Только российские домены (.ru, .рф, vk.com, yandex.ru и т.д.)</p>
+            </div>
+            <div class="window-content">
+                <div class="rustore-header">Магазин приложений</div>
+                <div class="rustore-content">
+                    <div class="rustore-grid" id="rustore-grid"></div>
+                    <div class="rustore-add">
+                        <h3>➕ Добавить приложение</h3>
+                        <input type="text" id="rustore-name" placeholder="Название">
+                        <input type="text" id="rustore-url" placeholder="Ссылка">
+                        <button id="rustore-add-btn">Добавить на рабочий стол</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Окно настроек -->
-        <div id="settings-window" class="hidden">
-            <div class="close-btn" id="close-settings">X</div>
-            <div class="settings-header">ПАТРИОТ НАСТРОЙКИ</div>
-            
-            <!-- Раздел с обоями -->
-            <div class="settings-section">
-                <h3>🖼️ ОБОИ РАБОЧЕГО СТОЛА</h3>
-                <div class="wallpaper-grid">
-                    <div class="wallpaper-option" data-wallpaper="flag">
-                        <img src="wallpapers/flag.png" alt="Флаг РФ" onerror="this.style.backgroundColor='#8b0000'; this.alt='Флаг (загр.)'">
-                    </div>
-                    <div class="wallpaper-option" data-wallpaper="gerb">
-                        <img src="wallpapers/gerb.png" alt="Герб РФ" onerror="this.style.backgroundColor='#8b0000'; this.alt='Герб (загр.)'">
-                    </div>
-                    <div class="wallpaper-option" data-wallpaper="bereza">
-                        <img src="wallpapers/bereza.png" alt="Берёза" onerror="this.style.backgroundColor='#2b4b3c'; this.alt='Берёза (загр.)'">
-                    </div>
+        <div id="settings-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">⚙️ Настройки</span>
+                <div class="window-controls">
+                    <div class="window-btn" onclick="toggleMaximize('settings-window')">□</div>
+                    <div class="window-btn" onclick="minimizeWindow('settings-window')">–</div>
+                    <div class="window-btn close" onclick="closeWindow('settings-window')">✕</div>
                 </div>
-                <div class="wallpaper-note">Выберите достойное оформление рабочего стола</div>
             </div>
-
-            <!-- Раздел со звуками -->
-            <div class="settings-section">
-                <h3>🔊 ЗВУКОВОЕ СОПРОВОЖДЕНИЕ</h3>
+            <div class="window-content">
+                <div class="settings-header">ПАТРИОТ НАСТРОЙКИ</div>
                 
-                <div class="sound-control">
-                    <span>Гимн РФ (полная версия)</span>
-                    <button class="sound-btn" id="play-gimn">▶ Прослушать</button>
-                </div>
-                
-                <div class="sound-control">
-                    <span>Уведомление (отрывок гимна)</span>
-                    <button class="sound-btn" id="play-uved">▶ Прослушать</button>
+                <div class="settings-section">
+                    <h3>🖼️ ОБОИ</h3>
+                    <div class="wallpaper-grid">
+                        <div class="wallpaper-option" data-wallpaper="flag">
+                            <img src="wallpapers/flag.png" alt="Флаг" onerror="this.style.backgroundColor='#8b0000'">
+                        </div>
+                        <div class="wallpaper-option" data-wallpaper="gerb">
+                            <img src="wallpapers/gerb.png" alt="Герб" onerror="this.style.backgroundColor='#8b0000'">
+                        </div>
+                        <div class="wallpaper-option" data-wallpaper="bereza">
+                            <img src="wallpapers/bereza.png" alt="Берёза" onerror="this.style.backgroundColor='#2b4b3c'">
+                        </div>
+                    </div>
+                    <div class="wallpaper-note">Выберите оформление</div>
                 </div>
 
-                <div class="patriot-message">
-                    ⚠️ Смена звуков невозможна<br>
-                    <small>Настоящий патриот слушает только гимн</small>
-                </div>
-            </div>
-
-            <!-- Раздел с языком -->
-            <div class="settings-section">
-                <h3>🌍 ЯЗЫК СИСТЕМЫ</h3>
-                <div style="padding: 10px; background: #111; border-radius: 5px;">
-                    <div style="color: #8b8b8b;">Текущий язык: <span style="color: #d2a679;">Русский</span></div>
-                    <div class="language-warning">
-                        ⚡ Доступные языки: Русский, Белорусский<br>
-                        ⛔ Английский или Украинский — НЕДОПУСТИМЫ
+                <div class="settings-section">
+                    <h3>🔊 ЗВУКИ</h3>
+                    <div class="sound-control">
+                        <span>Гимн РФ</span>
+                        <button class="sound-btn" id="play-gimn">▶</button>
+                    </div>
+                    <div class="sound-control">
+                        <span>Уведомление</span>
+                        <button class="sound-btn" id="play-uved">▶</button>
+                    </div>
+                    <div class="patriot-message">
+                        Смена звуков невозможна<br>
+                        <small>Настоящий патриот слушает только гимн</small>
                     </div>
                 </div>
-            </div>
 
-            <!-- Информация о системе -->
-            <div class="settings-section">
-                <h3>ℹ️ О СИСТЕМЕ</h3>
-                <div style="line-height: 1.6;">
+                <div class="settings-section">
+                    <h3>🌍 ЯЗЫК</h3>
+                    <div style="padding: 10px; background: #111;">
+                        <div>Текущий язык: <span style="color: #d2a679;">Русский</span></div>
+                        <div class="language-warning">
+                            ⚡ Русский, Белорусский<br>
+                            ⛔ Английский, Украинский — НЕДОПУСТИМЫ
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>ℹ️ О СИСТЕМЕ</h3>
                     <div><strong>ПатриотОС 0.4.0beta</strong></div>
-                    <div>Девиз: «Своих не бросаем. Чужих не запускаем.»</div>
-                    <div style="margin-top: 10px; font-size: 12px;">Разработчики: Губкобобоамёбо, Тимофей</div>
-                    <div style="font-size: 12px;">Надзор: активен ✓</div>
+                    <div>«Своих не бросаем. Чужих не запускаем.»</div>
+                    <div style="margin-top: 10px;">Разработчики: Губкобобоамёбо, Тимофей</div>
+                    <div>Надзор: активен ✓</div>
                 </div>
             </div>
         </div>
 
-        <!-- Окно проводника (Документы) -->
-        <div id="files-window" class="hidden">
-            <div class="close-btn" id="close-files">X</div>
+        <!-- Окно проводника -->
+        <div id="files-window" class="window hidden">
             <div class="window-header">
                 <span class="window-title">📁 Мои Документы</span>
-            </div>
-            <div class="files-content">
-                <div class="files-sidebar">
-                    <div class="files-sidebar-item" data-path="root">
-                        <span>📁 Мой компьютер</span>
-                    </div>
-                    <div class="files-sidebar-item" data-path="Документы">
-                        <span>📄 Мои документы</span>
-                    </div>
-                    <div class="files-sidebar-item" data-path="Изображения">
-                        <span>🖼️ Изображения</span>
-                    </div>
-                    <div class="files-sidebar-item" data-path="Музыка">
-                        <span>🎵 Моя музыка</span>
-                    </div>
+                <div class="window-controls">
+                    <div class="window-btn" onclick="toggleMaximize('files-window')">□</div>
+                    <div class="window-btn" onclick="minimizeWindow('files-window')">–</div>
+                    <div class="window-btn close" onclick="closeWindow('files-window')">✕</div>
                 </div>
-                <div class="files-main">
-                    <div class="files-toolbar">
-                        <button class="files-btn" id="files-new-folder">📁 Новая папка</button>
-                        <button class="files-btn" id="files-new-file">📄 Новый файл</button>
-                        <button class="files-btn" id="files-refresh">🔄 Обновить</button>
+            </div>
+            <div class="window-content" style="padding: 0;">
+                <div class="files-content">
+                    <div class="files-sidebar">
+                        <div class="files-sidebar-item" data-path="root">📁 Мой компьютер</div>
+                        <div class="files-sidebar-item" data-path="Документы">📄 Мои документы</div>
+                        <div class="files-sidebar-item" data-path="Изображения">🖼️ Изображения</div>
+                        <div class="files-sidebar-item" data-path="Музыка">🎵 Моя музыка</div>
                     </div>
-                    <div class="files-grid" id="files-grid"></div>
+                    <div class="files-main">
+                        <div class="files-toolbar">
+                            <button class="files-btn" id="files-new-folder">📁 Новая папка</button>
+                            <button class="files-btn" id="files-new-file">📄 Новый файл</button>
+                            <button class="files-btn" id="files-refresh">🔄 Обновить</button>
+                        </div>
+                        <div class="files-grid" id="files-grid"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1306,20 +1010,31 @@
 </div>
 
 <script>
+    // ========== УПРАВЛЕНИЕ ОКНАМИ ==========
+    function closeWindow(windowId) {
+        document.getElementById(windowId).classList.add('hidden');
+        playUvedomlenie();
+    }
+    
+    function minimizeWindow(windowId) {
+        const win = document.getElementById(windowId);
+        win.classList.add('minimized');
+        setTimeout(() => win.classList.remove('minimized'), 300);
+        playUvedomlenie();
+    }
+    
+    function toggleMaximize(windowId) {
+        const win = document.getElementById(windowId);
+        win.classList.toggle('maximized');
+        playUvedomlenie();
+    }
+    
     // ========== БЛОКИРОВКА НОВЫХ ОКОН ==========
     function blockNewWindows() {
         const blockMethods = ['open', 'showModalDialog', 'showModelessDialog', 'createPopup', 'CreatePopup'];
         blockMethods.forEach(method => {
             try { window[method] = function() { return null; }; } catch(e) {}
         });
-        
-        const originalCreateElement = document.createElement;
-        document.createElement = function(tagName) {
-            if (tagName.toLowerCase() === 'iframe' && document.querySelectorAll('iframe').length > 1) {
-                return originalCreateElement.call(document, 'div');
-            }
-            return originalCreateElement.call(document, tagName);
-        };
     }
     blockNewWindows();
 
@@ -1371,9 +1086,7 @@
         const maxLeft = track.offsetWidth - thumb.offsetWidth - 10;
         
         if (currentLeft < maxLeft - 5) {
-            thumb.style.transition = 'left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             thumb.style.left = '5px';
-            setTimeout(() => thumb.style.transition = 'none', 300);
         }
     }
 
@@ -1439,7 +1152,7 @@
         const randomIndex = Math.floor(Math.random() * wallpapersArray.length);
         desktop.style.backgroundImage = wallpapersArray[randomIndex];
         setTimeout(highlightSelectedWallpaper, 100);
-        loadDesktopIcons(); // Загружаем иконки приложений
+        loadDesktopIcons();
     });
 
     function setWallpaper(wallpaperName) {
@@ -1471,51 +1184,31 @@
     const rustoreWindow = document.getElementById('rustore-window');
     
     document.getElementById('open-calc').addEventListener('click', () => {
-        calcWindow.classList.remove('hidden');
-        playNotification();
-    });
-    document.getElementById('close-calc').addEventListener('click', () => {
-        calcWindow.classList.add('hidden');
+        calcWindow.classList.remove('hidden', 'minimized');
         playNotification();
     });
 
     document.getElementById('open-settings').addEventListener('click', () => {
-        settingsWindow.classList.remove('hidden');
+        settingsWindow.classList.remove('hidden', 'minimized');
         playNotification();
         highlightSelectedWallpaper();
     });
-    document.getElementById('close-settings').addEventListener('click', () => {
-        settingsWindow.classList.add('hidden');
-        playNotification();
-    });
 
     document.getElementById('open-browser').addEventListener('click', () => {
-        browserWindow.classList.remove('hidden');
-        playNotification();
-    });
-    document.getElementById('close-browser').addEventListener('click', () => {
-        browserWindow.classList.add('hidden');
+        browserWindow.classList.remove('hidden', 'minimized');
         playNotification();
     });
 
     document.getElementById('open-files').addEventListener('click', () => {
-        filesWindow.classList.remove('hidden');
+        filesWindow.classList.remove('hidden', 'minimized');
         playNotification();
         renderFiles('root');
     });
-    document.getElementById('close-files').addEventListener('click', () => {
-        filesWindow.classList.add('hidden');
-        playNotification();
-    });
 
     document.getElementById('open-rustore').addEventListener('click', () => {
-        rustoreWindow.classList.remove('hidden');
+        rustoreWindow.classList.remove('hidden', 'minimized');
         playNotification();
         renderRustore();
-    });
-    document.getElementById('close-rustore').addEventListener('click', () => {
-        rustoreWindow.classList.add('hidden');
-        playNotification();
     });
 
     // ========== БРАУЗЕР ==========
@@ -1532,7 +1225,6 @@
     let history = [];
     let currentHistoryIndex = -1;
     const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru', '.рф'];
-
     const forbiddenSearchTerms = [
         'наркотики', 'порно', 'взлом', 'хакинг', 'оружие', 'взрывчатка',
         'террор', 'экстремизм', 'педофилия', 'суицид', 'насилие',
@@ -1556,7 +1248,7 @@
         if (!query) return;
 
         if (isSearchForbidden(query)) {
-            showPatriotError('Поисковый запрос заблокирован!', 'Запрос нарушает законодательство Российской Федерации.');
+            alert('⛔ Запрос заблокирован!');
             browserSearch.value = '';
             return;
         }
@@ -1580,7 +1272,7 @@
         let isAllowed = allowedDomains.some(domain => fullUrl.includes(domain));
 
         if (!isAllowed) {
-            showPatriotError('Доступ запрещён!', 'Только проверенные российские ресурсы.');
+            alert('⛔ Только российские ресурсы!');
             showHome();
             return;
         }
@@ -1680,57 +1372,6 @@
         display.innerText = currentInput.length > 10 ? currentInput.substring(0, 10) : currentInput;
     }
 
-    // ========== ПАТРИОТИЧЕСКИЕ ОШИБКИ ==========
-    function showPatriotError(message, details = '') {
-        const errorBox = document.createElement('div');
-        errorBox.style.cssText = `
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #8b0000, #4a0000); border: 4px solid #d2a679;
-            border-radius: 15px; padding: 25px; color: white; font-family: 'Playfair Display', serif;
-            text-align: center; z-index: 10000; box-shadow: 0 0 50px rgba(0,0,0,0.8);
-            max-width: 400px; animation: patriotErrorFade 0.5s;
-        `;
-        errorBox.innerHTML = `
-            <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
-            <h2 style="margin: 0 0 15px 0; color: #d2a679;">ПАТРИОТИЧЕСКАЯ ЗАЩИТА</h2>
-            <p style="margin: 10px 0; font-size: 16px; line-height: 1.5;">${message}</p>
-            <p style="margin: 15px 0 10px 0; font-size: 14px; color: #ffaaaa;">${details}</p>
-            <button onclick="this.parentElement.remove()" style="
-                background: #d2a679; border: none; color: #4a0000; padding: 10px 30px;
-                border-radius: 30px; font-family: 'Courier Prime', monospace; font-weight: bold;
-                font-size: 16px; cursor: pointer; margin-top: 15px; border: 2px solid #ffd700;
-            ">ПРИНЯТЬ</button>
-        `;
-        document.body.appendChild(errorBox);
-        setTimeout(() => errorBox.remove(), 5000);
-        playUvedomlenie();
-    }
-
-    browserFrame.addEventListener('error', () => {
-        showPatriotError('Сайт не может быть загружен!', 
-            `Ресурс «${browserAddress.value}» не имеет серверов на территории Российской Федерации.\nДоступ запрещён.`);
-        showHome();
-    });
-
-    window.addEventListener('error', function(e) {
-        if (e.target === browserFrame) return;
-        let errorMessage = 'Техническая неполадка';
-        let errorDetails = 'Система заблокировала подозрительную активность.';
-        if (e.target?.tagName === 'IMG') {
-            errorMessage = 'Изображение не загружено!';
-            errorDetails = 'Файл содержит неподтверждённую символику или загружен с иностранного сервера.';
-        } else if (e.target?.tagName === 'AUDIO') {
-            errorMessage = 'Звуковой файл заблокирован!';
-            errorDetails = 'Аудио не прошло проверку на патриотичность.';
-        }
-        showPatriotError(errorMessage, errorDetails);
-        e.preventDefault();
-    });
-
-    const style = document.createElement('style');
-    style.textContent = `@keyframes patriotErrorFade { from { opacity: 0; transform: translate(-50%, -60%); } to { opacity: 1; transform: translate(-50%, -50%); } }`;
-    document.head.appendChild(style);
-
     // ========== ПРОВОДНИК ==========
     class PatriotFileSystem {
         constructor() {
@@ -1763,7 +1404,6 @@
         
         getFolder(path) {
             if (path === 'root') return this.root;
-            
             if (path === 'Документы') return this.root.children['Документы'];
             if (path === 'Изображения') return this.root.children['Изображения'];
             if (path === 'Музыка') return this.root.children['Музыка'];
@@ -1782,27 +1422,20 @@
         
         createItem(path, name, type) {
             if (!this.isPatrioticName(name)) {
-                alert('⛔ Имя файла должно быть патриотичным! Только русский язык, никаких иностранных слов.');
+                alert('⛔ Только русские буквы!');
                 return false;
             }
             
             const folder = this.getFolder(path);
             if (!folder || folder.type !== 'folder' || folder.children[name]) return false;
             
-            folder.children[name] = {
-                name, type,
-                children: type === 'folder' ? {} : undefined,
-                content: type === 'file' ? '' : undefined,
-                size: type === 'file' ? 0 : undefined,
-                created: new Date().toISOString()
-            };
+            folder.children[name] = { name, type, children: type === 'folder' ? {} : undefined, content: type === 'file' ? '' : undefined };
             this.saveFS();
             return true;
         }
         
         isPatrioticName(name) {
-            const patriotRegex = /^[а-яА-ЯёЁ0-9\s\.\-]+$/;
-            return patriotRegex.test(name);
+            return /^[а-яА-ЯёЁ0-9\s\.\-]+$/.test(name);
         }
         
         deleteItem(path, name) {
@@ -1815,13 +1448,11 @@
         
         renameItem(path, oldName, newName) {
             if (!this.isPatrioticName(newName)) {
-                alert('⛔ Имя файла должно быть патриотичным! Только русский язык, никаких иностранных слов.');
+                alert('⛔ Только русские буквы!');
                 return false;
             }
-            
             const folder = this.getFolder(path);
             if (!folder || !folder.children[oldName]) return false;
-            
             folder.children[newName] = folder.children[oldName];
             folder.children[newName].name = newName;
             delete folder.children[oldName];
@@ -1832,7 +1463,6 @@
 
     const patriotFS = new PatriotFileSystem();
     const filesGrid = document.getElementById('files-grid');
-    const closeFiles = document.getElementById('close-files');
     const newFolderBtn = document.getElementById('files-new-folder');
     const newFileBtn = document.getElementById('files-new-file');
     const refreshBtn = document.getElementById('files-refresh');
@@ -1867,23 +1497,19 @@
     window.openItem = function(path, name) {
         const folder = patriotFS.getFolder(path);
         if (!folder) return;
-        
         const item = folder.children[name];
         if (!item) return;
         
         if (item.type === 'folder') {
-            const newPath = path === 'root' ? name : path + '/' + name;
-            renderFiles(newPath);
+            renderFiles(path === 'root' ? name : path + '/' + name);
         } else {
             if (name.endsWith('.mp3')) {
-                const audio = new Audio(item.content);
-                audio.volume = 0.4;
-                audio.play();
-                alert(`🎵 Воспроизведение: ${name}\nНастоящий патриот слушает только гимн!`);
+                new Audio(item.content).play();
+                alert(`🎵 ${name}`);
             } else if (name.endsWith('.png') || name.endsWith('.jpg')) {
-                alert(`🖼️ Просмотр: ${name}\nДостойное изображение!`);
+                alert(`🖼️ ${name}`);
             } else {
-                alert(`📄 ${name}\n\n${item.content || 'Пустой файл'}`);
+                alert(`📄 ${name}\n\n${item.content || ''}`);
             }
         }
     };
@@ -1891,35 +1517,28 @@
     window.navigateUp = function() {
         const current = patriotFS.currentPath;
         if (current === 'root') return;
-        
         if (current === 'Документы' || current === 'Изображения' || current === 'Музыка') {
             renderFiles('root');
             return;
         }
-        
         const parts = current.split('/');
         parts.pop();
-        const parent = parts.join('/') || 'root';
-        renderFiles(parent);
+        renderFiles(parts.join('/') || 'root');
     };
 
     newFolderBtn.addEventListener('click', () => {
-        const name = prompt('Введите название папки (только русские буквы):');
-        if (name) {
-            if (patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
-                renderFiles(patriotFS.currentPath);
-                playUvedomlenie();
-            }
+        const name = prompt('Название папки:');
+        if (name && patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
+            renderFiles(patriotFS.currentPath);
+            playUvedomlenie();
         }
     });
 
     newFileBtn.addEventListener('click', () => {
-        const name = prompt('Введите название файла с расширением (только русские буквы):');
-        if (name) {
-            if (patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
-                renderFiles(patriotFS.currentPath);
-                playUvedomlenie();
-            }
+        const name = prompt('Название файла:');
+        if (name && patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
+            renderFiles(patriotFS.currentPath);
+            playUvedomlenie();
         }
     });
 
@@ -1941,33 +1560,25 @@
         const item = e.target.closest('.files-item');
         if (!item || item.querySelector('.files-item-name').textContent === '...') return;
         const name = item.dataset.name;
-        const action = confirm(`Действия с "${name}":\nOK - удалить\nОтмена - переименовать`);
-        if (action) {
+        if (confirm(`Удалить "${name}"?`)) {
             if (patriotFS.deleteItem(patriotFS.currentPath, name)) {
-                renderFiles(patriotFS.currentPath);
-                playUvedomlenie();
-            }
-        } else {
-            const newName = prompt('Новое название (только русские буквы):', name);
-            if (newName && newName !== name && patriotFS.renameItem(patriotFS.currentPath, name, newName)) {
                 renderFiles(patriotFS.currentPath);
                 playUvedomlenie();
             }
         }
     });
 
-    // ========== RuStore с иконками ==========
+    // ========== RuStore ==========
     const rustoreGrid = document.getElementById('rustore-grid');
     const rustoreName = document.getElementById('rustore-name');
     const rustoreUrl = document.getElementById('rustore-url');
     const rustoreAddBtn = document.getElementById('rustore-add-btn');
     const desktopIcons = document.getElementById('desktop-icons');
 
-    // Предустановленные приложения с путями к иконкам
     const preinstalledApps = [
         { name: 'ВКонтакте', url: 'vk.com', icon: 'images/vkontakte.png' },
         { name: 'RuTube', url: 'rutube.ru', icon: 'images/rutube.png' },
-        { name: 'MAX', url: 'max.ru/', icon: 'images/max.jpg' },
+        { name: 'MAX', url: 'max.ru', icon: 'images/max.jpg' },
         { name: 'Госуслуги', url: 'gosuslugi.ru', icon: 'images/gosuslugi.jpg' },
         { name: 'Сбербанк', url: 'sberbank.ru', icon: 'images/sber.jpg' },
         { name: 'ДваГИС', url: '2gis.ru', icon: 'images/2gis.png' },
@@ -1975,12 +1586,10 @@
         { name: 'VK Музыка', url: 'vk.com/audio', icon: 'images/VKmusica.png' }
     ];
 
-    // Загруженные приложения из localStorage
     let installedApps = JSON.parse(localStorage.getItem('patriotApps')) || [];
 
     function renderRustore() {
         let html = '';
-        
         preinstalledApps.forEach(app => {
             const isInstalled = installedApps.some(a => a.url === app.url);
             html += `
@@ -1988,58 +1597,41 @@
                     <div class="rustore-item-icon" style="background-image: url('${app.icon}');"></div>
                     <div class="rustore-item-name">${app.name}</div>
                     <div class="rustore-item-url">${app.url}</div>
-                    ${isInstalled ? '<div style="color: #4CAF50; margin-top: 5px;">✓ Установлено</div>' : ''}
+                    ${isInstalled ? '<div style="color: #4CAF50;">✓ Установлено</div>' : ''}
                 </div>
             `;
         });
-        
         rustoreGrid.innerHTML = html;
     }
 
     window.installApp = function(name, url, icon) {
         if (installedApps.some(a => a.url === url)) {
-            alert('Приложение уже установлено на рабочий стол!');
+            alert('Уже установлено!');
             return;
         }
-        
         installedApps.push({ name, url, icon });
         localStorage.setItem('patriotApps', JSON.stringify(installedApps));
-        
         addDesktopIcon(name, url, icon);
-        
         playUvedomlenie();
-        renderRustore(); // Обновляем отображение в RuStore
-        alert(`✅ Приложение "${name}" добавлено на рабочий стол!`);
+        renderRustore();
     };
 
     function addDesktopIcon(name, url, icon) {
-        const iconElement = document.createElement('div');
-        iconElement.className = 'desktop-icon';
-        iconElement.setAttribute('data-url', url);
-        iconElement.onclick = () => {
-            browserWindow.classList.remove('hidden');
+        const el = document.createElement('div');
+        el.className = 'desktop-icon';
+        el.setAttribute('data-url', url);
+        el.onclick = () => {
+            browserWindow.classList.remove('hidden', 'minimized');
             showSite(url);
         };
-        
-        iconElement.innerHTML = `
-            <div class="desktop-icon-img" style="background-image: url('${icon}');"></div>
-            <div class="desktop-icon-name">${name}</div>
-        `;
-        
-        desktopIcons.appendChild(iconElement);
+        el.innerHTML = `<div class="desktop-icon-img" style="background-image: url('${icon}');"></div><div class="desktop-icon-name">${name}</div>`;
+        desktopIcons.appendChild(el);
     }
 
     function loadDesktopIcons() {
-        // Сначала добавляем все предустановленные приложения
-        preinstalledApps.forEach(app => {
-            addDesktopIcon(app.name, app.url, app.icon);
-        });
-        
-        // Потом загружаем сохранённые пользовательские
+        preinstalledApps.forEach(app => addDesktopIcon(app.name, app.url, app.icon));
         installedApps.forEach(app => {
-            // Проверяем, не дублируется ли с предустановленным
-            const isPreinstalled = preinstalledApps.some(p => p.url === app.url);
-            if (!isPreinstalled) {
+            if (!preinstalledApps.some(p => p.url === app.url)) {
                 addDesktopIcon(app.name, app.url, app.icon);
             }
         });
@@ -2048,40 +1640,23 @@
     rustoreAddBtn.addEventListener('click', () => {
         const name = rustoreName.value.trim();
         let url = rustoreUrl.value.trim();
+        if (!name || !url) return alert('Заполните поля!');
         
-        if (!name || !url) {
-            alert('Введите название и ссылку!');
-            return;
+        if (!allowedDomains.some(d => url.includes(d)) && !url.includes('.ru') && !url.includes('.рф')) {
+            return alert('⛔ Только российские домены!');
         }
         
-        const isRussianDomain = allowedDomains.some(domain => url.includes(domain)) || url.includes('.ru') || url.includes('.рф');
-        if (!isRussianDomain) {
-            alert('⛔ Только российские домены!');
-            return;
-        }
+        if (!url.startsWith('http')) url = 'https://' + url;
         
-        if (!url.startsWith('http')) {
-            url = 'https://' + url;
-        }
+        const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='%238b6b4d'/%3E%3Ctext x='30' y='40' font-size='24' text-anchor='middle' fill='white'%3E${name.charAt(0).toUpperCase()}%3C/text%3E%3C/svg%3E`;
         
-        // Для пользовательских приложений используем заглушку
-        const icon = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\' viewBox=\'0 0 60 60\'%3E%3Crect width=\'60\' height=\'60\' fill=\'%238b6b4d\'/%3E%3Ctext x=\'30\' y=\'40\' font-size=\'24\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'%3E' + name.charAt(0).toUpperCase() + '%3C/text%3E%3C/svg%3E';
-        
-        if (installedApps.some(a => a.url === url)) {
-            alert('Приложение уже установлено!');
-            return;
-        }
+        if (installedApps.some(a => a.url === url)) return alert('Уже есть!');
         
         installedApps.push({ name, url, icon });
         localStorage.setItem('patriotApps', JSON.stringify(installedApps));
-        
         addDesktopIcon(name, url, icon);
-        
-        rustoreName.value = '';
-        rustoreUrl.value = '';
-        
+        rustoreName.value = rustoreUrl.value = '';
         playUvedomlenie();
-        alert(`✅ Приложение "${name}" добавлено на рабочий стол!`);
     });
 
     // ========== БЛОКИРОВКА F12 ==========
@@ -2089,11 +1664,10 @@
     document.addEventListener('keydown', e => {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
             e.preventDefault();
-            alert('⛔ Доступ к инструментам разработчика запрещён. Это непатриотично.');
+            alert('⛔ Доступ запрещён.');
         }
     });
 
-    // Кнопки звуков в настройках
     document.getElementById('play-gimn').addEventListener('click', function() {
         playGimn();
         this.classList.add('playing');
