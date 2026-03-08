@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PatriotOS 0.5.3beta</title>
+    <title>PatriotOS 0.5.4</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
@@ -117,14 +117,19 @@
         .top-panel {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 16px;
             margin-bottom: 16px;
-            height: 60px;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            border: 1px solid var(--glass-border);
         }
 
         .start-button {
-            width: 60px;
-            height: 60px;
+            width: 48px;
+            height: 48px;
             background: var(--glass);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
@@ -132,7 +137,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 24px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: var(--shadow);
@@ -147,124 +152,96 @@
             transform: scale(0.95);
         }
 
-        /* Основной контейнер */
-        .main-content {
+        /* Док в верхней панели */
+        .top-panel .dock {
             display: flex;
-            gap: 24px;
-            flex: 1;
-            min-height: 0;
-        }
-
-        /* Левая панель с доком и временем */
-        .left-panel {
-            display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            align-items: center;
             gap: 16px;
-            height: fit-content;
-            align-self: center;
-        }
-
-        .dock {
-            width: 90px; 
             background: var(--glass);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            padding: 24px 0; 
-            gap: 20px;
+            border-radius: 40px;
+            padding: 8px 20px;
             box-shadow: var(--shadow);
         }
 
-        .datetime-panel {
-            width: 90px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 16px 8px;
+        .top-panel .dock .icon {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
         }
 
-        .datetime-panel:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .top-panel .dock .icon span {
+            display: none; /* Скрываем подписи в верхнем доке */
         }
 
-        .datetime-panel:active {
-            transform: scale(0.95);
-        }
-
-        .time-panel {
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        .date-panel {
-            font-size: 14px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.9);
-            text-align: center;
-        }
-
-        .holiday-indicator {
-            font-size: 20px;
-            margin-top: 4px;
-        }
-
-        .icon {
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            cursor: pointer; 
-            width: 100%;
-        }
-
-        .icon-img {
-            width: 54px; 
-            height: 54px;
-            border-radius: 14px; 
+        .top-panel .dock .icon-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             background: var(--white);
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            align-items: center;
             justify-content: center;
-            font-size: 24px; 
+            font-size: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background-size: cover;
             background-position: center;
         }
 
-        .icon:active .icon-img { 
+        .top-panel .dock .icon:active .icon-img { 
             transform: scale(0.9); 
         }
 
-        .calc-icon { 
-            background: linear-gradient(135deg, #4facfe, #00f2fe); 
-        }
-        .settings-icon { 
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2); 
-        }
-        .files-icon { 
-            background: linear-gradient(135deg, #a8edea, #fed6e3); 
+        /* Панель даты/времени в верхней панели */
+        .top-panel .datetime-panel {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
 
-        .icon span {
-            margin-top: 6px; 
-            color: var(--white);
-            font-size: 11px; 
-            font-weight: 500; 
-            opacity: 0.9;
+        .top-panel .datetime-panel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .top-panel .datetime-panel:active {
+            transform: scale(0.95);
+        }
+
+        .top-panel .time-panel {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .top-panel .date-panel {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .top-panel .holiday-indicator {
+            font-size: 18px;
+        }
+
+        /* Основной контейнер */
+        .main-content {
+            flex: 1;
+            display: flex;
+            gap: 24px;
+            min-height: 0;
         }
 
         /* Область для иконок приложений */
@@ -936,61 +913,52 @@
             }
 
             .top-panel {
-                margin-bottom: 12px;
-                height: 50px;
+                padding: 6px 12px;
+                gap: 8px;
             }
 
             .start-button {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+            }
+
+            .top-panel .dock {
+                padding: 6px 12px;
+                gap: 12px;
+            }
+
+            .top-panel .dock .icon-img {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .top-panel .datetime-panel {
+                padding: 6px 12px;
+                gap: 8px;
+            }
+
+            .top-panel .time-panel {
+                font-size: 14px;
+            }
+
+            .top-panel .date-panel {
+                font-size: 12px;
+            }
+
+            .top-panel .holiday-indicator {
+                font-size: 16px;
             }
 
             .start-modal {
-                top: 74px;
+                top: 70px;
                 left: 12px;
                 width: 280px;
             }
 
             .main-content {
                 gap: 12px;
-            }
-
-            .left-panel {
-                gap: 12px;
-            }
-
-            .dock {
-                width: 70px;
-                padding: 16px 0;
-                gap: 16px;
-            }
-
-            .datetime-panel {
-                width: 70px;
-                padding: 12px 4px;
-            }
-
-            .time-panel {
-                font-size: 16px;
-            }
-
-            .date-panel {
-                font-size: 12px;
-            }
-
-            .holiday-indicator {
-                font-size: 18px;
-            }
-
-            .icon-img {
-                width: 44px;
-                height: 44px;
-                font-size: 20px;
-            }
-
-            .icon span {
-                font-size: 10px;
             }
 
             .desktop-icons {
@@ -1047,17 +1015,26 @@
         }
 
         @media (max-width: 480px) {
-            .dock {
-                width: 60px;
+            .top-panel .dock {
+                gap: 8px;
+                padding: 4px 8px;
             }
 
-            .datetime-panel {
-                width: 60px;
+            .top-panel .dock .icon-img {
+                width: 32px;
+                height: 32px;
             }
 
-            .icon-img {
-                width: 40px;
-                height: 40px;
+            .top-panel .datetime-panel {
+                padding: 4px 8px;
+            }
+
+            .top-panel .time-panel {
+                font-size: 12px;
+            }
+
+            .top-panel .date-panel {
+                display: none; /* На очень маленьких экранах скрываем дату, оставляем только время */
             }
 
             .window-controls {
@@ -1112,17 +1089,48 @@
 
     <!-- Рабочий стол -->
     <div id="desktop" style="background-image: url('wallpapers/flag.png');">
-        <!-- Верхняя панель с кнопкой Пуск -->
+        <!-- Верхняя панель с кнопкой Пуск, доком и датой -->
         <div class="top-panel">
             <div class="start-button" id="start-button">
                 🔴
+            </div>
+
+            <!-- Док (иконки приложений) -->
+            <div class="dock">
+                <div class="icon" data-window="calc-window">
+                    <div class="icon-img calc-icon">🔢</div>
+                    <span>Счётчик</span>
+                </div>
+                <div class="icon" data-window="browser-window">
+                    <div class="icon-img" style="background-image: url('images/yandex.png');"></div>
+                    <span>Браузер</span>
+                </div>
+                <div class="icon" data-window="rustore-window">
+                    <div class="icon-img" style="background-image: url('images/rustore.png');"></div>
+                    <span>RuStore</span>
+                </div>
+                <div class="icon" data-window="settings-window">
+                    <div class="icon-img settings-icon">⚙️</div>
+                    <span>Настройки</span>
+                </div>
+                <div class="icon" data-window="files-window">
+                    <div class="icon-img files-icon">📁</div>
+                    <span>Документы</span>
+                </div>
+            </div>
+
+            <!-- Панель с датой и временем -->
+            <div class="datetime-panel" id="datetime-panel">
+                <div class="time-panel" id="current-time">12:00</div>
+                <div class="date-panel" id="current-date">1 января</div>
+                <div class="holiday-indicator" id="holiday-indicator">⭐</div>
             </div>
         </div>
 
         <!-- Модальное окно Пуск -->
         <div id="start-modal" class="start-modal hidden">
             <div class="start-header">
-                <h2>ПатриотОС 0.5.3beta</h2>
+                <h2>ПатриотОС 0.5.4</h2>
                 <p>Своих не бросаем</p>
             </div>
             
@@ -1151,40 +1159,7 @@
         </div>
 
         <div class="main-content">
-            <!-- Левая панель с доком и временем -->
-            <div class="left-panel">
-                <div class="dock">
-                    <div class="icon" data-window="calc-window">
-                        <div class="icon-img calc-icon">🔢</div>
-                        <span>Счётчик</span>
-                    </div>
-                    <div class="icon" data-window="browser-window">
-                        <div class="icon-img" style="background-image: url('images/yandex.png');"></div>
-                        <span>Браузер</span>
-                    </div>
-                    <div class="icon" data-window="rustore-window">
-                        <div class="icon-img" style="background-image: url('images/rustore.png');"></div>
-                        <span>RuStore</span>
-                    </div>
-                    <div class="icon" data-window="settings-window">
-                        <div class="icon-img settings-icon">⚙️</div>
-                        <span>Настройки</span>
-                    </div>
-                    <div class="icon" data-window="files-window">
-                        <div class="icon-img files-icon">📁</div>
-                        <span>Документы</span>
-                    </div>
-                </div>
-
-                <!-- Панель с датой и временем -->
-                <div class="datetime-panel" id="datetime-panel">
-                    <div class="time-panel" id="current-time">12:00</div>
-                    <div class="date-panel" id="current-date">1 января</div>
-                    <div class="holiday-indicator" id="holiday-indicator">⭐</div>
-                </div>
-            </div>
-
-            <!-- Иконки приложений -->
+            <!-- Иконки приложений на рабочем столе -->
             <div class="desktop-icons" id="desktop-icons"></div>
         </div>
 
@@ -1290,7 +1265,7 @@
             </div>
             <div class="window-content">
                 <div class="flag-line"></div>
-                <h2 style="margin: 0 0 10px; font-size: 20px;">ПатриотОС 0.5.3beta</h2>
+                <h2 style="margin: 0 0 10px; font-size: 20px;">ПатриотОС 0.5.4</h2>
                 
                 <div class="settings-card">
                     <h3 style="margin: 0 0 10px;">🖼️ ОБОИ</h3>
@@ -1320,7 +1295,7 @@
                 </div>
 
                 <div class="settings-card">
-                    <p><strong>Версия:</strong> 0.5.3beta</p>
+                    <p><strong>Версия:</strong> 0.5.4</p>
                     <p><strong>Безопасность:</strong> Активна ✓</p>
                     <p><strong>Язык:</strong> Русский (Системный)</p>
                     <p style="color: var(--red); font-size: 12px;">Английский/Украинский — блокировка</p>
