@@ -911,6 +911,34 @@
     let isDragging = false;
     let startX;
 
+// Полная блокировка всех попыток открыть новое окно
+function blockNewWindows() {
+    // Блокируем все возможные способы открыть новое окно
+    const blockMethods = [
+        'open', 'showModalDialog', 'showModelessDialog',
+        'createPopup', 'CreatePopup'
+    ];
+    
+    blockMethods.forEach(method => {
+        try {
+            window[method] = function() { return null; };
+        } catch(e) {}
+    });
+    
+    // Блокируем создание новых iframe
+    const originalCreateElement = document.createElement;
+    document.createElement = function(tagName) {
+        if (tagName.toLowerCase() === 'iframe') {
+            console.log('Блокировка создания нового iframe');
+            return originalCreateElement.call(document, 'div');
+        }
+        return originalCreateElement.call(document, tagName);
+    };
+}
+
+// Вызываем при загрузке
+blockNewWindows();
+
     function getClientX(e) {
         if (e.touches) {
             return e.touches[0].clientX;
@@ -1369,8 +1397,8 @@ function openInPatriotBrowser(url) {
         playNotification();
     }
     
-    // Очищаем URL от якоря (#) и лишнего
-    const cleanUrl = url.split('#')[0].split('?')[0];
+    // Очищаем URL от якоря (#) и параметров для красоты
+    const cleanUrl = url.split('#')[0];
     
     // Устанавливаем URL в адресную строку
     browserAddress.value = cleanUrl;
@@ -1379,86 +1407,91 @@ function openInPatriotBrowser(url) {
     showSite(cleanUrl);
 }
 
-// Перехватываем все клики по ссылкам в любом iframe
-document.addEventListener('click', function(e) {
-    // Ищем, кликнули ли по ссылке внутри iframe
-    const iframe = e.target.closest('iframe');
-    if (iframe) {
-        // Даём время iframe обработать клик, потом проверяем
-        setTimeout(() => {
-            try {
-                // Пытаемся получить URL, на который перешёл iframe
-                const iframeSrc = iframe.contentWindow.location.href;
-                
-                // Если это не пустая страница и не домашняя
-                if (iframeSrc && iframeSrc !== 'about:blank' && !iframeSrc.includes('yandex.ru/search')) {
-                    
-                    // Проверяем, не пытается ли iframe уйти на другой сайт
-                    const isExternal = !iframeSrc.includes(window.location.hostname);
-                    
-                    if (isExternal) {
-                        // Останавливаем загрузку в iframe
-                        iframe.src = 'about:blank';
-                        
-                        // Открываем в браузере ПатриотОС
-                        openInPatriotBrowser(iframeSrc);
-                    }
-                }
-            } catch (err) {
-                // Если ошибка доступа (кросс-домен) — значит точно внешняя ссылка
-                // Это то, что нам нужно!
-                
-                // Останавливаем загрузку в iframe
-                iframe.src = 'about:blank';
-                
-                // Берём URL из последнего известного
-                if (history.length > 0) {
-                    const lastUrl = history[history.length - 1];
-                    openInPatriotBrowser(lastUrl);
-                }
-            }
-        }, 100);
-    }
-});
-
-// Перехватываем все ссылки, которые открываются в новом окне
-const originalWindowOpen = window.open;
+// Полностью блокируем все попытки открыть новое окно
 window.open = function(url, name, features) {
-    // Вместо нового окна — открываем в браузере ПатриотОС
+    console.log('Блокировка window.open:', url);
     if (url) {
         openInPatriotBrowser(url);
     }
-    return null;
+    return {
+        closed: false,
+        focus: function() {},
+        close: function() {}
+    };
 };
 
-// Перехватываем клики по ссылкам в основном документе
+// Блокируем target="_blank" на всех ссылках
 document.addEventListener('click', function(e) {
+    // Ищем ссылку, по которой кликнули
     const link = e.target.closest('a');
     if (link && link.href) {
-        // Если ссылка ведёт не на текущий домен
-        if (!link.href.includes(window.location.hostname)) {
+        // Если это ссылка на другой сайт или с target="_blank"
+        if (link.target === '_blank' || !link.href.includes(window.location.hostname)) {
             e.preventDefault();
+            e.stopPropagation();
             openInPatriotBrowser(link.href);
+            return false;
         }
+    }
+}, true);
+
+// Следим за iframe и перехватываем всё, что там происходит
+let iframeBlocked = false;
+browserFrame.addEventListener('load', function() {
+    try {
+        // Пытаемся внедриться в iframe и перехватить там ссылки
+        const iframeDoc = browserFrame.contentDocument || browserFrame.contentWindow.document;
+        
+        // Добавляем мета-тег, запрещающий открытие новых окон
+        const meta = iframeDoc.createElement('meta');
+        meta.setAttribute('http-equiv', 'Content-Security-Policy');
+        meta.setAttribute('content', "frame-ancestors 'self'");
+        iframeDoc.head.appendChild(meta);
+        
+        // Перехватываем все клики внутри iframe
+        iframeDoc.addEventListener('click', function(e) {
+            const iframeLink = e.target.closest('a');
+            if (iframeLink && iframeLink.href) {
+                e.preventDefault();
+                e.stopPropagation();
+                openInPatriotBrowser(iframeLink.href);
+                return false;
+            }
+        }, true);
+        
+        // Переопределяем window.open внутри iframe
+        const iframeWindow = browserFrame.contentWindow;
+        iframeWindow.open = function(url, name, features) {
+            openInPatriotBrowser(url);
+            return null;
+        };
+        
+    } catch (err) {
+        // Если не можем достучаться до iframe (кросс-домен) - это нормально
+        console.log('Не могу достучаться до iframe (кросс-домен)');
     }
 });
 
-// Следим за изменениями в iframe
-let lastIframeUrl = '';
+// Бесконечная защита от новых окон
 setInterval(function() {
+    // Проверяем, не появилось ли новое окно
+    if (window.frames.length > 1) {
+        // Если появился новый iframe - удаляем его
+        while (window.frames.length > 1) {
+            document.body.removeChild(document.querySelectorAll('iframe')[1]);
+        }
+    }
+    
+    // Проверяем, не пытается ли iframe сбежать
     try {
-        const currentUrl = browserFrame.contentWindow.location.href;
-        if (currentUrl && currentUrl !== 'about:blank' && currentUrl !== lastIframeUrl) {
-            lastIframeUrl = currentUrl;
-            
+        const iframeLocation = browserFrame.contentWindow.location.href;
+        if (iframeLocation && iframeLocation !== 'about:blank') {
             // Обновляем адресную строку
-            browserAddress.value = currentUrl;
+            browserAddress.value = iframeLocation;
         }
     } catch (err) {
-        // Ошибка доступа — значит iframe пытается уйти на другой домен
-        if (lastIframeUrl) {
-            openInPatriotBrowser(lastIframeUrl);
-        }
+        // Ошибка доступа - значит iframe на чужом домене
+        // Это нормально, ничего не делаем
     }
 }, 500);
 </script>
