@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PatriotOS 0.6.1</title>
+    <title>PatriotOS 0.6.0</title>
     <link rel="icon" type="image/png" href="images/icon.png">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
         :root {
             --white: #ffffff;
@@ -63,11 +63,10 @@
 
         .clock {
             font-size: clamp(5rem, 15vw, 8rem);
-            font-weight: 700; 
+            font-weight: 300; 
             color: var(--white);
             margin-bottom: 40px; 
             letter-spacing: -2px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .login-button {
@@ -79,7 +78,7 @@
             color: white;
             font-family: 'Inter', sans-serif;
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 600;
             letter-spacing: 2px;
             cursor: pointer;
             display: flex;
@@ -128,8 +127,6 @@
             border-radius: 60px;
             border: 1px solid var(--glass-border-light);
             box-shadow: var(--shadow);
-            z-index: 100;
-            position: relative;
         }
 
         .start-button {
@@ -224,16 +221,14 @@
 
         .top-panel .time-panel {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             color: white;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
         .top-panel .date-panel {
             font-size: 14px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.95);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .top-panel .holiday-indicator {
@@ -291,26 +286,26 @@
             margin-top: 6px; 
             color: var(--white);
             font-size: 11px; 
-            font-weight: 700; 
+            font-weight: 500; 
+            opacity: 0.9;
             text-align: center;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
         }
 
         /* ОКНА — теперь всегда на весь экран */
         .window {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
+            position: absolute;
+            top: 100px; /* Отступ от верхней панели */
+            left: 24px;
+            right: 24px;
+            bottom: 24px;
             background: rgba(255, 255, 255, 0.98);
-            border-radius: 0;
-            box-shadow: none;
-            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border: 1px solid var(--white);
             overflow: hidden; 
             display: flex; 
             flex-direction: column;
             transition: opacity 0.3s;
-            z-index: 2000;
         }
 
         .window.hidden { 
@@ -328,8 +323,8 @@
         }
 
         .window-title { 
-            font-weight: 700; 
-            font-size: 16px; 
+            font-weight: 600; 
+            font-size: 14px; 
             color: #1d1d1f; 
         }
 
@@ -368,7 +363,7 @@
             border-radius: 12px; 
             text-align: right;
             font-size: 32px; 
-            font-weight: 700; 
+            font-weight: 300; 
             margin-bottom: 15px;
         }
         
@@ -384,7 +379,6 @@
             border-radius: 10px;
             background: #eee; 
             font-size: 18px; 
-            font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
             -webkit-tap-highlight-color: transparent;
@@ -415,13 +409,12 @@
 
         .calendar-month {
             font-size: 24px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--blue);
         }
 
         .calendar-year {
             font-size: 20px;
-            font-weight: 700;
             color: var(--red);
         }
 
@@ -431,7 +424,7 @@
             gap: 5px;
             margin-bottom: 10px;
             text-align: center;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--blue);
         }
 
@@ -448,7 +441,6 @@
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
-            font-weight: 600;
         }
 
         .calendar-day:hover {
@@ -458,7 +450,7 @@
         .calendar-day.today {
             background: var(--blue);
             color: white;
-            font-weight: 700;
+            font-weight: 600;
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0, 87, 183, 0.3);
             z-index: 1;
@@ -467,7 +459,7 @@
         .calendar-day.holiday {
             background: rgba(213, 43, 30, 0.1);
             color: var(--red);
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .calendar-day.holiday::after {
@@ -489,14 +481,12 @@
         .holiday-list h4 {
             margin: 0 0 10px 0;
             color: var(--red);
-            font-weight: 700;
         }
 
         .holiday-list ul {
             margin: 0;
             padding-left: 20px;
             color: #333;
-            font-weight: 600;
         }
 
         .holiday-list li {
@@ -507,7 +497,7 @@
             background: rgba(213, 43, 30, 0.2);
             padding: 5px 10px;
             border-radius: 20px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         /* МОДАЛЬНОЕ ОКНО ПУСК */
@@ -541,13 +531,12 @@
         .start-header h2 {
             margin: 0;
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .start-header p {
             margin: 5px 0 0;
             font-size: 12px;
-            font-weight: 600;
             opacity: 0.9;
         }
 
@@ -563,7 +552,6 @@
             border-radius: 30px;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
-            font-weight: 600;
         }
 
         .start-apps {
@@ -607,7 +595,6 @@
 
         .start-app-name {
             font-size: 12px;
-            font-weight: 700;
             color: #333;
             text-align: center;
         }
@@ -627,7 +614,6 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.2s;
-            font-weight: 700;
         }
 
         .start-footer-item:hover {
@@ -657,7 +643,7 @@
             padding: 12px 20px; 
             border-radius: 10px; 
             width: 100%;
-            font-weight: 700; 
+            font-weight: 600; 
             cursor: pointer; 
             margin-top: 10px;
         }
@@ -668,7 +654,6 @@
             padding: 8px 16px;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
         }
 
         .sound-btn.playing {
@@ -697,7 +682,6 @@
             border-radius: 8px;
             cursor: pointer; 
             font-size: 16px;
-            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -709,7 +693,6 @@
             border: 1px solid #ddd;
             border-radius: 8px; 
             font-family: 'Inter', sans-serif;
-            font-weight: 600;
         }
         
         #browser-frame {
@@ -771,14 +754,10 @@
             background-position: center;
         }
         
-        .rustore-item-name {
-            font-weight: 700;
-        }
-        
         .installed-badge {
             color: #4CAF50;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 600;
             margin-top: 5px;
         }
         
@@ -796,7 +775,6 @@
             margin-bottom: 10px;
             border: 1px solid #ddd; 
             border-radius: 8px;
-            font-weight: 600;
         }
 
         /* Документы */
@@ -817,7 +795,6 @@
             margin-bottom: 5px;
             border-radius: 8px; 
             cursor: pointer;
-            font-weight: 600;
         }
         
         .files-sidebar-item:hover { 
@@ -827,7 +804,6 @@
         .files-sidebar-item.active { 
             background: var(--blue); 
             color: white; 
-            font-weight: 700;
         }
         
         .files-main { 
@@ -849,7 +825,6 @@
             padding: 6px 12px;
             border-radius: 8px; 
             cursor: pointer;
-            font-weight: 600;
         }
         
         .files-grid {
@@ -883,7 +858,6 @@
             font-size: 12px; 
             text-align: center; 
             margin-top: 5px; 
-            font-weight: 600;
         }
 
         /* Мобильная адаптация */
@@ -957,7 +931,10 @@
             }
 
             .window {
-                /* На мобильных тоже fullscreen */
+                top: 80px;
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
             }
 
             .browser-nav-btn {
@@ -1002,6 +979,13 @@
                 display: none;
             }
 
+            .window {
+                top: 70px;
+                left: 8px;
+                right: 8px;
+                bottom: 8px;
+            }
+
             .calc-btn {
                 padding: 12px;
                 font-size: 16px;
@@ -1034,11 +1018,11 @@
         </div>
 
         <button class="login-button" id="login-btn">
-            <span>Войти</span>
+            <span data-i18n="login">Войти</span>
             <span style="font-size: 24px;">▶️</span>
         </button>
 
-        <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px; font-weight: 600;">
+        <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px;" data-i18n="tap_to_enter">
             Нажмите для входа
         </p>
     </div>
@@ -1086,12 +1070,12 @@
         <!-- Модальное окно Пуск -->
         <div id="start-modal" class="start-modal hidden">
             <div class="start-header">
-                <h2>ПатриотОС 0.6.1</h2>
+                <h2>ПатриотОС 0.6.0</h2>
                 <p>Своих не бросаем</p>
             </div>
             
             <div class="start-search">
-                <input type="text" placeholder="Поиск приложений..." id="start-search">
+                <input type="text" placeholder="Поиск приложений..." id="start-search" data-i18n-placeholder="search_apps">
             </div>
             
             <div class="start-apps" id="start-apps">
@@ -1101,15 +1085,15 @@
             <div class="start-footer">
                 <div class="start-footer-item" data-window="settings-window">
                     <span>⚙️</span>
-                    <span>Настройки</span>
+                    <span data-i18n="settings">Настройки</span>
                 </div>
                 <div class="start-footer-item" data-window="calendar-window">
                     <span>📅</span>
-                    <span>Календарь</span>
+                    <span data-i18n="calendar">Календарь</span>
                 </div>
                 <div class="start-footer-item" onclick="localStorage.clear(); alert('Данные очищены!'); location.reload();">
                     <span>🗑️</span>
-                    <span>Сброс</span>
+                    <span data-i18n="reset">Сброс</span>
                 </div>
             </div>
         </div>
@@ -1122,7 +1106,7 @@
         <!-- Окно калькулятора -->
         <div id="calc-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">🔢 Счётчик</span>
+                <span class="window-title" data-i18n="calculator">🔢 Счётчик</span>
                 <div class="window-controls">
                     <button class="win-btn close" data-win="calc-window" data-action="close"></button>
                 </div>
@@ -1154,7 +1138,7 @@
         <!-- Окно браузера -->
         <div id="browser-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">🌐 Браузер</span>
+                <span class="window-title" data-i18n="browser">🌐 Браузер</span>
                 <div class="window-controls">
                     <button class="win-btn close" data-win="browser-window" data-action="close"></button>
                 </div>
@@ -1183,7 +1167,7 @@
         <!-- Окно RuStore -->
         <div id="rustore-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">📦 RuStore</span>
+                <span class="window-title" data-i18n="rustore">📦 RuStore</span>
                 <div class="window-controls">
                     <button class="win-btn close" data-win="rustore-window" data-action="close"></button>
                 </div>
@@ -1191,10 +1175,10 @@
             <div class="window-content">
                 <div class="rustore-grid" id="rustore-grid"></div>
                 <div class="rustore-add">
-                    <h3 style="margin: 0 0 15px;">➕ Добавить приложение</h3>
-                    <input type="text" id="rustore-name" placeholder="Название">
-                    <input type="text" id="rustore-url" placeholder="Ссылка (например, vk.com)">
-                    <button class="btn-blue" id="rustore-add-btn">Добавить на рабочий стол</button>
+                    <h3 style="margin: 0 0 15px;" data-i18n="add_app">➕ Добавить приложение</h3>
+                    <input type="text" id="rustore-name" placeholder="Название" data-i18n-placeholder="name">
+                    <input type="text" id="rustore-url" placeholder="Ссылка (например, vk.com)" data-i18n-placeholder="link">
+                    <button class="btn-blue" id="rustore-add-btn" data-i18n="add_to_desktop">Добавить на рабочий стол</button>
                 </div>
             </div>
         </div>
@@ -1202,17 +1186,17 @@
         <!-- Окно настроек -->
         <div id="settings-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">⚙️ Настройки</span>
+                <span class="window-title" data-i18n="settings">⚙️ Настройки</span>
                 <div class="window-controls">
                     <button class="win-btn close" data-win="settings-window" data-action="close"></button>
                 </div>
             </div>
             <div class="window-content">
                 <div class="flag-line"></div>
-                <h2 style="margin: 0 0 10px; font-size: 20px; font-weight: 700;">ПатриотОС 0.6.1</h2>
+                <h2 style="margin: 0 0 10px; font-size: 20px;">ПатриотОС 0.6.0</h2>
                 
                 <div class="settings-card">
-                    <h3 style="margin: 0 0 10px; font-weight: 700;">🖼️ ОБОИ</h3>
+                    <h3 style="margin: 0 0 10px;" data-i18n="wallpapers">🖼️ ОБОИ</h3>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
                         <div class="wallpaper-option" data-wallpaper="flag">
                             <img src="wallpapers/flag.png" alt="Флаг" style="width: 100%; border-radius: 8px; cursor: pointer;">
@@ -1227,33 +1211,58 @@
                 </div>
 
                 <div class="settings-card">
-                    <h3 style="margin: 0 0 10px; font-weight: 700;">🔊 ЗВУКИ</h3>
+                    <h3 style="margin: 0 0 10px;" data-i18n="sounds">🔊 ЗВУКИ</h3>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span style="font-weight: 600;">Гимн РФ</span>
+                        <span data-i18n="anthem">Гимн РФ</span>
                         <button class="sound-btn" id="play-gimn">▶</button>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: 600;">Уведомление</span>
+                        <span data-i18n="notification">Уведомление</span>
                         <button class="sound-btn" id="play-uved">▶</button>
                     </div>
                 </div>
 
+                <!-- НАСТРОЙКИ ЯЗЫКА -->
                 <div class="settings-card">
-                    <p style="font-weight: 600;"><strong style="font-weight: 700;">Версия:</strong> 0.6.1</p>
-                    <p style="font-weight: 600;"><strong style="font-weight: 700;">Безопасность:</strong> Активна ✓</p>
-                    <p style="font-weight: 600;"><strong style="font-weight: 700;">Язык:</strong> Русский (Системный)</p>
-                    <p style="color: var(--red); font-size: 12px; font-weight: 600;">Английский/Украинский — блокировка</p>
+                    <h3 style="margin: 0 0 10px;" data-i18n="language">🌐 ЯЗЫК СИСТЕМЫ</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="system-language" value="ru" checked style="width: 18px; height: 18px;">
+                            <span style="font-size: 16px;">🇷🇺 Русский (Россия)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="system-language" value="by" style="width: 18px; height: 18px;">
+                            <span style="font-size: 16px;">🇧🇾 Беларуская мова (Беларусь)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.5;">
+                            <input type="radio" disabled>
+                            <span style="font-size: 16px;">🇺🇦 Українська (обмежено)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.5;">
+                            <input type="radio" disabled>
+                            <span style="font-size: 16px;">🇬🇧 English (blocked)</span>
+                        </label>
+                        <p style="color: var(--red); font-size: 12px; margin-top: 5px;">
+                            ⚡ Только языки Союзного государства
+                        </p>
+                        <button class="btn-blue" id="apply-language" style="margin-top: 10px;" data-i18n="apply_lang">Применить язык</button>
+                    </div>
                 </div>
 
-                <button class="btn-blue" id="check-updates">Проверить обновления</button>
-                <button class="btn-blue" style="background: var(--red); margin-top: 10px;" id="clear-data">Очистить все данные</button>
+                <div class="settings-card">
+                    <p><strong data-i18n="version">Версия:</strong> 0.6.0</p>
+                    <p><strong data-i18n="security">Безопасность:</strong> <span data-i18n="active">Активна ✓</span></p>
+                </div>
+
+                <button class="btn-blue" id="check-updates" data-i18n="updates">Проверить обновления</button>
+                <button class="btn-blue" style="background: var(--red); margin-top: 10px;" id="clear-data" data-i18n="clear_data">Очистить все данные</button>
             </div>
         </div>
 
         <!-- Окно документов -->
         <div id="files-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">📁 Мои Документы</span>
+                <span class="window-title" data-i18n="files">📁 Мои Документы</span>
                 <div class="window-controls">
                     <button class="win-btn close" data-win="files-window" data-action="close"></button>
                 </div>
@@ -1261,16 +1270,16 @@
             <div class="window-content" style="padding: 0;">
                 <div class="files-content">
                     <div class="files-sidebar">
-                        <div class="files-sidebar-item active" data-path="root">📁 Мой компьютер</div>
-                        <div class="files-sidebar-item" data-path="Документы">📄 Мои документы</div>
-                        <div class="files-sidebar-item" data-path="Изображения">🖼️ Изображения</div>
-                        <div class="files-sidebar-item" data-path="Музыка">🎵 Моя музыка</div>
+                        <div class="files-sidebar-item active" data-path="root">📁 <span data-i18n="my_computer">Мой компьютер</span></div>
+                        <div class="files-sidebar-item" data-path="Документы">📄 <span data-i18n="my_docs">Мои документы</span></div>
+                        <div class="files-sidebar-item" data-path="Изображения">🖼️ <span data-i18n="images">Изображения</span></div>
+                        <div class="files-sidebar-item" data-path="Музыка">🎵 <span data-i18n="music">Моя музыка</span></div>
                     </div>
                     <div class="files-main">
                         <div class="files-toolbar">
-                            <button class="files-btn" id="files-new-folder">📁 Новая папка</button>
-                            <button class="files-btn" id="files-new-file">📄 Новый файл</button>
-                            <button class="files-btn" id="files-refresh">🔄 Обновить</button>
+                            <button class="files-btn" id="files-new-folder"><span data-i18n="new_folder">📁 Новая папка</span></button>
+                            <button class="files-btn" id="files-new-file"><span data-i18n="new_file">📄 Новый файл</span></button>
+                            <button class="files-btn" id="files-refresh"><span data-i18n="refresh">🔄 Обновить</span></button>
                         </div>
                         <div class="files-grid" id="files-grid"></div>
                     </div>
@@ -1279,9 +1288,9 @@
         </div>
 
         <!-- Окно календаря -->
-        <div id="calendar-window" class="window hidden">
+        <div id="calendar-window" class="window hidden calendar-window">
             <div class="window-header">
-                <span class="window-title">📅 Календарь праздников РФ</span>
+                <span class="window-title" data-i18n="calendar">📅 Календарь праздников РФ</span>
                 <div class="window-controls">
                     <button class="win-btn close" data-win="calendar-window" data-action="close"></button>
                 </div>
@@ -1297,13 +1306,13 @@
                 </div>
                 
                 <div class="calendar-weekdays">
-                    <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+                    <div data-i18n="monday">Пн</div><div data-i18n="tuesday">Вт</div><div data-i18n="wednesday">Ср</div><div data-i18n="thursday">Чт</div><div data-i18n="friday">Пт</div><div data-i18n="saturday">Сб</div><div data-i18n="sunday">Вс</div>
                 </div>
                 
                 <div class="calendar-days" id="calendar-days"></div>
                 
                 <div class="holiday-list" id="holiday-list">
-                    <h4>Праздники в этом месяце:</h4>
+                    <h4 data-i18n="holidays_this_month">Праздники в этом месяце:</h4>
                     <ul id="month-holidays">
                         <li>8 марта — Международный женский день</li>
                     </ul>
@@ -1334,6 +1343,147 @@
     document.addEventListener('gesturechange', (e) => e.preventDefault());
     document.addEventListener('gestureend', (e) => e.preventDefault());
 
+    // ========== ЗАЩИТА ОТ VPN ==========
+    const vpnRanges = [
+        '104.16.0.0/12', '172.64.0.0/13', '162.158.0.0/15',
+        '146.70.0.0/16', '185.65.0.0/16', '5.253.0.0/16',
+        '5.234.0.0/16', '209.95.0.0/16', '5.45.0.0/16',
+        '95.217.0.0/16', '65.21.0.0/16', '168.119.0.0/16',
+        '142.132.0.0/16', '138.201.0.0/16', '159.89.0.0/16',
+        '165.227.0.0/16', '167.99.0.0/16', '138.68.0.0/16',
+        '52.0.0.0/8', '54.0.0.0/8', '35.0.0.0/8', '34.0.0.0/8'
+    ];
+
+    function ipToNumber(ip) {
+        return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0) >>> 0;
+    }
+
+    function isVPNbyIP(ip) {
+        try {
+            const ipNum = ipToNumber(ip);
+            return vpnRanges.some(range => {
+                try {
+                    const [baseIP, mask] = range.split('/');
+                    const baseNum = ipToNumber(baseIP);
+                    const maskNum = ~((1 << (32 - parseInt(mask))) - 1);
+                    return (ipNum & maskNum) === (baseNum & maskNum);
+                } catch (e) {
+                    return false;
+                }
+            });
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function checkRussianDNS() {
+        const russianDNS = ['77.88.8.8', '77.88.8.1', '77.88.8.3', '77.88.8.2', '8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1'];
+        
+        return new Promise((resolve) => {
+            try {
+                const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+                pc.createDataChannel('');
+                pc.createOffer().then(offer => pc.setLocalDescription(offer)).catch(() => {});
+                
+                pc.onicecandidate = (ice) => {
+                    if (ice.candidate) {
+                        const match = ice.candidate.candidate.match(/\d+\.\d+\.\d+\.\d+/g);
+                        if (match && match[0] !== '0.0.0.0') {
+                            const detectedIP = match[0];
+                            resolve(russianDNS.includes(detectedIP) ? 'ru' : 'foreign');
+                            pc.close();
+                        }
+                    }
+                };
+                
+                setTimeout(() => { resolve('unknown'); pc.close(); }, 2000);
+            } catch (e) { resolve('unknown'); }
+        });
+    }
+
+    function checkWebRTCLeak() {
+        return new Promise((resolve) => {
+            try {
+                const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+                pc.createDataChannel('');
+                pc.createOffer().then(offer => pc.setLocalDescription(offer)).catch(() => {});
+                
+                pc.onicecandidate = (ice) => {
+                    if (ice.candidate) {
+                        const match = ice.candidate.candidate.match(/\d+\.\d+\.\d+\.\d+/g);
+                        if (match && match[0] !== '0.0.0.0') {
+                            resolve(match[0]);
+                            pc.close();
+                        }
+                    }
+                };
+                
+                setTimeout(() => { resolve(null); pc.close(); }, 2000);
+            } catch (e) { resolve(null); }
+        });
+    }
+
+    function pingRussianServers() {
+        const russianServers = ['yandex.ru', 'vk.com', 'mail.ru', 'gosuslugi.ru', 'sberbank.ru'];
+        
+        return new Promise((resolve) => {
+            let successCount = 0, completed = 0;
+            
+            russianServers.forEach(server => {
+                const img = new Image();
+                const startTime = Date.now();
+                
+                img.onload = () => { successCount++; completed++; if (completed === russianServers.length) resolve(successCount > 2); };
+                img.onerror = () => { completed++; if (completed === russianServers.length) resolve(successCount > 2); };
+                img.src = `https://${server}/favicon.ico?t=${startTime}`;
+            });
+            
+            setTimeout(() => resolve(false), 3000);
+        });
+    }
+
+    async function checkVPN() {
+        try {
+            const realIP = await checkWebRTCLeak();
+            if (realIP && isVPNbyIP(realIP)) { showVPNBlock('Обнаружен VPN (IP в черном списке)'); return false; }
+            
+            const dnsType = await checkRussianDNS();
+            if (dnsType === 'foreign') showVPNWarning('Обнаружены иностранные DNS-серверы');
+            
+            const russianAccess = await pingRussianServers();
+            if (!russianAccess) { showVPNBlock('Нет доступа к российским серверам'); return false; }
+            
+            return true;
+        } catch (e) { return true; }
+    }
+
+    function showVPNBlock(reason) {
+        const vpnBlock = document.createElement('div');
+        vpnBlock.id = 'vpn-block';
+        vpnBlock.style.cssText = `position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #d52b1e 0%, #8b0000 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Inter', sans-serif; text-align: center; padding: 20px;`;
+        vpnBlock.innerHTML = `
+            <div style="font-size: 80px; margin-bottom: 20px;">🚫</div>
+            <h1 style="font-size: 32px; margin-bottom: 20px;">Доступ запрещен</h1>
+            <p style="font-size: 18px; max-width: 400px; margin-bottom: 30px;">Обнаружено использование VPN или прокси.<br>PatriotOS доступна только с территории РФ.</p>
+            <p style="font-size: 14px; opacity: 0.8;">Причина: ${reason}</p>
+            <button onclick="location.reload()" style="background: white; color: #d52b1e; border: none; padding: 15px 30px; border-radius: 40px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 20px;">Проверить снова</button>
+        `;
+        document.body.appendChild(vpnBlock);
+    }
+
+    function showVPNWarning(reason) {
+        const warning = document.createElement('div');
+        warning.id = 'vpn-warning';
+        warning.style.cssText = `position: fixed; top: 20px; right: 20px; background: #ffbd2e; color: #333; padding: 15px 20px; border-radius: 10px; font-family: 'Inter', sans-serif; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 9998; max-width: 300px; animation: slideIn 0.3s;`;
+        warning.innerHTML = `<strong>⚠️ Внимание!</strong><br>${reason}<br><small>Для полной функциональности используйте российские DNS.</small>`;
+        document.body.appendChild(warning);
+        setTimeout(() => warning.remove(), 5000);
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }`;
+    document.head.appendChild(style);
+
     // ========== ВХОД ПО КНОПКЕ ==========
     const loginBtn = document.getElementById('login-btn');
     const lockScreen = document.getElementById('lock-screen');
@@ -1361,22 +1511,19 @@
     function updateDateTime() {
         const now = new Date();
         
-        // Время
         const hours = now.getHours().toString().padStart(2, '0');
         const minutes = now.getMinutes().toString().padStart(2, '0');
         document.getElementById('current-time').innerText = `${hours}:${minutes}`;
         document.getElementById('time-display').innerText = `${hours}:${minutes}`;
         
-        // Дата
         const months = [
-            'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-            'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+            __('january_gen'), __('february_gen'), __('march_gen'), __('april_gen'), __('may_gen'), __('june_gen'),
+            __('july_gen'), __('august_gen'), __('september_gen'), __('october_gen'), __('november_gen'), __('december_gen')
         ];
         const day = now.getDate();
         const month = months[now.getMonth()];
         document.getElementById('current-date').innerText = `${day} ${month}`;
         
-        // Проверка на праздник
         const holiday = checkHoliday(now);
         const indicator = document.getElementById('holiday-indicator');
         if (holiday) {
@@ -1384,11 +1531,10 @@
             indicator.title = holiday;
         } else {
             indicator.innerText = '📅';
-            indicator.title = 'Нет праздника';
+            indicator.title = __('no_holiday');
         }
     }
 
-    // Список праздников
     const holidays = [
         { month: 0, day: 1, name: 'Новый год' },
         { month: 0, day: 2, name: 'Новогодние каникулы' },
@@ -1481,7 +1627,6 @@
         }, { passive: false });
     });
 
-    // Открытие окон по клику на иконку в доке
     document.querySelectorAll('.icon[data-window]').forEach(icon => {
         icon.addEventListener('click', (e) => {
             e.preventDefault();
@@ -1494,14 +1639,13 @@
         }, { passive: false });
     });
 
-    // Открытие окон из меню «Пуск»
     document.querySelectorAll('.start-app-item, .start-footer-item[data-window]').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
             const winId = item.dataset.window;
             if (winId) {
                 openWin(winId);
-                toggleStartMenu(); // Закрываем меню после открытия
+                toggleStartMenu();
             }
         });
 
@@ -1531,7 +1675,6 @@
         toggleStartMenu();
     }, { passive: false });
 
-    // Закрытие меню при клике вне его
     document.addEventListener('click', (e) => {
         if (!startModal.classList.contains('hidden') && 
             !startModal.contains(e.target) && 
@@ -1540,15 +1683,14 @@
         }
     });
 
-    // Заполнение меню приложениями
     function renderStartMenu() {
         const apps = [
-            { name: 'Счётчик', icon: '🔢', windowId: 'calc-window' },
-            { name: 'Браузер', icon: '🌐', windowId: 'browser-window' },
-            { name: 'RuStore', icon: '📦', windowId: 'rustore-window' },
-            { name: 'Настройки', icon: '⚙️', windowId: 'settings-window' },
-            { name: 'Документы', icon: '📁', windowId: 'files-window' },
-            { name: 'Календарь', icon: '📅', windowId: 'calendar-window' }
+            { name: __('calculator'), icon: '🔢', windowId: 'calc-window' },
+            { name: __('browser'), icon: '🌐', windowId: 'browser-window' },
+            { name: __('rustore'), icon: '📦', windowId: 'rustore-window' },
+            { name: __('settings'), icon: '⚙️', windowId: 'settings-window' },
+            { name: __('files'), icon: '📁', windowId: 'files-window' },
+            { name: __('calendar'), icon: '📅', windowId: 'calendar-window' }
         ];
 
         let html = '';
@@ -1562,7 +1704,6 @@
         });
         startApps.innerHTML = html;
 
-        // Добавляем обработчики для новых элементов
         document.querySelectorAll('.start-app-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1579,7 +1720,6 @@
             }, { passive: false });
         });
 
-        // Поиск
         startSearch.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
             const items = document.querySelectorAll('.start-app-item');
@@ -1622,28 +1762,24 @@
         const month = date.getMonth();
         
         const monthNames = [
-            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-            'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+            __('january'), __('february'), __('march'), __('april'), __('may'), __('june'),
+            __('july'), __('august'), __('september'), __('october'), __('november'), __('december')
         ];
         calendarMonth.innerText = monthNames[month];
         calendarYear.innerText = year;
 
-        // Получаем первый день месяца
         const firstDay = new Date(year, month, 1);
         let startDay = firstDay.getDay();
-        // В России неделя начинается с понедельника
         startDay = startDay === 0 ? 6 : startDay - 1;
 
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const today = new Date();
 
         let html = '';
-        // Пустые ячейки до первого дня
         for (let i = 0; i < startDay; i++) {
             html += '<div class="calendar-day"></div>';
         }
 
-        // Дни месяца
         for (let d = 1; d <= daysInMonth; d++) {
             const dateStr = `${year}-${month + 1}-${d}`;
             const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
@@ -1658,7 +1794,6 @@
 
         calendarDays.innerHTML = html;
 
-        // Список праздников в месяце
         const monthHolidaysList = holidays.filter(h => h.month === month);
         let holidaysHtml = '';
         monthHolidaysList.forEach(h => {
@@ -1667,16 +1802,14 @@
         });
         
         if (monthHolidaysList.length === 0) {
-            holidaysHtml = '<li>Нет праздников в этом месяце</li>';
+            holidaysHtml = `<li>${__('no_holidays')}</li>`;
         }
         
         monthHolidays.innerHTML = holidaysHtml;
 
-        // Добавляем обработчики на дни
         document.querySelectorAll('.calendar-day[data-date]').forEach(day => {
             day.addEventListener('click', () => {
-                const date = day.dataset.date;
-                alert(`Выбрана дата: ${date}`);
+                alert(`${__('selected_date')}: ${day.dataset.date}`);
             });
         });
     }
@@ -1772,7 +1905,7 @@
         let isAllowed = allowedDomains.some(domain => fullUrl.includes(domain));
 
         if (!isAllowed) {
-            alert('⛔ Только российские ресурсы!');
+            alert(__('only_russian'));
             showHome();
             return;
         }
@@ -1886,13 +2019,13 @@
     function renderRustore() {
         let html = '';
         preinstalledApps.forEach(app => {
-            const isInstalled = true; // Все предустановленные приложения считаем установленными
+            const isInstalled = true;
             html += `
                 <div class="rustore-item ${isInstalled ? 'installed' : ''}" data-app='${JSON.stringify(app)}'>
                     <div class="rustore-item-icon" style="background-image: url('${app.icon}');"></div>
                     <div class="rustore-item-name">${app.name}</div>
                     <div class="rustore-item-url">${app.url}</div>
-                    <div class="installed-badge">✓ Установлено</div>
+                    <div class="installed-badge">✓ ${__('installed')}</div>
                 </div>
             `;
         });
@@ -1905,7 +2038,7 @@
                 if (!installedApps.some(a => a.url === app.url)) {
                     installApp(app.name, app.url, app.icon);
                 } else {
-                    alert(`✅ ${app.name} уже установлено`);
+                    alert(`✅ ${app.name} ${__('already_installed')}`);
                 }
             });
             
@@ -1914,7 +2047,7 @@
                 if (!installedApps.some(a => a.url === app.url)) {
                     installApp(app.name, app.url, app.icon);
                 } else {
-                    alert(`✅ ${app.name} уже установлено`);
+                    alert(`✅ ${app.name} ${__('already_installed')}`);
                 }
             }, { passive: false });
         });
@@ -1922,7 +2055,7 @@
 
     window.installApp = function(name, url, icon) {
         if (installedApps.some(a => a.url === url)) {
-            alert('Приложение уже установлено!');
+            alert(__('already_installed'));
             return;
         }
         installedApps.push({ name, url, icon });
@@ -1957,9 +2090,7 @@
 
     function loadDesktopIcons() {
         desktopIcons.innerHTML = '';
-        // Добавляем все предустановленные приложения
         preinstalledApps.forEach(app => addDesktopIcon(app.name, app.url, app.icon));
-        // Добавляем пользовательские
         installedApps.forEach(app => {
             if (!preinstalledApps.some(p => p.url === app.url)) {
                 addDesktopIcon(app.name, app.url, app.icon);
@@ -1970,17 +2101,17 @@
     rustoreAddBtn.addEventListener('click', () => {
         const name = rustoreName.value.trim();
         let url = rustoreUrl.value.trim();
-        if (!name || !url) return alert('Заполните поля!');
+        if (!name || !url) return alert(__('fill_fields'));
         
         if (!allowedDomains.some(d => url.includes(d)) && !url.includes('.ru') && !url.includes('.рф')) {
-            return alert('⛔ Только российские домены!');
+            return alert(__('only_russian_domains'));
         }
         
         if (!url.startsWith('http')) url = 'https://' + url;
         
         const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='%238b6b4d'/%3E%3Ctext x='30' y='40' font-size='24' text-anchor='middle' fill='white'%3E${name.charAt(0).toUpperCase()}%3C/text%3E%3C/svg%3E`;
         
-        if (installedApps.some(a => a.url === url)) return alert('Уже есть!');
+        if (installedApps.some(a => a.url === url)) return alert(__('already_exists'));
         
         installedApps.push({ name, url, icon });
         localStorage.setItem('patriotApps', JSON.stringify(installedApps));
@@ -2065,7 +2196,7 @@
         
         createItem(path, name, type) {
             if (!/^[а-яА-ЯёЁ0-9\s\.\-]+$/.test(name)) {
-                alert('⛔ Только русские буквы!');
+                alert(__('only_russian_letters'));
                 return false;
             }
             const folder = this.getFolder(path);
@@ -2159,7 +2290,7 @@
     };
 
     newFolderBtn.addEventListener('click', () => {
-        const name = prompt('Название папки:');
+        const name = prompt(__('folder_name'));
         if (name && patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
             renderFiles(patriotFS.currentPath);
             playUvedomlenie();
@@ -2172,7 +2303,7 @@
     }, { passive: false });
 
     newFileBtn.addEventListener('click', () => {
-        const name = prompt('Название файла:');
+        const name = prompt(__('file_name'));
         if (name && patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
             renderFiles(patriotFS.currentPath);
             playUvedomlenie();
@@ -2214,7 +2345,7 @@
         const item = e.target.closest('.files-item');
         if (!item || item.dataset.folder === 'up') return;
         const name = item.dataset.name;
-        if (confirm(`Удалить "${name}"?`)) {
+        if (confirm(`${__('delete_confirm')} "${name}"?`)) {
             if (patriotFS.deleteItem(patriotFS.currentPath, name)) {
                 renderFiles(patriotFS.currentPath);
                 playUvedomlenie();
@@ -2236,33 +2367,268 @@
     }, { passive: false });
 
     document.getElementById('check-updates').addEventListener('click', () => {
-        alert('Обновлений нет. Вы используете самую патриотичную версию!');
+        alert(__('no_updates'));
     });
 
     document.getElementById('check-updates').addEventListener('touchstart', (e) => {
         e.preventDefault();
-        alert('Обновлений нет. Вы используете самую патриотичную версию!');
+        alert(__('no_updates'));
     }, { passive: false });
 
     document.getElementById('clear-data').addEventListener('click', () => {
-        if (confirm('Очистить все данные? Это удалит все файлы и приложения.')) {
+        if (confirm(__('clear_confirm'))) {
             localStorage.clear();
-            alert('Данные очищены! Страница будет перезагружена.');
+            alert(__('data_cleared'));
             location.reload();
         }
     });
 
     document.getElementById('clear-data').addEventListener('touchstart', (e) => {
         e.preventDefault();
-        if (confirm('Очистить все данные? Это удалит все файлы и приложения.')) {
+        if (confirm(__('clear_confirm'))) {
             localStorage.clear();
-            alert('Данные очищены! Страница будет перезагружена.');
+            alert(__('data_cleared'));
             location.reload();
         }
     }, { passive: false });
 
+    // ========== СИСТЕМА ПЕРЕВОДА (Русский/Белорусский) ==========
+    const translations = {
+        ru: {
+            'login': 'Войти',
+            'tap_to_enter': 'Нажмите для входа',
+            'start': 'Пуск',
+            'calculator': 'Калькулятор',
+            'browser': 'Браузер',
+            'rustore': 'RuStore',
+            'settings': 'Настройки',
+            'files': 'Документы',
+            'calendar': 'Календарь',
+            'monday': 'Пн',
+            'tuesday': 'Вт',
+            'wednesday': 'Ср',
+            'thursday': 'Чт',
+            'friday': 'Пт',
+            'saturday': 'Сб',
+            'sunday': 'Вс',
+            'january': 'Январь',
+            'february': 'Февраль',
+            'march': 'Март',
+            'april': 'Апрель',
+            'may': 'Май',
+            'june': 'Июнь',
+            'july': 'Июль',
+            'august': 'Август',
+            'september': 'Сентябрь',
+            'october': 'Октябрь',
+            'november': 'Ноябрь',
+            'december': 'Декабрь',
+            'january_gen': 'января',
+            'february_gen': 'февраля',
+            'march_gen': 'марта',
+            'april_gen': 'апреля',
+            'may_gen': 'мая',
+            'june_gen': 'июня',
+            'july_gen': 'июля',
+            'august_gen': 'августа',
+            'september_gen': 'сентября',
+            'october_gen': 'октября',
+            'november_gen': 'ноября',
+            'december_gen': 'декабря',
+            'wallpapers': '🖼️ ОБОИ',
+            'sounds': '🔊 ЗВУКИ',
+            'anthem': 'Гимн РФ',
+            'notification': 'Уведомление',
+            'language': '🌐 ЯЗЫК СИСТЕМЫ',
+            'apply_lang': 'Применить язык',
+            'version': 'Версия',
+            'security': 'Безопасность',
+            'active': 'Активна ✓',
+            'updates': 'Проверить обновления',
+            'clear_data': 'Очистить все данные',
+            'my_computer': 'Мой компьютер',
+            'my_docs': 'Мои документы',
+            'images': 'Изображения',
+            'music': 'Моя музыка',
+            'new_folder': '📁 Новая папка',
+            'new_file': '📄 Новый файл',
+            'refresh': '🔄 Обновить',
+            'add_app': '➕ Добавить приложение',
+            'name': 'Название',
+            'link': 'Ссылка (например, vk.com)',
+            'add_to_desktop': 'Добавить на рабочий стол',
+            'search_apps': 'Поиск приложений...',
+            'reset': 'Сброс',
+            'only_russian': '⛔ Только российские ресурсы!',
+            'installed': 'Установлено',
+            'already_installed': 'уже установлено',
+            'fill_fields': 'Заполните поля!',
+            'only_russian_domains': '⛔ Только российские домены!',
+            'already_exists': 'Уже есть!',
+            'no_updates': 'Обновлений нет. Вы используете самую патриотичную версию!',
+            'clear_confirm': 'Очистить все данные? Это удалит все файлы и приложения.',
+            'data_cleared': 'Данные очищены! Страница будет перезагружена.',
+            'delete_confirm': 'Удалить',
+            'no_holiday': 'Нет праздника',
+            'no_holidays': 'Нет праздников в этом месяце',
+            'selected_date': 'Выбрана дата',
+            'folder_name': 'Название папки:',
+            'file_name': 'Название файла:',
+            'only_russian_letters': '⛔ Только русские буквы!'
+        },
+        by: {
+            'login': 'Увайсці',
+            'tap_to_enter': 'Націсніце для ўваходу',
+            'start': 'Старт',
+            'calculator': 'Калькулятар',
+            'browser': 'Браўзэр',
+            'rustore': 'RuStore',
+            'settings': 'Налады',
+            'files': 'Дакументы',
+            'calendar': 'Каляндар',
+            'monday': 'Пн',
+            'tuesday': 'Аў',
+            'wednesday': 'Ср',
+            'thursday': 'Чц',
+            'friday': 'Пт',
+            'saturday': 'Сб',
+            'sunday': 'Нд',
+            'january': 'Студзень',
+            'february': 'Люты',
+            'march': 'Сакавік',
+            'april': 'Красавік',
+            'may': 'Май',
+            'june': 'Чэрвень',
+            'july': 'Ліпень',
+            'august': 'Жнівень',
+            'september': 'Верасень',
+            'october': 'Кастрычнік',
+            'november': 'Лістапад',
+            'december': 'Снежань',
+            'january_gen': 'студзеня',
+            'february_gen': 'лютага',
+            'march_gen': 'сакавіка',
+            'april_gen': 'красавіка',
+            'may_gen': 'мая',
+            'june_gen': 'чэрвеня',
+            'july_gen': 'ліпеня',
+            'august_gen': 'жніўня',
+            'september_gen': 'верасня',
+            'october_gen': 'кастрычніка',
+            'november_gen': 'лістапада',
+            'december_gen': 'снежня',
+            'wallpapers': '🖼️ ШПАЛЕРЫ',
+            'sounds': '🔊 ГУКІ',
+            'anthem': 'Гімн РФ',
+            'notification': 'Апавяшчэнне',
+            'language': '🌐 МОВА СІСТЭМЫ',
+            'apply_lang': 'Прымяніць мову',
+            'version': 'Версія',
+            'security': 'Бяспека',
+            'active': 'Актыўная ✓',
+            'updates': 'Праверыць абнаўленні',
+            'clear_data': 'Ачысціць усе дадзеныя',
+            'my_computer': 'Мой кампутар',
+            'my_docs': 'Мае дакументы',
+            'images': 'Выявы',
+            'music': 'Мая музыка',
+            'new_folder': '📁 Новы тэчак',
+            'new_file': '📄 Новы файл',
+            'refresh': '🔄 Абнавіць',
+            'add_app': '➕ Дадаць праграму',
+            'name': 'Назва',
+            'link': 'Спасылка (напрыклад, vk.com)',
+            'add_to_desktop': 'Дадаць на працоўны стол',
+            'search_apps': 'Пошук праграм...',
+            'reset': 'Скід',
+            'only_russian': '⛔ Толькі расійскія рэсурсы!',
+            'installed': 'Усталявана',
+            'already_installed': 'ужо ўсталявана',
+            'fill_fields': 'Запоўніце палі!',
+            'only_russian_domains': '⛔ Толькі расійскія дамены!',
+            'already_exists': 'Ужо ёсць!',
+            'no_updates': 'Абнаўленняў няма. Вы карыстаецеся самай патрыятычнай версіяй!',
+            'clear_confirm': 'Ачысціць усе дадзеныя? Гэта выдаліць усе файлы і праграмы.',
+            'data_cleared': 'Дадзеныя ачышчаны! Старонка будзе перазагружана.',
+            'delete_confirm': 'Выдаліць',
+            'no_holiday': 'Няма свята',
+            'no_holidays': 'Няма святаў у гэтым месяцы',
+            'selected_date': 'Абраная дата',
+            'folder_name': 'Назва тэчака:',
+            'file_name': 'Назва файла:',
+            'only_russian_letters': '⛔ Толькі рускія літары!'
+        }
+    };
+
+    let currentLang = localStorage.getItem('patriotLang') || 'ru';
+
+    function __(key) {
+        return translations[currentLang][key] || key;
+    }
+
+    function updateLanguage() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.dataset.i18n;
+            el.textContent = __(key);
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.dataset.i18nPlaceholder;
+            el.placeholder = __(key);
+        });
+
+        updateDateTime();
+        
+        if (typeof renderCalendar === 'function') {
+            renderCalendar(currentDate);
+        }
+
+        localStorage.setItem('patriotLang', currentLang);
+    }
+
+    document.getElementById('apply-language')?.addEventListener('click', () => {
+        const selected = document.querySelector('input[name="system-language"]:checked');
+        if (selected) {
+            currentLang = selected.value;
+            updateLanguage();
+            alert(`${__('apply_lang')}: ${currentLang === 'ru' ? 'русский' : 'беларуская'}`);
+            playUvedomlenie();
+        }
+    });
+
+    document.getElementById('apply-language')?.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        document.getElementById('apply-language').click();
+    }, { passive: false });
+
+    // ========== БЛОКИРОВКА F12 ==========
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+            e.preventDefault();
+            alert('⛔ Доступ запрещён.');
+        }
+    });
+
     // ========== ЗАПУСК ==========
-    window.addEventListener('load', () => {
+    window.addEventListener('load', async () => {
+        try {
+            const isClean = await checkVPN();
+            if (!isClean) {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('desktop').style.display = 'none';
+                return;
+            }
+        } catch (e) {}
+
+        const savedLang = localStorage.getItem('patriotLang');
+        if (savedLang && (savedLang === 'ru' || savedLang === 'by')) {
+            currentLang = savedLang;
+            const radio = document.querySelector(`input[name="system-language"][value="${savedLang}"]`);
+            if (radio) radio.checked = true;
+            updateLanguage();
+        }
+
         renderFiles('root');
         renderRustore();
         loadDesktopIcons();
@@ -2270,6 +2636,8 @@
         renderStartMenu();
         setTimeout(playVhod, 500);
     });
+
+    setInterval(async () => { await checkVPN(); }, 300000);
 </script>
 </body>
 </html>
