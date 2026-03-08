@@ -531,6 +531,51 @@
 </div>
 
 <script>
+
+// ========== СЕНСОРНАЯ ПОДДЕРЖКА ==========
+// Отключаем стандартные жесты браузера
+document.addEventListener('touchmove', (e) => {
+    if (e.target.closest('.window') || e.target.closest('.dock') || e.target.closest('.slider-thumb')) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
+document.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.icon') || e.target.closest('.win-btn') || e.target.closest('.calc-btn')) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
+// Поддержка для всех иконок
+document.querySelectorAll('.icon').forEach(icon => {
+    const onclickAttr = icon.getAttribute('onclick');
+    if (onclickAttr) {
+        const windowId = onclickAttr.match(/'([^']+)'/)?.[1];
+        if (windowId) {
+            icon.removeAttribute('onclick');
+            icon.dataset.window = windowId;
+            
+            icon.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleWin(windowId);
+            });
+            
+            icon.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                toggleWin(windowId);
+            }, { passive: false });
+        }
+    }
+});
+
+// Поддержка для кнопок окон
+document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .browser-search-btn').forEach(btn => {
+    btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        // Оригинальный onclick сработает
+    }, { passive: false });
+});
+    
     // ========== УПРАВЛЕНИЕ ОКНАМИ ==========
     function closeWin(id) {
         document.getElementById(id).classList.add('hidden');
