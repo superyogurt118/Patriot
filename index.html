@@ -1274,11 +1274,36 @@
                     </div>
                 </div>
 
+<!-- НАСТРОЙКИ ЯЗЫКА (вставить после блока с безопасностью) -->
+<div class="settings-card">
+    <h3 style="margin: 0 0 10px;">🌐 ЯЗЫК СИСТЕМЫ</h3>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="radio" name="system-language" value="ru" checked style="width: 18px; height: 18px;">
+            <span style="font-size: 16px;">🇷🇺 Русский (Россия)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="radio" name="system-language" value="by" style="width: 18px; height: 18px;">
+            <span style="font-size: 16px;">🇧🇾 Белорусский (Беларусь)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.5;">
+            <input type="radio" disabled>
+            <span style="font-size: 16px;">🇺🇦 Украинский (ограничен)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.5;">
+            <input type="radio" disabled>
+            <span style="font-size: 16px;">🇬🇧 Английский (заблокирован)</span>
+        </label>
+        <p style="color: var(--red); font-size: 12px; margin-top: 5px;">
+            ⚡ Только языки Союзных государств
+        </p>
+        <button class="btn-blue" id="apply-language" style="margin-top: 10px;">Применить язык</button>
+    </div>
+</div>
+
                 <div class="settings-card">
                     <p><strong>Версия:</strong> 0.5.5</p>
                     <p><strong>Безопасность:</strong> Активна ✓</p>
-                    <p><strong>Язык:</strong> Русский (Системный)</p>
-                    <p style="color: var(--red); font-size: 12px;">Английский/Украинский — блокировка</p>
                 </div>
 
                 <button class="btn-blue" id="check-updates">Проверить обновления</button>
@@ -1373,6 +1398,326 @@
     document.addEventListener('gesturestart', (e) => e.preventDefault());
     document.addEventListener('gesturechange', (e) => e.preventDefault());
     document.addEventListener('gestureend', (e) => e.preventDefault());
+
+// ========== ЗАЩИТА ОТ VPN ==========
+// База IP-диапазонов VPN и дата-центров
+const vpnRanges = [
+    // Cloudflare VPN
+    '104.16.0.0/12',
+    '172.64.0.0/13',
+    '162.158.0.0/15',
+    // NordVPN
+    '146.70.0.0/16',
+    '185.65.0.0/16',
+    // Mullvad
+    '5.253.0.0/16',
+    // Private Internet Access
+    '5.234.0.0/16',
+    '209.95.0.0/16',
+    // Hetzner (дата-центры)
+    '5.45.0.0/16',
+    '95.217.0.0/16',
+    '65.21.0.0/16',
+    '168.119.0.0/16',
+    '142.132.0.0/16',
+    '138.201.0.0/16',
+    // Digital Ocean
+    '159.89.0.0/16',
+    '165.227.0.0/16',
+    '167.99.0.0/16',
+    '138.68.0.0/16',
+    // Amazon AWS
+    '52.0.0.0/8',
+    '54.0.0.0/8',
+    // Google Cloud
+    '35.0.0.0/8',
+    '34.0.0.0/8'
+];
+
+// Функция конвертации IP в число
+function ipToNumber(ip) {
+    return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0) >>> 0;
+}
+
+// Проверка IP на VPN
+function isVPNbyIP(ip) {
+    try {
+        const ipNum = ipToNumber(ip);
+        return vpnRanges.some(range => {
+            try {
+                const [baseIP, mask] = range.split('/');
+                const baseNum = ipToNumber(baseIP);
+                const maskNum = ~((1 << (32 - parseInt(mask))) - 1);
+                return (ipNum & maskNum) === (baseNum & maskNum);
+            } catch (e) {
+                return false;
+            }
+        });
+    } catch (e) {
+        return false;
+    }
+}
+
+// Проверка российских DNS
+function checkRussianDNS() {
+    const russianDNS = [
+        '77.88.8.8',    // Яндекс DNS
+        '77.88.8.1',    // Яндекс DNS
+        '77.88.8.3',    // Яндекс DNS (безопасный)
+        '77.88.8.2',    // Яндекс DNS (семейный)
+        '8.8.8.8',      // Google DNS (предупреждение)
+        '8.8.4.4',      // Google DNS
+        '1.1.1.1',      // Cloudflare DNS
+        '1.0.0.1'       // Cloudflare DNS
+    ];
+    
+    return new Promise((resolve) => {
+        try {
+            const pc = new RTCPeerConnection({
+                iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+            });
+            
+            pc.createDataChannel('');
+            pc.createOffer()
+                .then(offer => pc.setLocalDescription(offer))
+                .catch(() => {});
+            
+            pc.onicecandidate = (ice) => {
+                if (ice.candidate) {
+                    const match = ice.candidate.candidate.match(/\d+\.\d+\.\d+\.\d+/g);
+                    if (match && match[0] !== '0.0.0.0') {
+                        const detectedIP = match[0];
+                        const isRussian = russianDNS.includes(detectedIP);
+                        resolve(isRussian ? 'ru' : 'foreign');
+                        pc.close();
+                    }
+                }
+            };
+            
+            setTimeout(() => {
+                resolve('unknown');
+                pc.close();
+            }, 2000);
+        } catch (e) {
+            resolve('unknown');
+        }
+    });
+}
+
+// Проверка WebRTC утечек
+function checkWebRTCLeak() {
+    return new Promise((resolve) => {
+        try {
+            const pc = new RTCPeerConnection({
+                iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+            });
+            
+            pc.createDataChannel('');
+            pc.createOffer()
+                .then(offer => pc.setLocalDescription(offer))
+                .catch(() => {});
+            
+            pc.onicecandidate = (ice) => {
+                if (ice.candidate) {
+                    const match = ice.candidate.candidate.match(/\d+\.\d+\.\d+\.\d+/g);
+                    if (match && match[0] !== '0.0.0.0') {
+                        const realIP = match[0];
+                        resolve(realIP);
+                        pc.close();
+                    }
+                }
+            };
+            
+            setTimeout(() => {
+                resolve(null);
+                pc.close();
+            }, 2000);
+        } catch (e) {
+            resolve(null);
+        }
+    });
+}
+
+// Пинг до российских серверов
+function pingRussianServers() {
+    const russianServers = [
+        'yandex.ru',
+        'vk.com',
+        'mail.ru',
+        'gosuslugi.ru',
+        'sberbank.ru'
+    ];
+    
+    return new Promise((resolve) => {
+        let successCount = 0;
+        let completed = 0;
+        
+        russianServers.forEach(server => {
+            const img = new Image();
+            const startTime = Date.now();
+            
+            img.onload = () => {
+                successCount++;
+                completed++;
+                if (completed === russianServers.length) {
+                    resolve(successCount > 2); // Хотя бы 2 сервера отвечают
+                }
+            };
+            
+            img.onerror = () => {
+                completed++;
+                if (completed === russianServers.length) {
+                    resolve(successCount > 2);
+                }
+            };
+            
+            img.src = `https://${server}/favicon.ico?t=${startTime}`;
+        });
+        
+        setTimeout(() => resolve(false), 3000);
+    });
+}
+
+// Главная функция проверки
+async function checkVPN() {
+    try {
+        // 1. Проверка через WebRTC (реальный IP)
+        const realIP = await checkWebRTCLeak();
+        if (realIP && isVPNbyIP(realIP)) {
+            showVPNBlock('Обнаружен VPN (IP в черном списке)');
+            return false;
+        }
+        
+        // 2. Проверка DNS
+        const dnsType = await checkRussianDNS();
+        if (dnsType === 'foreign') {
+            showVPNWarning('Обнаружены иностранные DNS-серверы');
+        }
+        
+        // 3. Пинг до российских серверов
+        const russianAccess = await pingRussianServers();
+        if (!russianAccess) {
+            showVPNBlock('Нет доступа к российским серверам');
+            return false;
+        }
+        
+        return true;
+    } catch (e) {
+        console.log('Ошибка проверки VPN:', e);
+        return true;
+    }
+}
+
+// Показать блокировку VPN
+function showVPNBlock(reason) {
+    const vpnBlock = document.createElement('div');
+    vpnBlock.id = 'vpn-block';
+    vpnBlock.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #d52b1e 0%, #8b0000 100%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: 'Inter', sans-serif;
+        text-align: center;
+        padding: 20px;
+    `;
+    
+    vpnBlock.innerHTML = `
+        <div style="font-size: 80px; margin-bottom: 20px;">🚫</div>
+        <h1 style="font-size: 32px; margin-bottom: 20px;">Доступ запрещен</h1>
+        <p style="font-size: 18px; max-width: 400px; margin-bottom: 30px;">
+            Обнаружено использование VPN или прокси.<br>
+            PatriotOS доступна только с территории РФ.
+        </p>
+        <p style="font-size: 14px; opacity: 0.8;">
+            Причина: ${reason}
+        </p>
+        <button onclick="location.reload()" style="
+            background: white;
+            color: #d52b1e;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        ">Проверить снова</button>
+    `;
+    
+    document.body.appendChild(vpnBlock);
+}
+
+// Показать предупреждение
+function showVPNWarning(reason) {
+    const warning = document.createElement('div');
+    warning.id = 'vpn-warning';
+    warning.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #ffbd2e;
+        color: #333;
+        padding: 15px 20px;
+        border-radius: 10px;
+        font-family: 'Inter', sans-serif;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        z-index: 9998;
+        max-width: 300px;
+        animation: slideIn 0.3s;
+    `;
+    
+    warning.innerHTML = `
+        <strong>⚠️ Внимание!</strong><br>
+        ${reason}<br>
+        <small>Для полной функциональности используйте российские DNS.</small>
+    `;
+    
+    document.body.appendChild(warning);
+    
+    setTimeout(() => {
+        warning.remove();
+    }, 5000);
+}
+
+// Добавляем стили для анимации
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// Запускаем проверку при загрузке
+window.addEventListener('load', async () => {
+    const isClean = await checkVPN();
+    if (!isClean) {
+        // Блокируем весь функционал
+        document.getElementById('lock-screen').style.display = 'none';
+        document.getElementById('desktop').style.display = 'none';
+    }
+});
+
+// Периодическая проверка (каждые 5 минут)
+setInterval(async () => {
+    await checkVPN();
+}, 300000);
 
     // ========== ВХОД ПО КНОПКЕ ==========
     const loginBtn = document.getElementById('login-btn');
@@ -2288,6 +2633,271 @@
             location.reload();
         }
     }, { passive: false });
+
+// ========== СИСТЕМА ПЕРЕВОДА (Русский/Белорусский) ==========
+const translations = {
+    ru: {
+        // Интерфейс
+        'start': 'Пуск',
+        'login': 'Войти',
+        'calculator': 'Калькулятор',
+        'browser': 'Браузер',
+        'rustore': 'RuStore',
+        'settings': 'Настройки',
+        'files': 'Документы',
+        'calendar': 'Календарь',
+        
+        // Календарь
+        'monday': 'Пн',
+        'tuesday': 'Вт',
+        'wednesday': 'Ср',
+        'thursday': 'Чт',
+        'friday': 'Пт',
+        'saturday': 'Сб',
+        'sunday': 'Вс',
+        
+        // Месяца
+        'january': 'Январь',
+        'february': 'Февраль',
+        'march': 'Март',
+        'april': 'Апрель',
+        'may': 'Май',
+        'june': 'Июнь',
+        'july': 'Июль',
+        'august': 'Август',
+        'september': 'Сентябрь',
+        'october': 'Октябрь',
+        'november': 'Ноябрь',
+        'december': 'Декабрь',
+        
+        // Месяца в родительном падеже (для даты)
+        'january_gen': 'января',
+        'february_gen': 'февраля',
+        'march_gen': 'марта',
+        'april_gen': 'апреля',
+        'may_gen': 'мая',
+        'june_gen': 'июня',
+        'july_gen': 'июля',
+        'august_gen': 'августа',
+        'september_gen': 'сентября',
+        'october_gen': 'октября',
+        'november_gen': 'ноября',
+        'december_gen': 'декабря',
+        
+        // Настройки
+        'settings_title': 'Настройки',
+        'wallpapers': 'ОБОИ',
+        'sounds': 'ЗВУКИ',
+        'anthem': 'Гимн РФ',
+        'notification': 'Уведомление',
+        'language': 'ЯЗЫК СИСТЕМЫ',
+        'apply_lang': 'Применить язык',
+        'version': 'Версия',
+        'security': 'Безопасность',
+        'active': 'Активна ✓',
+        'updates': 'Проверить обновления',
+        'clear_data': 'Очистить все данные',
+        
+        // Файловый менеджер
+        'my_computer': 'Мой компьютер',
+        'my_docs': 'Мои документы',
+        'images': 'Изображения',
+        'music': 'Моя музыка',
+        'new_folder': 'Новая папка',
+        'new_file': 'Новый файл',
+        'refresh': 'Обновить',
+        
+        // RuStore
+        'add_app': 'Добавить приложение',
+        'name': 'Название',
+        'link': 'Ссылка',
+        'add_to_desktop': 'Добавить на рабочий стол',
+        
+        // Браузер
+        'search_placeholder': 'Поиск в Яндекс',
+        'only_russian': 'Только российские ресурсы!',
+        
+        // Уведомления
+        'already_installed': 'уже установлено',
+        'fill_fields': 'Заполните поля!',
+        'only_russian_domains': '⛔ Только российские домены!',
+        'data_cleared': 'Данные очищены!',
+        'no_updates': 'Обновлений нет. Вы используете самую патриотичную версию!',
+        'delete_confirm': 'Удалить',
+        
+        // Экран блокировки
+        'tap_to_enter': 'Нажмите для входа',
+        
+        // Пуск
+        'search_apps': 'Поиск приложений...',
+        'reset': 'Сброс'
+    },
+    
+    by: {
+        // Інтэрфейс
+        'start': 'Старт',
+        'login': 'Увайсці',
+        'calculator': 'Калькулятар',
+        'browser': 'Браўзэр',
+        'rustore': 'RuStore',
+        'settings': 'Налады',
+        'files': 'Дакументы',
+        'calendar': 'Каляндар',
+        
+        // Каляндар
+        'monday': 'Пн',
+        'tuesday': 'Аў',
+        'wednesday': 'Ср',
+        'thursday': 'Чц',
+        'friday': 'Пт',
+        'saturday': 'Сб',
+        'sunday': 'Нд',
+        
+        // Месяцы
+        'january': 'Студзень',
+        'february': 'Люты',
+        'march': 'Сакавік',
+        'april': 'Красавік',
+        'may': 'Май',
+        'june': 'Чэрвень',
+        'july': 'Ліпень',
+        'august': 'Жнівень',
+        'september': 'Верасень',
+        'october': 'Кастрычнік',
+        'november': 'Лістапад',
+        'december': 'Снежань',
+        
+        // Месяцы ў родным склоне
+        'january_gen': 'студзеня',
+        'february_gen': 'лютага',
+        'march_gen': 'сакавіка',
+        'april_gen': 'красавіка',
+        'may_gen': 'мая',
+        'june_gen': 'чэрвеня',
+        'july_gen': 'ліпеня',
+        'august_gen': 'жніўня',
+        'september_gen': 'верасня',
+        'october_gen': 'кастрычніка',
+        'november_gen': 'лістапада',
+        'december_gen': 'снежня',
+        
+        // Налады
+        'settings_title': 'Налады',
+        'wallpapers': 'ШПАЛЕРЫ',
+        'sounds': 'ГУКІ',
+        'anthem': 'Гімн РФ',
+        'notification': 'Апавяшчэнне',
+        'language': 'МОВА СІСТЭМЫ',
+        'apply_lang': 'Прымяніць мову',
+        'version': 'Версія',
+        'security': 'Бяспека',
+        'active': 'Актыўная ✓',
+        'updates': 'Праверыць абнаўленні',
+        'clear_data': 'Ачысціць усе дадзеныя',
+        
+        // Файлавы менеджар
+        'my_computer': 'Мой кампутар',
+        'my_docs': 'Мае дакументы',
+        'images': 'Выявы',
+        'music': 'Мая музыка',
+        'new_folder': 'Новы тэчак',
+        'new_file': 'Новы файл',
+        'refresh': 'Абнавіць',
+        
+        // RuStore
+        'add_app': 'Дадаць праграму',
+        'name': 'Назва',
+        'link': 'Спасылка',
+        'add_to_desktop': 'Дадаць на працоўны стол',
+        
+        // Браўзэр
+        'search_placeholder': 'Пошук у Яндекс',
+        'only_russian': 'Толькі расійскія рэсурсы!',
+        
+        // Абвесткі
+        'already_installed': 'ужо ўсталявана',
+        'fill_fields': 'Запоўніце палі!',
+        'only_russian_domains': '⛔ Толькі расійскія дамены!',
+        'data_cleared': 'Дадзеныя ачышчаны!',
+        'no_updates': 'Абнаўленняў няма. Вы карыстаецеся самай патрыятычнай версіяй!',
+        'delete_confirm': 'Выдаліць',
+        
+        // Экран блакіроўкі
+        'tap_to_enter': 'Націсніце для ўваходу',
+        
+        // Пуск
+        'search_apps': 'Пошук праграм...',
+        'reset': 'Скід'
+    }
+};
+
+// Текущий язык (читаем из localStorage или ставим русский)
+let currentLang = localStorage.getItem('patriotLang') || 'ru';
+
+// Функция перевода
+function __(key) {
+    return translations[currentLang][key] || key;
+}
+
+// Функция обновления интерфейса
+function updateLanguage() {
+    // Обновляем все элементы с data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        el.textContent = __(key);
+    });
+    
+    // Обновляем плейсхолдеры
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        el.placeholder = __(key);
+    });
+    
+    // Обновляем заголовки окон
+    document.querySelector('.window-title[data-i18n="calculator"]')?.textContent = __('calculator');
+    document.querySelector('.window-title[data-i18n="browser"]')?.textContent = __('browser');
+    document.querySelector('.window-title[data-i18n="rustore"]')?.textContent = __('rustore');
+    document.querySelector('.window-title[data-i18n="settings"]')?.textContent = __('settings');
+    document.querySelector('.window-title[data-i18n="files"]')?.textContent = __('files');
+    document.querySelector('.window-title[data-i18n="calendar"]')?.textContent = __('calendar');
+    
+    // Обновляем дату с учетом языка
+    updateDateTime();
+    
+    // Обновляем календарь
+    if (typeof renderCalendar === 'function') {
+        renderCalendar(currentDate);
+    }
+    
+    // Сохраняем язык
+    localStorage.setItem('patriotLang', currentLang);
+}
+
+// Обработчик применения языка
+document.getElementById('apply-language')?.addEventListener('click', () => {
+    const selected = document.querySelector('input[name="system-language"]:checked');
+    if (selected) {
+        currentLang = selected.value;
+        updateLanguage();
+        alert(`Язык изменен на ${currentLang === 'ru' ? 'русский' : 'белорусский'}`);
+        playUvedomlenie();
+    }
+});
+
+document.getElementById('apply-language')?.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    document.getElementById('apply-language').click();
+}, { passive: false });
+
+// Загружаем сохраненный язык при старте
+window.addEventListener('load', () => {
+    const savedLang = localStorage.getItem('patriotLang');
+    if (savedLang && (savedLang === 'ru' || savedLang === 'by')) {
+        currentLang = savedLang;
+        document.querySelector(`input[name="system-language"][value="${savedLang}"]`).checked = true;
+        updateLanguage();
+    }
+});
 
     // ========== ПЕРЕТАСКИВАНИЕ ОКОН ==========
     let draggedWindow = null;
