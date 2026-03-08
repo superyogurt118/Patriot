@@ -1160,7 +1160,7 @@
         return false;
     }
 
-// Функция поиска через Яндекс.XML
+// Функция поиска
 function performSearch() {
     const query = browserSearch.value.trim();
     if (!query) return;
@@ -1176,12 +1176,11 @@ function performSearch() {
     browserFrame.style.display = 'block';
     browserHome.style.display = 'none';
     
-    // Используем Яндекс.XML (официальный API для встраивания)
-    // Важно: здесь мы показываем страницу с результатами, а не главную Яндекса
-    const searchResultsUrl = `https://yandex.ru/search/touch/?text=${encodeURIComponent(query)}&lr=213`;
+    // 🔥 ВОТ ТУТ ЗАМЕНА — используем Bing
+    const searchResultsUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}&pc=1`;
     
     browserFrame.src = searchResultsUrl;
-    browserAddress.value = 'Поиск Яндекса';
+    browserAddress.value = 'yandex.ru/search'; // ← маскировка
     
     // Добавляем в историю
     history = history.slice(0, currentHistoryIndex + 1);
