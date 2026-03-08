@@ -1602,6 +1602,215 @@
         } catch (e) {}
     }
 
+    // ========== СИСТЕМА ПЕРЕВОДА (Русский/Белорусский) ==========
+    const translations = {
+        ru: {
+            'login': 'Войти',
+            'tap_to_enter': 'Нажмите для входа',
+            'start': 'Пуск',
+            'calculator': 'Калькулятор',
+            'browser': 'Браузер',
+            'rustore': 'RuStore',
+            'settings': 'Настройки',
+            'files': 'Документы',
+            'calendar': 'Календарь',
+            'monday': 'Пн',
+            'tuesday': 'Вт',
+            'wednesday': 'Ср',
+            'thursday': 'Чт',
+            'friday': 'Пт',
+            'saturday': 'Сб',
+            'sunday': 'Вс',
+            'january': 'Январь',
+            'february': 'Февраль',
+            'march': 'Март',
+            'april': 'Апрель',
+            'may': 'Май',
+            'june': 'Июнь',
+            'july': 'Июль',
+            'august': 'Август',
+            'september': 'Сентябрь',
+            'october': 'Октябрь',
+            'november': 'Ноябрь',
+            'december': 'Декабрь',
+            'january_gen': 'января',
+            'february_gen': 'февраля',
+            'march_gen': 'марта',
+            'april_gen': 'апреля',
+            'may_gen': 'мая',
+            'june_gen': 'июня',
+            'july_gen': 'июля',
+            'august_gen': 'августа',
+            'september_gen': 'сентября',
+            'october_gen': 'октября',
+            'november_gen': 'ноября',
+            'december_gen': 'декабря',
+            'wallpapers': '🖼️ ОБОИ',
+            'sounds': '🔊 ЗВУКИ',
+            'anthem': 'Гимн РФ',
+            'notification': 'Уведомление',
+            'language': '🌐 ЯЗЫК СИСТЕМЫ',
+            'apply_lang': 'Применить язык',
+            'version': 'Версия',
+            'security': 'Безопасность',
+            'active': 'Активна ✓',
+            'updates': 'Проверить обновления',
+            'clear_data': 'Очистить все данные',
+            'my_computer': 'Мой компьютер',
+            'my_docs': 'Мои документы',
+            'images': 'Изображения',
+            'music': 'Моя музыка',
+            'new_folder': '📁 Новая папка',
+            'new_file': '📄 Новый файл',
+            'refresh': '🔄 Обновить',
+            'add_app': '➕ Добавить приложение',
+            'name': 'Название',
+            'link': 'Ссылка (например, vk.com)',
+            'add_to_desktop': 'Добавить на рабочий стол',
+            'search_apps': 'Поиск приложений...',
+            'reset': 'Сброс',
+            'only_russian': '⛔ Только российские ресурсы!',
+            'installed': 'Установлено',
+            'already_installed': 'уже установлено',
+            'fill_fields': 'Заполните поля!',
+            'only_russian_domains': '⛔ Только российские домены!',
+            'already_exists': 'Уже есть!',
+            'no_updates': 'Обновлений нет. Вы используете самую патриотичную версию!',
+            'clear_confirm': 'Очистить все данные? Это удалит все файлы и приложения.',
+            'data_cleared': 'Данные очищены! Страница будет перезагружена.',
+            'delete_confirm': 'Удалить',
+            'no_holiday': 'Нет праздника',
+            'no_holidays': 'Нет праздников в этом месяце',
+            'selected_date': 'Выбрана дата',
+            'folder_name': 'Название папки:',
+            'file_name': 'Название файла:',
+            'only_russian_letters': '⛔ Только русские буквы!'
+        },
+        by: {
+            'login': 'Увайсці',
+            'tap_to_enter': 'Націсніце для ўваходу',
+            'start': 'Старт',
+            'calculator': 'Калькулятар',
+            'browser': 'Браўзэр',
+            'rustore': 'RuStore',
+            'settings': 'Налады',
+            'files': 'Дакументы',
+            'calendar': 'Каляндар',
+            'monday': 'Пн',
+            'tuesday': 'Аў',
+            'wednesday': 'Ср',
+            'thursday': 'Чц',
+            'friday': 'Пт',
+            'saturday': 'Сб',
+            'sunday': 'Нд',
+            'january': 'Студзень',
+            'february': 'Люты',
+            'march': 'Сакавік',
+            'april': 'Красавік',
+            'may': 'Май',
+            'june': 'Чэрвень',
+            'july': 'Ліпень',
+            'august': 'Жнівень',
+            'september': 'Верасень',
+            'october': 'Кастрычнік',
+            'november': 'Лістапад',
+            'december': 'Снежань',
+            'january_gen': 'студзеня',
+            'february_gen': 'лютага',
+            'march_gen': 'сакавіка',
+            'april_gen': 'красавіка',
+            'may_gen': 'мая',
+            'june_gen': 'чэрвеня',
+            'july_gen': 'ліпеня',
+            'august_gen': 'жніўня',
+            'september_gen': 'верасня',
+            'october_gen': 'кастрычніка',
+            'november_gen': 'лістапада',
+            'december_gen': 'снежня',
+            'wallpapers': '🖼️ ШПАЛЕРЫ',
+            'sounds': '🔊 ГУКІ',
+            'anthem': 'Гімн РФ',
+            'notification': 'Апавяшчэнне',
+            'language': '🌐 МОВА СІСТЭМЫ',
+            'apply_lang': 'Прымяніць мову',
+            'version': 'Версія',
+            'security': 'Бяспека',
+            'active': 'Актыўная ✓',
+            'updates': 'Праверыць абнаўленні',
+            'clear_data': 'Ачысціць усе дадзеныя',
+            'my_computer': 'Мой кампутар',
+            'my_docs': 'Мае дакументы',
+            'images': 'Выявы',
+            'music': 'Мая музыка',
+            'new_folder': '📁 Новы тэчак',
+            'new_file': '📄 Новы файл',
+            'refresh': '🔄 Абнавіць',
+            'add_app': '➕ Дадаць праграму',
+            'name': 'Назва',
+            'link': 'Спасылка (напрыклад, vk.com)',
+            'add_to_desktop': 'Дадаць на працоўны стол',
+            'search_apps': 'Пошук праграм...',
+            'reset': 'Скід',
+            'only_russian': '⛔ Толькі расійскія рэсурсы!',
+            'installed': 'Усталявана',
+            'already_installed': 'ужо ўсталявана',
+            'fill_fields': 'Запоўніце палі!',
+            'only_russian_domains': '⛔ Толькі расійскія дамены!',
+            'already_exists': 'Ужо ёсць!',
+            'no_updates': 'Абнаўленняў няма. Вы карыстаецеся самай патрыятычнай версіяй!',
+            'clear_confirm': 'Ачысціць усе дадзеныя? Гэта выдаліць усе файлы і праграмы.',
+            'data_cleared': 'Дадзеныя ачышчаны! Старонка будзе перазагружана.',
+            'delete_confirm': 'Выдаліць',
+            'no_holiday': 'Няма свята',
+            'no_holidays': 'Няма святаў у гэтым месяцы',
+            'selected_date': 'Абраная дата',
+            'folder_name': 'Назва тэчака:',
+            'file_name': 'Назва файла:',
+            'only_russian_letters': '⛔ Толькі рускія літары!'
+        }
+    };
+
+    let currentLang = localStorage.getItem('patriotLang') || 'ru';
+
+    function __(key) {
+        return translations[currentLang][key] || key;
+    }
+
+    function updateLanguage() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.dataset.i18n;
+            el.textContent = __(key);
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.dataset.i18nPlaceholder;
+            el.placeholder = __(key);
+        });
+
+        updateDateTime();
+        
+        if (typeof renderCalendar === 'function') {
+            renderCalendar(currentDate);
+        }
+
+        localStorage.setItem('patriotLang', currentLang);
+    }
+
+    document.getElementById('apply-language')?.addEventListener('click', () => {
+        const selected = document.querySelector('input[name="system-language"]:checked');
+        if (selected) {
+            currentLang = selected.value;
+            updateLanguage();
+            alert(`${__('apply_lang')}: ${currentLang === 'ru' ? 'русский' : 'беларуская'}`);
+            playUvedomlenie();
+        }
+    });
+
+    document.getElementById('apply-language')?.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        document.getElementById('apply-language').click();
+    }, { passive: false });
+
     // ========== УПРАВЛЕНИЕ ОКНАМИ ==========
     function closeWin(id) {
         document.getElementById(id).classList.add('hidden');
@@ -2390,215 +2599,6 @@
             alert(__('data_cleared'));
             location.reload();
         }
-    }, { passive: false });
-
-    // ========== СИСТЕМА ПЕРЕВОДА (Русский/Белорусский) ==========
-    const translations = {
-        ru: {
-            'login': 'Войти',
-            'tap_to_enter': 'Нажмите для входа',
-            'start': 'Пуск',
-            'calculator': 'Калькулятор',
-            'browser': 'Браузер',
-            'rustore': 'RuStore',
-            'settings': 'Настройки',
-            'files': 'Документы',
-            'calendar': 'Календарь',
-            'monday': 'Пн',
-            'tuesday': 'Вт',
-            'wednesday': 'Ср',
-            'thursday': 'Чт',
-            'friday': 'Пт',
-            'saturday': 'Сб',
-            'sunday': 'Вс',
-            'january': 'Январь',
-            'february': 'Февраль',
-            'march': 'Март',
-            'april': 'Апрель',
-            'may': 'Май',
-            'june': 'Июнь',
-            'july': 'Июль',
-            'august': 'Август',
-            'september': 'Сентябрь',
-            'october': 'Октябрь',
-            'november': 'Ноябрь',
-            'december': 'Декабрь',
-            'january_gen': 'января',
-            'february_gen': 'февраля',
-            'march_gen': 'марта',
-            'april_gen': 'апреля',
-            'may_gen': 'мая',
-            'june_gen': 'июня',
-            'july_gen': 'июля',
-            'august_gen': 'августа',
-            'september_gen': 'сентября',
-            'october_gen': 'октября',
-            'november_gen': 'ноября',
-            'december_gen': 'декабря',
-            'wallpapers': '🖼️ ОБОИ',
-            'sounds': '🔊 ЗВУКИ',
-            'anthem': 'Гимн РФ',
-            'notification': 'Уведомление',
-            'language': '🌐 ЯЗЫК СИСТЕМЫ',
-            'apply_lang': 'Применить язык',
-            'version': 'Версия',
-            'security': 'Безопасность',
-            'active': 'Активна ✓',
-            'updates': 'Проверить обновления',
-            'clear_data': 'Очистить все данные',
-            'my_computer': 'Мой компьютер',
-            'my_docs': 'Мои документы',
-            'images': 'Изображения',
-            'music': 'Моя музыка',
-            'new_folder': '📁 Новая папка',
-            'new_file': '📄 Новый файл',
-            'refresh': '🔄 Обновить',
-            'add_app': '➕ Добавить приложение',
-            'name': 'Название',
-            'link': 'Ссылка (например, vk.com)',
-            'add_to_desktop': 'Добавить на рабочий стол',
-            'search_apps': 'Поиск приложений...',
-            'reset': 'Сброс',
-            'only_russian': '⛔ Только российские ресурсы!',
-            'installed': 'Установлено',
-            'already_installed': 'уже установлено',
-            'fill_fields': 'Заполните поля!',
-            'only_russian_domains': '⛔ Только российские домены!',
-            'already_exists': 'Уже есть!',
-            'no_updates': 'Обновлений нет. Вы используете самую патриотичную версию!',
-            'clear_confirm': 'Очистить все данные? Это удалит все файлы и приложения.',
-            'data_cleared': 'Данные очищены! Страница будет перезагружена.',
-            'delete_confirm': 'Удалить',
-            'no_holiday': 'Нет праздника',
-            'no_holidays': 'Нет праздников в этом месяце',
-            'selected_date': 'Выбрана дата',
-            'folder_name': 'Название папки:',
-            'file_name': 'Название файла:',
-            'only_russian_letters': '⛔ Только русские буквы!'
-        },
-        by: {
-            'login': 'Увайсці',
-            'tap_to_enter': 'Націсніце для ўваходу',
-            'start': 'Старт',
-            'calculator': 'Калькулятар',
-            'browser': 'Браўзэр',
-            'rustore': 'RuStore',
-            'settings': 'Налады',
-            'files': 'Дакументы',
-            'calendar': 'Каляндар',
-            'monday': 'Пн',
-            'tuesday': 'Аў',
-            'wednesday': 'Ср',
-            'thursday': 'Чц',
-            'friday': 'Пт',
-            'saturday': 'Сб',
-            'sunday': 'Нд',
-            'january': 'Студзень',
-            'february': 'Люты',
-            'march': 'Сакавік',
-            'april': 'Красавік',
-            'may': 'Май',
-            'june': 'Чэрвень',
-            'july': 'Ліпень',
-            'august': 'Жнівень',
-            'september': 'Верасень',
-            'october': 'Кастрычнік',
-            'november': 'Лістапад',
-            'december': 'Снежань',
-            'january_gen': 'студзеня',
-            'february_gen': 'лютага',
-            'march_gen': 'сакавіка',
-            'april_gen': 'красавіка',
-            'may_gen': 'мая',
-            'june_gen': 'чэрвеня',
-            'july_gen': 'ліпеня',
-            'august_gen': 'жніўня',
-            'september_gen': 'верасня',
-            'october_gen': 'кастрычніка',
-            'november_gen': 'лістапада',
-            'december_gen': 'снежня',
-            'wallpapers': '🖼️ ШПАЛЕРЫ',
-            'sounds': '🔊 ГУКІ',
-            'anthem': 'Гімн РФ',
-            'notification': 'Апавяшчэнне',
-            'language': '🌐 МОВА СІСТЭМЫ',
-            'apply_lang': 'Прымяніць мову',
-            'version': 'Версія',
-            'security': 'Бяспека',
-            'active': 'Актыўная ✓',
-            'updates': 'Праверыць абнаўленні',
-            'clear_data': 'Ачысціць усе дадзеныя',
-            'my_computer': 'Мой кампутар',
-            'my_docs': 'Мае дакументы',
-            'images': 'Выявы',
-            'music': 'Мая музыка',
-            'new_folder': '📁 Новы тэчак',
-            'new_file': '📄 Новы файл',
-            'refresh': '🔄 Абнавіць',
-            'add_app': '➕ Дадаць праграму',
-            'name': 'Назва',
-            'link': 'Спасылка (напрыклад, vk.com)',
-            'add_to_desktop': 'Дадаць на працоўны стол',
-            'search_apps': 'Пошук праграм...',
-            'reset': 'Скід',
-            'only_russian': '⛔ Толькі расійскія рэсурсы!',
-            'installed': 'Усталявана',
-            'already_installed': 'ужо ўсталявана',
-            'fill_fields': 'Запоўніце палі!',
-            'only_russian_domains': '⛔ Толькі расійскія дамены!',
-            'already_exists': 'Ужо ёсць!',
-            'no_updates': 'Абнаўленняў няма. Вы карыстаецеся самай патрыятычнай версіяй!',
-            'clear_confirm': 'Ачысціць усе дадзеныя? Гэта выдаліць усе файлы і праграмы.',
-            'data_cleared': 'Дадзеныя ачышчаны! Старонка будзе перазагружана.',
-            'delete_confirm': 'Выдаліць',
-            'no_holiday': 'Няма свята',
-            'no_holidays': 'Няма святаў у гэтым месяцы',
-            'selected_date': 'Абраная дата',
-            'folder_name': 'Назва тэчака:',
-            'file_name': 'Назва файла:',
-            'only_russian_letters': '⛔ Толькі рускія літары!'
-        }
-    };
-
-    let currentLang = localStorage.getItem('patriotLang') || 'ru';
-
-    function __(key) {
-        return translations[currentLang][key] || key;
-    }
-
-    function updateLanguage() {
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.dataset.i18n;
-            el.textContent = __(key);
-        });
-
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.dataset.i18nPlaceholder;
-            el.placeholder = __(key);
-        });
-
-        updateDateTime();
-        
-        if (typeof renderCalendar === 'function') {
-            renderCalendar(currentDate);
-        }
-
-        localStorage.setItem('patriotLang', currentLang);
-    }
-
-    document.getElementById('apply-language')?.addEventListener('click', () => {
-        const selected = document.querySelector('input[name="system-language"]:checked');
-        if (selected) {
-            currentLang = selected.value;
-            updateLanguage();
-            alert(`${__('apply_lang')}: ${currentLang === 'ru' ? 'русский' : 'беларуская'}`);
-            playUvedomlenie();
-        }
-    });
-
-    document.getElementById('apply-language')?.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        document.getElementById('apply-language').click();
     }, { passive: false });
 
     // ========== БЛОКИРОВКА F12 ==========
