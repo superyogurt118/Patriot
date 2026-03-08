@@ -1688,6 +1688,535 @@ setInterval(function() {
         }
     }
 }, 30000); // Каждые 30 секунд
+
+// ========== ПРОВОДНИК (ДОКУМЕНТЫ) ==========
+// Создаём виртуальную файловую систему
+
+// Создаём окно проводника, если его ещё нет
+if (!document.getElementById('files-window')) {
+    const filesWindowHTML = `
+        <div id="files-window" class="window hidden">
+            <div class="close-btn" id="close-files">X</div>
+            <div class="window-header">
+                <span class="window-title">📁 Мои Документы</span>
+            </div>
+            <div class="files-content">
+                <div class="files-sidebar">
+                    <div class="files-sidebar-item" data-path="root">
+                        <span>📁 Мой компьютер</span>
+                    </div>
+                    <div class="files-sidebar-item" data-path="documents">
+                        <span>📄 Мои документы</span>
+                    </div>
+                    <div class="files-sidebar-item" data-path="images">
+                        <span>🖼️ Изображения</span>
+                    </div>
+                    <div class="files-sidebar-item" data-path="music">
+                        <span>🎵 Моя музыка</span>
+                    </div>
+                    <div class="files-sidebar-item" data-path="system">
+                        <span>⚙️ Системные папки</span>
+                    </div>
+                </div>
+                <div class="files-main">
+                    <div class="files-toolbar">
+                        <button class="files-btn" id="files-new-folder">📁 Новая папка</button>
+                        <button class="files-btn" id="files-new-file">📄 Новый файл</button>
+                        <button class="files-btn" id="files-refresh">🔄 Обновить</button>
+                    </div>
+                    <div class="files-grid" id="files-grid">
+                        <!-- Сюда будут загружаться файлы -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Добавляем в DOM
+    document.body.insertAdjacentHTML('beforeend', filesWindowHTML);
+}
+
+// Стили для проводника
+const filesStyles = `
+    #files-window {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        width: min(800px, 90vw);
+        height: min(500px, 70vh);
+        background: linear-gradient(to bottom, #3a3a3a, #222);
+        border-radius: 15px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 2px 3px rgba(255,255,255,0.2);
+        border: 1px solid #111;
+        z-index: 80;
+        opacity: 1;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        color: #f0e6d2;
+    }
+    
+    #files-window.hidden {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .window-header {
+        background: #2a2a2a;
+        padding: 12px 15px;
+        border-bottom: 2px solid #5a3e2b;
+        font-family: 'Playfair Display', serif;
+        font-size: 18px;
+        color: #d2a679;
+    }
+    
+    .files-content {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+    
+    .files-sidebar {
+        width: 180px;
+        background: rgba(0,0,0,0.5);
+        border-right: 1px solid #5a3e2b;
+        padding: 10px;
+        overflow-y: auto;
+    }
+    
+    .files-sidebar-item {
+        padding: 8px 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #ddd;
+    }
+    
+    .files-sidebar-item:hover {
+        background: rgba(210, 166, 121, 0.3);
+    }
+    
+    .files-sidebar-item.active {
+        background: #d2a679;
+        color: #222;
+    }
+    
+    .files-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    .files-toolbar {
+        padding: 10px;
+        border-bottom: 1px solid #5a3e2b;
+        display: flex;
+        gap: 10px;
+    }
+    
+    .files-btn {
+        background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+        border: 1px solid #888;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-family: 'Courier Prime', monospace;
+        font-size: 12px;
+    }
+    
+    .files-btn:active {
+        transform: translateY(2px);
+    }
+    
+    .files-grid {
+        flex: 1;
+        padding: 15px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px;
+        overflow-y: auto;
+        align-content: start;
+    }
+    
+    .files-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+    }
+    
+    .files-item:hover {
+        background: rgba(210, 166, 121, 0.3);
+    }
+    
+    .files-item.folder .files-item-icon {
+        font-size: 40px;
+        filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
+    }
+    
+    .files-item.file .files-item-icon {
+        font-size: 32px;
+        filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
+    }
+    
+    .files-item-name {
+        margin-top: 5px;
+        font-size: 12px;
+        word-break: break-word;
+        max-width: 100%;
+    }
+    
+    .files-item-input {
+        width: 90%;
+        background: #111;
+        border: 1px solid #d2a679;
+        color: white;
+        padding: 2px 5px;
+        font-family: 'Courier Prime', monospace;
+        font-size: 12px;
+        text-align: center;
+    }
+`;
+
+// Добавляем стили
+const styleSheet = document.createElement('style');
+styleSheet.textContent = filesStyles;
+document.head.appendChild(styleSheet);
+
+// ========== ФАЙЛОВАЯ СИСТЕМА ==========
+// Виртуальная файловая система в localStorage
+
+class PatriotFileSystem {
+    constructor() {
+        this.root = this.loadFS();
+        this.currentPath = 'root';
+    }
+    
+    loadFS() {
+        const saved = localStorage.getItem('patriotFS');
+        if (saved) {
+            return JSON.parse(saved);
+        }
+        
+        // Начальная структура
+        return {
+            name: 'root',
+            type: 'folder',
+            children: {
+                'Документы': {
+                    name: 'Документы',
+                    type: 'folder',
+                    children: {
+                        'Важный документ.txt': {
+                            name: 'Важный документ.txt',
+                            type: 'file',
+                            content: 'Слава Российской Федерации! 🇷🇺',
+                            size: 28
+                        }
+                    }
+                },
+                'Изображения': {
+                    name: 'Изображения',
+                    type: 'folder',
+                    children: {
+                        'Флаг РФ.png': {
+                            name: 'Флаг РФ.png',
+                            type: 'file',
+                            content: 'wallpapers/flag.png',
+                            size: 1024
+                        },
+                        'Герб РФ.png': {
+                            name: 'Герб РФ.png',
+                            type: 'file',
+                            content: 'wallpapers/gerb.png',
+                            size: 1024
+                        },
+                        'Берёза.png': {
+                            name: 'Берёза.png',
+                            type: 'file',
+                            content: 'wallpapers/bereza.png',
+                            size: 1024
+                        }
+                    }
+                },
+                'Музыка': {
+                    name: 'Музыка',
+                    type: 'folder',
+                    children: {
+                        'Гимн РФ.mp3': {
+                            name: 'Гимн РФ.mp3',
+                            type: 'file',
+                            content: 'sounds/gimn.mp3',
+                            size: 4096
+                        },
+                        'Уведомление.mp3': {
+                            name: 'Уведомление.mp3',
+                            type: 'file',
+                            content: 'sounds/uvedomlenie.mp3',
+                            size: 1024
+                        }
+                    }
+                }
+            }
+        };
+    }
+    
+    saveFS() {
+        localStorage.setItem('patriotFS', JSON.stringify(this.root));
+    }
+    
+    getFolder(path) {
+        if (path === 'root') return this.root;
+        
+        const parts = path.split('/');
+        let current = this.root;
+        
+        for (const part of parts) {
+            if (part && current.children && current.children[part]) {
+                current = current.children[part];
+            } else {
+                return null;
+            }
+        }
+        return current;
+    }
+    
+    createItem(path, name, type) {
+        const folder = this.getFolder(path);
+        if (!folder || folder.type !== 'folder') return false;
+        
+        if (folder.children[name]) return false;
+        
+        folder.children[name] = {
+            name: name,
+            type: type,
+            children: type === 'folder' ? {} : undefined,
+            content: type === 'file' ? '' : undefined,
+            size: type === 'file' ? 0 : undefined,
+            created: new Date().toISOString()
+        };
+        
+        this.saveFS();
+        return true;
+    }
+    
+    deleteItem(path, name) {
+        const folder = this.getFolder(path);
+        if (!folder || !folder.children[name]) return false;
+        
+        delete folder.children[name];
+        this.saveFS();
+        return true;
+    }
+    
+    renameItem(path, oldName, newName) {
+        const folder = this.getFolder(path);
+        if (!folder || !folder.children[oldName]) return false;
+        
+        folder.children[newName] = folder.children[oldName];
+        folder.children[newName].name = newName;
+        delete folder.children[oldName];
+        
+        this.saveFS();
+        return true;
+    }
+}
+
+// Инициализируем файловую систему
+const patriotFS = new PatriotFileSystem();
+
+// Получаем элементы проводника
+const filesWindow = document.getElementById('files-window');
+const filesGrid = document.getElementById('files-grid');
+const closeFiles = document.getElementById('close-files');
+const openFiles = document.getElementById('open-files');
+const newFolderBtn = document.getElementById('files-new-folder');
+const newFileBtn = document.getElementById('files-new-file');
+const refreshBtn = document.getElementById('files-refresh');
+
+// Если нет кнопки "Документы" в доке, добавим
+if (!document.querySelector('.icon[onclick*="filesWindow"]')) {
+    const dock = document.querySelector('.dock');
+    const filesIcon = document.createElement('div');
+    filesIcon.className = 'icon';
+    filesIcon.id = 'open-files';
+    filesIcon.innerHTML = `
+        <div class="icon-img" style="background: linear-gradient(135deg, #8b6b4d, #5a3e2b); border: 2px solid #d2a679; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 24px;">📁</span>
+        </div>
+        <span>Документы</span>
+    `;
+    dock.appendChild(filesIcon);
+}
+
+// Обработчики открытия/закрытия
+document.getElementById('open-files').addEventListener('click', () => {
+    filesWindow.classList.remove('hidden');
+    playNotification();
+    renderFiles('root');
+});
+
+closeFiles.addEventListener('click', () => {
+    filesWindow.classList.add('hidden');
+    playNotification();
+});
+
+// Рендер файлов
+function renderFiles(path) {
+    const folder = patriotFS.getFolder(path);
+    if (!folder) return;
+    
+    patriotFS.currentPath = path;
+    
+    let html = '';
+    
+    // Добавляем папку "Назад", если не в корне
+    if (path !== 'root') {
+        html += `
+            <div class="files-item folder" onclick="navigateUp()">
+                <div class="files-item-icon">📂</div>
+                <div class="files-item-name">...</div>
+            </div>
+        `;
+    }
+    
+    // Сортируем: сначала папки, потом файлы
+    const items = Object.values(folder.children).sort((a, b) => {
+        if (a.type === 'folder' && b.type !== 'folder') return -1;
+        if (a.type !== 'folder' && b.type === 'folder') return 1;
+        return a.name.localeCompare(b.name);
+    });
+    
+    items.forEach(item => {
+        const icon = item.type === 'folder' ? '📁' : '📄';
+        html += `
+            <div class="files-item ${item.type}" ondblclick="openItem('${path}', '${item.name}')" data-name="${item.name}">
+                <div class="files-item-icon">${icon}</div>
+                <div class="files-item-name">${item.name}</div>
+            </div>
+        `;
+    });
+    
+    filesGrid.innerHTML = html;
+}
+
+// Открытие элемента
+window.openItem = function(path, name) {
+    const folder = patriotFS.getFolder(path);
+    const item = folder.children[name];
+    
+    if (item.type === 'folder') {
+        // Открываем папку
+        renderFiles(path + (path === 'root' ? '' : '/') + name);
+    } else {
+        // Открываем файл
+        if (name.endsWith('.mp3')) {
+            // Воспроизводим звук
+            const audio = new Audio(item.content);
+            audio.volume = 0.4;
+            audio.play();
+            alert(`🎵 Воспроизведение: ${name}\nНастоящий патриот слушает только гимн!`);
+        } else if (name.endsWith('.png') || name.endsWith('.jpg')) {
+            // Показываем картинку
+            alert(`🖼️ Просмотр: ${name}\nДостойное изображение!`);
+        } else {
+            // Текстовый файл
+            alert(`📄 ${name}\n\n${item.content || 'Пустой файл'}`);
+        }
+    }
+};
+
+// Навигация вверх
+window.navigateUp = function() {
+    const current = patriotFS.currentPath;
+    if (current === 'root') return;
+    
+    const parts = current.split('/');
+    parts.pop();
+    const parent = parts.join('/') || 'root';
+    renderFiles(parent);
+};
+
+// Новая папка
+newFolderBtn.addEventListener('click', () => {
+    const name = prompt('Введите название папки:');
+    if (name) {
+        if (patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
+            renderFiles(patriotFS.currentPath);
+            playUvedomlenie();
+        } else {
+            alert('Папка с таким названием уже существует!');
+        }
+    }
+});
+
+// Новый файл
+newFileBtn.addEventListener('click', () => {
+    const name = prompt('Введите название файла (с расширением):');
+    if (name) {
+        if (patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
+            renderFiles(patriotFS.currentPath);
+            playUvedomlenie();
+        } else {
+            alert('Файл с таким названием уже существует!');
+        }
+    }
+});
+
+// Обновить
+refreshBtn.addEventListener('click', () => {
+    renderFiles(patriotFS.currentPath);
+    playUvedomlenie();
+});
+
+// Навигация по боковой панели
+document.querySelectorAll('.files-sidebar-item').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelectorAll('.files-sidebar-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        
+        const path = item.dataset.path;
+        renderFiles(path);
+    });
+});
+
+// Контекстное меню (удаление/переименование)
+filesGrid.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    
+    const item = e.target.closest('.files-item');
+    if (!item || item.querySelector('.files-item-name').textContent === '...') return;
+    
+    const name = item.dataset.name;
+    
+    const action = confirm(`Действия с "${name}":\nOK - удалить\nОтмена - переименовать`);
+    
+    if (action) {
+        // Удаление
+        if (patriotFS.deleteItem(patriotFS.currentPath, name)) {
+            renderFiles(patriotFS.currentPath);
+            playUvedomlenie();
+        }
+    } else {
+        // Переименование
+        const newName = prompt('Новое название:', name);
+        if (newName && newName !== name) {
+            if (patriotFS.renameItem(patriotFS.currentPath, name, newName)) {
+                renderFiles(patriotFS.currentPath);
+                playUvedomlenie();
+            }
+        }
+    }
+});
     
 </script>
 </body>
