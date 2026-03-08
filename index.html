@@ -1357,6 +1357,110 @@ function performSearch() {
         this.classList.add('playing');
         setTimeout(() => this.classList.remove('playing'), 300);
     });
+
+// ========== ПЕРЕХВАТ ВСЕХ ССЫЛОК ==========
+// Заставляем все ссылки открываться в браузере ПатриотОС
+
+// Функция для открытия ссылки в браузере ПатриотОС
+function openInPatriotBrowser(url) {
+    // Показываем окно браузера, если оно скрыто
+    if (browserWindow.classList.contains('hidden')) {
+        browserWindow.classList.remove('hidden');
+        playNotification();
+    }
+    
+    // Очищаем URL от якоря (#) и лишнего
+    const cleanUrl = url.split('#')[0].split('?')[0];
+    
+    // Устанавливаем URL в адресную строку
+    browserAddress.value = cleanUrl;
+    
+    // Загружаем сайт
+    showSite(cleanUrl);
+}
+
+// Перехватываем все клики по ссылкам в любом iframe
+document.addEventListener('click', function(e) {
+    // Ищем, кликнули ли по ссылке внутри iframe
+    const iframe = e.target.closest('iframe');
+    if (iframe) {
+        // Даём время iframe обработать клик, потом проверяем
+        setTimeout(() => {
+            try {
+                // Пытаемся получить URL, на который перешёл iframe
+                const iframeSrc = iframe.contentWindow.location.href;
+                
+                // Если это не пустая страница и не домашняя
+                if (iframeSrc && iframeSrc !== 'about:blank' && !iframeSrc.includes('yandex.ru/search')) {
+                    
+                    // Проверяем, не пытается ли iframe уйти на другой сайт
+                    const isExternal = !iframeSrc.includes(window.location.hostname);
+                    
+                    if (isExternal) {
+                        // Останавливаем загрузку в iframe
+                        iframe.src = 'about:blank';
+                        
+                        // Открываем в браузере ПатриотОС
+                        openInPatriotBrowser(iframeSrc);
+                    }
+                }
+            } catch (err) {
+                // Если ошибка доступа (кросс-домен) — значит точно внешняя ссылка
+                // Это то, что нам нужно!
+                
+                // Останавливаем загрузку в iframe
+                iframe.src = 'about:blank';
+                
+                // Берём URL из последнего известного
+                if (history.length > 0) {
+                    const lastUrl = history[history.length - 1];
+                    openInPatriotBrowser(lastUrl);
+                }
+            }
+        }, 100);
+    }
+});
+
+// Перехватываем все ссылки, которые открываются в новом окне
+const originalWindowOpen = window.open;
+window.open = function(url, name, features) {
+    // Вместо нового окна — открываем в браузере ПатриотОС
+    if (url) {
+        openInPatriotBrowser(url);
+    }
+    return null;
+};
+
+// Перехватываем клики по ссылкам в основном документе
+document.addEventListener('click', function(e) {
+    const link = e.target.closest('a');
+    if (link && link.href) {
+        // Если ссылка ведёт не на текущий домен
+        if (!link.href.includes(window.location.hostname)) {
+            e.preventDefault();
+            openInPatriotBrowser(link.href);
+        }
+    }
+});
+
+// Следим за изменениями в iframe
+let lastIframeUrl = '';
+setInterval(function() {
+    try {
+        const currentUrl = browserFrame.contentWindow.location.href;
+        if (currentUrl && currentUrl !== 'about:blank' && currentUrl !== lastIframeUrl) {
+            lastIframeUrl = currentUrl;
+            
+            // Обновляем адресную строку
+            browserAddress.value = currentUrl;
+        }
+    } catch (err) {
+        // Ошибка доступа — значит iframe пытается уйти на другой домен
+        if (lastIframeUrl) {
+            openInPatriotBrowser(lastIframeUrl);
+        }
+    }
+}, 500);
 </script>
 </body>
 </html>
