@@ -606,7 +606,7 @@
             border-color: #d2a679;
         }
 
-        /* НОВАЯ ПОИСКОВАЯ СТРОКА */
+        /* ПОИСКОВАЯ СТРОКА */
         .browser-search-row {
             display: flex;
             align-items: center;
@@ -702,6 +702,144 @@
             font-style: italic;
         }
 
+        /* ОКНО ПРОВОДНИКА */
+        #files-window {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: min(800px, 90vw);
+            height: min(500px, 70vh);
+            background: linear-gradient(to bottom, #3a3a3a, #222);
+            border-radius: 15px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 2px 3px rgba(255,255,255,0.2);
+            border: 1px solid #111;
+            z-index: 80;
+            opacity: 1;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #f0e6d2;
+        }
+
+        #files-window.hidden {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .window-header {
+            background: #2a2a2a;
+            padding: 12px 15px;
+            border-bottom: 2px solid #5a3e2b;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            color: #d2a679;
+        }
+
+        .files-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .files-sidebar {
+            width: 180px;
+            background: rgba(0,0,0,0.5);
+            border-right: 1px solid #5a3e2b;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .files-sidebar-item {
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #ddd;
+        }
+
+        .files-sidebar-item:hover {
+            background: rgba(210, 166, 121, 0.3);
+        }
+
+        .files-sidebar-item.active {
+            background: #d2a679;
+            color: #222;
+        }
+
+        .files-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .files-toolbar {
+            padding: 10px;
+            border-bottom: 1px solid #5a3e2b;
+            display: flex;
+            gap: 10px;
+        }
+
+        .files-btn {
+            background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+            border: 1px solid #888;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+            font-size: 12px;
+        }
+
+        .files-btn:active {
+            transform: translateY(2px);
+        }
+
+        .files-grid {
+            flex: 1;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            overflow-y: auto;
+            align-content: start;
+        }
+
+        .files-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .files-item:hover {
+            background: rgba(210, 166, 121, 0.3);
+        }
+
+        .files-item.folder .files-item-icon {
+            font-size: 40px;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
+        }
+
+        .files-item.file .files-item-icon {
+            font-size: 32px;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
+        }
+
+        .files-item-name {
+            margin-top: 5px;
+            font-size: 12px;
+            word-break: break-word;
+            max-width: 100%;
+        }
+
         /* Адаптация для узких экранов */
         @media (max-width: 600px) {
             .dock {
@@ -765,7 +903,7 @@
                 <div class="icon-img settings-icon"></div>
                 <span>Настройки</span>
             </div>
-            <div class="icon">
+            <div class="icon" id="open-files">
                 <div class="icon-img" style="background: linear-gradient(to bottom, #e3c48f, #cda766); border: 2px solid #a67c42; position: relative; overflow: hidden;">
                     <div style="position:absolute; top:0; left:10px; width:20px; height:8px; background:#ccc; border-bottom: 1px solid #888;"></div>
                 </div>
@@ -814,7 +952,7 @@
                     <button class="browser-nav-btn" id="browser-go">▶</button>
                 </div>
                 
-                <!-- НОВАЯ ПОИСКОВАЯ СТРОКА -->
+                <!-- ПОИСКОВАЯ СТРОКА -->
                 <div class="browser-search-row">
                     <input type="text" class="browser-search-bar" id="browser-search" placeholder="Поиск в Яндексе...">
                     <button class="browser-search-btn" id="browser-search-btn">Найти</button>
@@ -898,11 +1036,60 @@
             </div>
         </div>
 
+        <!-- Окно проводника (Документы) -->
+        <div id="files-window" class="hidden">
+            <div class="close-btn" id="close-files">X</div>
+            <div class="window-header">
+                <span class="window-title">📁 Мои Документы</span>
+            </div>
+            <div class="files-content">
+                <div class="files-sidebar">
+                    <div class="files-sidebar-item" data-path="root">
+                        <span>📁 Мой компьютер</span>
+                    </div>
+                    <div class="files-sidebar-item" data-path="documents">
+                        <span>📄 Мои документы</span>
+                    </div>
+                    <div class="files-sidebar-item" data-path="images">
+                        <span>🖼️ Изображения</span>
+                    </div>
+                    <div class="files-sidebar-item" data-path="music">
+                        <span>🎵 Моя музыка</span>
+                    </div>
+                </div>
+                <div class="files-main">
+                    <div class="files-toolbar">
+                        <button class="files-btn" id="files-new-folder">📁 Новая папка</button>
+                        <button class="files-btn" id="files-new-file">📄 Новый файл</button>
+                        <button class="files-btn" id="files-refresh">🔄 Обновить</button>
+                    </div>
+                    <div class="files-grid" id="files-grid"></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
 
 <script>
+    // ========== БЛОКИРОВКА НОВЫХ ОКОН ==========
+    function blockNewWindows() {
+        const blockMethods = ['open', 'showModalDialog', 'showModelessDialog', 'createPopup', 'CreatePopup'];
+        blockMethods.forEach(method => {
+            try { window[method] = function() { return null; }; } catch(e) {}
+        });
+        
+        const originalCreateElement = document.createElement;
+        document.createElement = function(tagName) {
+            if (tagName.toLowerCase() === 'iframe') {
+                return originalCreateElement.call(document, 'div');
+            }
+            return originalCreateElement.call(document, tagName);
+        };
+    }
+    blockNewWindows();
+
     // ========== ЭКРАН БЛОКИРОВКИ ==========
     const track = document.getElementById('slider-track');
     const thumb = document.getElementById('slider-thumb');
@@ -911,39 +1098,8 @@
     let isDragging = false;
     let startX;
 
-// Полная блокировка всех попыток открыть новое окно
-function blockNewWindows() {
-    // Блокируем все возможные способы открыть новое окно
-    const blockMethods = [
-        'open', 'showModalDialog', 'showModelessDialog',
-        'createPopup', 'CreatePopup'
-    ];
-    
-    blockMethods.forEach(method => {
-        try {
-            window[method] = function() { return null; };
-        } catch(e) {}
-    });
-    
-    // Блокируем создание новых iframe
-    const originalCreateElement = document.createElement;
-    document.createElement = function(tagName) {
-        if (tagName.toLowerCase() === 'iframe') {
-            console.log('Блокировка создания нового iframe');
-            return originalCreateElement.call(document, 'div');
-        }
-        return originalCreateElement.call(document, tagName);
-    };
-}
-
-// Вызываем при загрузке
-blockNewWindows();
-
     function getClientX(e) {
-        if (e.touches) {
-            return e.touches[0].clientX;
-        }
-        return e.clientX;
+        return e.touches ? e.touches[0].clientX : e.clientX;
     }
 
     function startDrag(e) {
@@ -969,9 +1125,7 @@ blockNewWindows();
         if (newLeft >= maxLeft - 5) {
             isDragging = false;
             playVhod();
-            setTimeout(() => {
-                lockScreen.classList.add('unlocked');
-            }, 100);
+            setTimeout(() => lockScreen.classList.add('unlocked'), 100);
         }
     }
 
@@ -986,14 +1140,13 @@ blockNewWindows();
         if (currentLeft < maxLeft - 5) {
             thumb.style.transition = 'left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             thumb.style.left = '5px';
-            setTimeout(() => { thumb.style.transition = 'none'; }, 300);
+            setTimeout(() => thumb.style.transition = 'none', 300);
         }
     }
 
     thumb.addEventListener('mousedown', startDrag);
     document.addEventListener('mousemove', onDrag);
     document.addEventListener('mouseup', stopDrag);
-
     thumb.addEventListener('touchstart', startDrag, { passive: false });
     document.addEventListener('touchmove', onDrag, { passive: false });
     document.addEventListener('touchend', stopDrag);
@@ -1002,68 +1155,47 @@ blockNewWindows();
     // ========== ВРЕМЯ ==========
     function updateTime() {
         const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('time-display').innerText = `${h}:${m}`;
+        document.getElementById('time-display').innerText = 
+            `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     }
     setInterval(updateTime, 1000);
     updateTime();
 
     // ========== ЗВУКИ ==========
-    let gimnAudio = null;
-    let uvedAudio = null;
-    let vhodAudio = null;
+    let gimnAudio = null, uvedAudio = null, vhodAudio = null;
 
     function playGimn() {
         try {
-            if (gimnAudio) {
-                gimnAudio.pause();
-                gimnAudio.currentTime = 0;
-            }
+            if (gimnAudio) { gimnAudio.pause(); gimnAudio.currentTime = 0; }
             gimnAudio = new Audio('sounds/gimn.mp3');
             gimnAudio.volume = 0.4;
-            gimnAudio.play().catch(e => console.log('Аудио не загрузилось:', e));
-        } catch (e) {
-            console.log('Ошибка воспроизведения гимна:', e);
-        }
+            gimnAudio.play().catch(() => {});
+        } catch (e) {}
     }
 
     function playVhod() {
         try {
-            if (vhodAudio) {
-                vhodAudio.pause();
-                vhodAudio.currentTime = 0;
-            }
+            if (vhodAudio) { vhodAudio.pause(); vhodAudio.currentTime = 0; }
             vhodAudio = new Audio('sounds/vhod.mp3');
             vhodAudio.volume = 0.4;
-            vhodAudio.play().catch(e => console.log('Аудио не загрузилось:', e));
-        } catch (e) {
-            console.log('Ошибка воспроизведения входа:', e);
-        }
+            vhodAudio.play().catch(() => {});
+        } catch (e) {}
     }
 
     function playUvedomlenie() {
         try {
-            if (uvedAudio) {
-                uvedAudio.pause();
-                uvedAudio.currentTime = 0;
-            }
+            if (uvedAudio) { uvedAudio.pause(); uvedAudio.currentTime = 0; }
             uvedAudio = new Audio('sounds/uvedomlenie.mp3');
             uvedAudio.volume = 0.3;
-            uvedAudio.play().catch(e => console.log('Аудио не загрузилось:', e));
-        } catch (e) {
-            console.log('Ошибка воспроизведения уведомления:', e);
-        }
+            uvedAudio.play().catch(() => {});
+        } catch (e) {}
     }
 
-    function playNotification() {
-        playUvedomlenie();
-    }
+    function playNotification() { playUvedomlenie(); }
 
     // ========== ОБОИ ==========
     const desktop = document.getElementById('desktop');
     const wallpaperOptions = document.querySelectorAll('.wallpaper-option');
-    
     const wallpapersArray = [
         'url("wallpapers/flag.png")',
         'url("wallpapers/gerb.png")',
@@ -1073,21 +1205,15 @@ blockNewWindows();
     window.addEventListener('load', function() {
         const randomIndex = Math.floor(Math.random() * wallpapersArray.length);
         desktop.style.backgroundImage = wallpapersArray[randomIndex];
-        
-        setTimeout(() => {
-            highlightSelectedWallpaper();
-        }, 100);
+        setTimeout(highlightSelectedWallpaper, 100);
     });
 
     function setWallpaper(wallpaperName) {
         desktop.style.backgroundImage = `url('wallpapers/${wallpaperName}.png')`;
         playUvedomlenie();
-        
         wallpaperOptions.forEach(opt => {
             opt.classList.remove('selected');
-            if (opt.dataset.wallpaper === wallpaperName) {
-                opt.classList.add('selected');
-            }
+            if (opt.dataset.wallpaper === wallpaperName) opt.classList.add('selected');
         });
     }
 
@@ -1095,29 +1221,24 @@ blockNewWindows();
         const currentBg = desktop.style.backgroundImage;
         wallpaperOptions.forEach(opt => {
             opt.classList.remove('selected');
-            if (currentBg.includes(opt.dataset.wallpaper)) {
-                opt.classList.add('selected');
-            }
+            if (currentBg.includes(opt.dataset.wallpaper)) opt.classList.add('selected');
         });
     }
 
     wallpaperOptions.forEach(opt => {
-        opt.addEventListener('click', function() {
-            const wallpaperName = this.dataset.wallpaper;
-            setWallpaper(wallpaperName);
-        });
+        opt.addEventListener('click', () => setWallpaper(opt.dataset.wallpaper));
     });
 
     // ========== УПРАВЛЕНИЕ ОКНАМИ ==========
     const calcWindow = document.getElementById('calc-window');
     const settingsWindow = document.getElementById('settings-window');
     const browserWindow = document.getElementById('browser-window');
+    const filesWindow = document.getElementById('files-window');
     
     document.getElementById('open-calc').addEventListener('click', () => {
         calcWindow.classList.remove('hidden');
         playNotification();
     });
-
     document.getElementById('close-calc').addEventListener('click', () => {
         calcWindow.classList.add('hidden');
         playNotification();
@@ -1128,7 +1249,6 @@ blockNewWindows();
         playNotification();
         highlightSelectedWallpaper();
     });
-
     document.getElementById('close-settings').addEventListener('click', () => {
         settingsWindow.classList.add('hidden');
         playNotification();
@@ -1138,9 +1258,18 @@ blockNewWindows();
         browserWindow.classList.remove('hidden');
         playNotification();
     });
-
     document.getElementById('close-browser').addEventListener('click', () => {
         browserWindow.classList.add('hidden');
+        playNotification();
+    });
+
+    document.getElementById('open-files').addEventListener('click', () => {
+        filesWindow.classList.remove('hidden');
+        playNotification();
+        renderFiles('root');
+    });
+    document.getElementById('close-files').addEventListener('click', () => {
+        filesWindow.classList.add('hidden');
         playNotification();
     });
 
@@ -1152,18 +1281,12 @@ blockNewWindows();
     const browserBack = document.getElementById('browser-back');
     const browserForward = document.getElementById('browser-forward');
     const browserRefresh = document.getElementById('browser-refresh');
-    
-    // НОВЫЕ ЭЛЕМЕНТЫ ПОИСКА
     const browserSearch = document.getElementById('browser-search');
     const browserSearchBtn = document.getElementById('browser-search-btn');
 
     let history = [];
     let currentHistoryIndex = -1;
-
-    // Разрешённые домены
     const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru'];
-
-    // НАСТРОЙКА: Запрещённые слова для поиска (нарушающие законодательство)
     const forbiddenSearchTerms = [
         'наркотики', 'порно', 'взлом', 'хакинг', 'оружие', 'взрывчатка',
         'террор', 'экстремизм', 'педофилия', 'суицид', 'насилие',
@@ -1177,45 +1300,30 @@ blockNewWindows();
         browserAddress.value = 'yandex.ru';
     }
 
-    // Функция проверки поискового запроса
     function isSearchForbidden(query) {
         const lowerQuery = query.toLowerCase();
-        for (let term of forbiddenSearchTerms) {
-            if (lowerQuery.includes(term)) {
-                return true;
-            }
+        return forbiddenSearchTerms.some(term => lowerQuery.includes(term));
+    }
+
+    function performSearch() {
+        const query = browserSearch.value.trim();
+        if (!query) return;
+
+        if (isSearchForbidden(query)) {
+            alert('⛔ Поисковый запрос нарушает законодательство Российской Федерации. Доступ запрещён.');
+            browserSearch.value = '';
+            return;
         }
-        return false;
+
+        browserFrame.style.display = 'block';
+        browserHome.style.display = 'none';
+        const searchResultsUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}&pc=1`;
+        browserFrame.src = searchResultsUrl;
+        browserAddress.value = 'yandex.ru/search';
+        history = history.slice(0, currentHistoryIndex + 1);
+        history.push('yandex-search');
+        currentHistoryIndex = history.length - 1;
     }
-
-// Функция поиска
-function performSearch() {
-    const query = browserSearch.value.trim();
-    if (!query) return;
-
-    // Проверяем на запрещённые слова
-    if (isSearchForbidden(query)) {
-        alert('⛔ Поисковый запрос нарушает законодательство Российской Федерации. Доступ запрещён.');
-        browserSearch.value = '';
-        return;
-    }
-
-    // Показываем результаты в iframe
-    browserFrame.style.display = 'block';
-    browserHome.style.display = 'none';
-    
-    // 🔥 ВОТ ТУТ ЗАМЕНА — используем Bing
-    const searchResultsUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}&pc=1`;
-    
-    browserFrame.src = searchResultsUrl;
-    browserAddress.value = 'yandex.ru/search'; // ← маскировка
-    
-    // Добавляем в историю
-    history = history.slice(0, currentHistoryIndex + 1);
-    history.push('yandex-search');
-    currentHistoryIndex = history.length - 1;
-}
-
 
     function showSite(url) {
         let fullUrl = url;
@@ -1223,14 +1331,7 @@ function performSearch() {
             fullUrl = 'https://' + url;
         }
         
-        // Проверка на патриотичность (только российские сайты)
-        let isAllowed = false;
-        for (let domain of allowedDomains) {
-            if (fullUrl.includes(domain)) {
-                isAllowed = true;
-                break;
-            }
-        }
+        let isAllowed = allowedDomains.some(domain => fullUrl.includes(domain));
 
         if (!isAllowed) {
             alert('⛔ Доступ к иностранным сайтам запрещён. Только проверенные российские ресурсы.');
@@ -1243,59 +1344,43 @@ function performSearch() {
         browserFrame.src = fullUrl;
         browserAddress.value = url;
 
-        // Добавляем в историю
         history = history.slice(0, currentHistoryIndex + 1);
         history.push(url);
         currentHistoryIndex = history.length - 1;
     }
 
-    // Обработчики для адресной строки
     browserGo.addEventListener('click', () => {
         const url = browserAddress.value.trim();
-        if (url) {
-            showSite(url);
-        }
+        if (url) showSite(url);
     });
-
     browserAddress.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const url = browserAddress.value.trim();
-            if (url) {
-                showSite(url);
-            }
+            if (url) showSite(url);
         }
     });
 
-    // Обработчики для поисковой строки
     browserSearchBtn.addEventListener('click', performSearch);
     browserSearch.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            performSearch();
-        }
+        if (e.key === 'Enter') performSearch();
     });
 
-    // Навигация
     browserBack.addEventListener('click', () => {
         if (currentHistoryIndex > 0) {
             currentHistoryIndex--;
             showSite(history[currentHistoryIndex]);
         }
     });
-
     browserForward.addEventListener('click', () => {
         if (currentHistoryIndex < history.length - 1) {
             currentHistoryIndex++;
             showSite(history[currentHistoryIndex]);
         }
     });
-
     browserRefresh.addEventListener('click', () => {
-        if (browserFrame.style.display !== 'none') {
-            browserFrame.src = browserFrame.src;
-        }
+        if (browserFrame.style.display !== 'none') browserFrame.src = browserFrame.src;
     });
 
-    // Изначально показываем домашнюю страницу
     showHome();
 
     // ========== КАЛЬКУЛЯТОР ==========
@@ -1305,29 +1390,25 @@ function performSearch() {
     let operation = null;
 
     window.appendNumber = function(number) {
-        if (currentInput === '0' && number !== '.') {
-            currentInput = number;
-        } else {
+        if (currentInput === '0' && number !== '.') currentInput = number;
+        else {
             if (number === '.' && currentInput.includes('.')) return;
             currentInput += number;
         }
         updateDisplay();
     };
-
     window.clearDisplay = function() {
         currentInput = '0';
         previousInput = '';
         operation = null;
         updateDisplay();
     };
-
     window.setOp = function(op) {
         if (operation !== null) calculate();
         previousInput = currentInput;
         operation = op;
         currentInput = '0';
     };
-
     window.calculate = function() {
         if (operation === null || previousInput === '') return;
         let result;
@@ -1339,8 +1420,9 @@ function performSearch() {
             case '-': result = prev - current; break;
             case '*': result = prev * current; break;
             case '/': 
-                if (current === 0) { result = 'Ошибка'; break; }
-                result = prev / current; break;
+                if (current === 0) result = 'Ошибка';
+                else result = prev / current;
+                break;
         }
         
         currentInput = result.toString();
@@ -1348,23 +1430,244 @@ function performSearch() {
         previousInput = '';
         updateDisplay();
     };
-
     function updateDisplay() {
-        if (currentInput.length > 10) {
-            display.innerText = currentInput.substring(0, 10);
-        } else {
-            display.innerText = currentInput;
+        display.innerText = currentInput.length > 10 ? currentInput.substring(0, 10) : currentInput;
+    }
+
+    // ========== ПАТРИОТИЧЕСКИЕ ОШИБКИ ==========
+    function showPatriotError(message, details = '') {
+        const errorBox = document.createElement('div');
+        errorBox.style.cssText = `
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #8b0000, #4a0000); border: 4px solid #d2a679;
+            border-radius: 15px; padding: 25px; color: white; font-family: 'Playfair Display', serif;
+            text-align: center; z-index: 10000; box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            max-width: 400px; animation: patriotErrorFade 0.5s;
+        `;
+        errorBox.innerHTML = `
+            <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
+            <h2 style="margin: 0 0 15px 0; color: #d2a679;">ПАТРИОТИЧЕСКАЯ ЗАЩИТА</h2>
+            <p style="margin: 10px 0; font-size: 16px; line-height: 1.5;">${message}</p>
+            <p style="margin: 15px 0 10px 0; font-size: 14px; color: #ffaaaa;">${details}</p>
+            <button onclick="this.parentElement.remove()" style="
+                background: #d2a679; border: none; color: #4a0000; padding: 10px 30px;
+                border-radius: 30px; font-family: 'Courier Prime', monospace; font-weight: bold;
+                font-size: 16px; cursor: pointer; margin-top: 15px; border: 2px solid #ffd700;
+            ">ПРИНЯТЬ</button>
+        `;
+        document.body.appendChild(errorBox);
+        setTimeout(() => errorBox.remove(), 5000);
+        playUvedomlenie();
+    }
+
+    browserFrame.addEventListener('error', () => {
+        showPatriotError('Сайт не может быть загружен!', 
+            `Ресурс «${browserAddress.value}» не имеет серверов на территории Российской Федерации.\nДоступ запрещён.`);
+        showHome();
+    });
+
+    window.addEventListener('error', function(e) {
+        if (e.target === browserFrame) return;
+        let errorMessage = 'Техническая неполадка';
+        let errorDetails = 'Система заблокировала подозрительную активность.';
+        if (e.target?.tagName === 'IMG') {
+            errorMessage = 'Изображение не загружено!';
+            errorDetails = 'Файл содержит неподтверждённую символику или загружен с иностранного сервера.';
+        } else if (e.target?.tagName === 'AUDIO') {
+            errorMessage = 'Звуковой файл заблокирован!';
+            errorDetails = 'Аудио не прошло проверку на патриотичность.';
+        }
+        showPatriotError(errorMessage, errorDetails);
+        e.preventDefault();
+    });
+
+    const style = document.createElement('style');
+    style.textContent = `@keyframes patriotErrorFade { from { opacity: 0; transform: translate(-50%, -60%); } to { opacity: 1; transform: translate(-50%, -50%); } }`;
+    document.head.appendChild(style);
+
+    // ========== ПРОВОДНИК ==========
+    class PatriotFileSystem {
+        constructor() {
+            this.root = this.loadFS();
+            this.currentPath = 'root';
+        }
+        
+        loadFS() {
+            const saved = localStorage.getItem('patriotFS');
+            if (saved) return JSON.parse(saved);
+            return {
+                name: 'root', type: 'folder', children: {
+                    'Документы': { name: 'Документы', type: 'folder', children: {
+                        'Важный документ.txt': { name: 'Важный документ.txt', type: 'file', content: 'Слава Российской Федерации! 🇷🇺', size: 28 }
+                    } },
+                    'Изображения': { name: 'Изображения', type: 'folder', children: {
+                        'Флаг РФ.png': { name: 'Флаг РФ.png', type: 'file', content: 'wallpapers/flag.png', size: 1024 },
+                        'Герб РФ.png': { name: 'Герб РФ.png', type: 'file', content: 'wallpapers/gerb.png', size: 1024 },
+                        'Берёза.png': { name: 'Берёза.png', type: 'file', content: 'wallpapers/bereza.png', size: 1024 }
+                    } },
+                    'Музыка': { name: 'Музыка', type: 'folder', children: {
+                        'Гимн РФ.mp3': { name: 'Гимн РФ.mp3', type: 'file', content: 'sounds/gimn.mp3', size: 4096 },
+                        'Уведомление.mp3': { name: 'Уведомление.mp3', type: 'file', content: 'sounds/uvedomlenie.mp3', size: 1024 }
+                    } }
+                }
+            };
+        }
+        
+        saveFS() { localStorage.setItem('patriotFS', JSON.stringify(this.root)); }
+        
+        getFolder(path) {
+            if (path === 'root') return this.root;
+            const parts = path.split('/');
+            let current = this.root;
+            for (const part of parts) {
+                if (part && current.children?.[part]) current = current.children[part];
+                else return null;
+            }
+            return current;
+        }
+        
+        createItem(path, name, type) {
+            const folder = this.getFolder(path);
+            if (!folder || folder.type !== 'folder' || folder.children[name]) return false;
+            folder.children[name] = {
+                name, type,
+                children: type === 'folder' ? {} : undefined,
+                content: type === 'file' ? '' : undefined,
+                size: type === 'file' ? 0 : undefined,
+                created: new Date().toISOString()
+            };
+            this.saveFS();
+            return true;
+        }
+        
+        deleteItem(path, name) {
+            const folder = this.getFolder(path);
+            if (!folder || !folder.children[name]) return false;
+            delete folder.children[name];
+            this.saveFS();
+            return true;
+        }
+        
+        renameItem(path, oldName, newName) {
+            const folder = this.getFolder(path);
+            if (!folder || !folder.children[oldName]) return false;
+            folder.children[newName] = folder.children[oldName];
+            folder.children[newName].name = newName;
+            delete folder.children[oldName];
+            this.saveFS();
+            return true;
         }
     }
 
-    // ========== ЗАПУСК ==========
-    window.addEventListener('load', function() {
-        setTimeout(() => {
-            playVhod();
-        }, 500);
+    const patriotFS = new PatriotFileSystem();
+    const filesGrid = document.getElementById('files-grid');
+    const closeFiles = document.getElementById('close-files');
+    const newFolderBtn = document.getElementById('files-new-folder');
+    const newFileBtn = document.getElementById('files-new-file');
+    const refreshBtn = document.getElementById('files-refresh');
+
+    function renderFiles(path) {
+        const folder = patriotFS.getFolder(path);
+        if (!folder) return;
+        patriotFS.currentPath = path;
+        
+        let html = '';
+        if (path !== 'root') {
+            html += `<div class="files-item folder" onclick="navigateUp()"><div class="files-item-icon">📂</div><div class="files-item-name">...</div></div>`;
+        }
+        
+        const items = Object.values(folder.children).sort((a, b) => {
+            if (a.type === 'folder' && b.type !== 'folder') return -1;
+            if (a.type !== 'folder' && b.type === 'folder') return 1;
+            return a.name.localeCompare(b.name);
+        });
+        
+        items.forEach(item => {
+            const icon = item.type === 'folder' ? '📁' : '📄';
+            html += `<div class="files-item ${item.type}" ondblclick="openItem('${path}', '${item.name.replace(/'/g, "\\'")}')" data-name="${item.name}">
+                <div class="files-item-icon">${icon}</div><div class="files-item-name">${item.name}</div>
+            </div>`;
+        });
+        filesGrid.innerHTML = html;
+    }
+
+    window.openItem = function(path, name) {
+        const folder = patriotFS.getFolder(path);
+        const item = folder.children[name];
+        if (item.type === 'folder') {
+            renderFiles(path + (path === 'root' ? '' : '/') + name);
+        } else {
+            if (name.endsWith('.mp3')) {
+                const audio = new Audio(item.content);
+                audio.volume = 0.4;
+                audio.play();
+                alert(`🎵 Воспроизведение: ${name}\nНастоящий патриот слушает только гимн!`);
+            } else if (name.endsWith('.png') || name.endsWith('.jpg')) {
+                alert(`🖼️ Просмотр: ${name}\nДостойное изображение!`);
+            } else {
+                alert(`📄 ${name}\n\n${item.content || 'Пустой файл'}`);
+            }
+        }
+    };
+
+    window.navigateUp = function() {
+        const current = patriotFS.currentPath;
+        if (current === 'root') return;
+        const parts = current.split('/');
+        parts.pop();
+        renderFiles(parts.join('/') || 'root');
+    };
+
+    newFolderBtn.addEventListener('click', () => {
+        const name = prompt('Введите название папки:');
+        if (name && patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
+            renderFiles(patriotFS.currentPath);
+            playUvedomlenie();
+        } else alert('Папка с таким названием уже существует!');
     });
 
-    // Блокировка F12
+    newFileBtn.addEventListener('click', () => {
+        const name = prompt('Введите название файла (с расширением):');
+        if (name && patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
+            renderFiles(patriotFS.currentPath);
+            playUvedomlenie();
+        } else alert('Файл с таким названием уже существует!');
+    });
+
+    refreshBtn.addEventListener('click', () => {
+        renderFiles(patriotFS.currentPath);
+        playUvedomlenie();
+    });
+
+    document.querySelectorAll('.files-sidebar-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.files-sidebar-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            renderFiles(item.dataset.path);
+        });
+    });
+
+    filesGrid.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const item = e.target.closest('.files-item');
+        if (!item || item.querySelector('.files-item-name').textContent === '...') return;
+        const name = item.dataset.name;
+        const action = confirm(`Действия с "${name}":\nOK - удалить\nОтмена - переименовать`);
+        if (action) {
+            if (patriotFS.deleteItem(patriotFS.currentPath, name)) {
+                renderFiles(patriotFS.currentPath);
+                playUvedomlenie();
+            }
+        } else {
+            const newName = prompt('Новое название:', name);
+            if (newName && newName !== name && patriotFS.renameItem(patriotFS.currentPath, name, newName)) {
+                renderFiles(patriotFS.currentPath);
+                playUvedomlenie();
+            }
+        }
+    });
+
+    // ========== БЛОКИРОВКА F12 ==========
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
@@ -1379,845 +1682,13 @@ function performSearch() {
         this.classList.add('playing');
         setTimeout(() => this.classList.remove('playing'), 300);
     });
-
     document.getElementById('play-uved').addEventListener('click', function() {
         playUvedomlenie();
         this.classList.add('playing');
         setTimeout(() => this.classList.remove('playing'), 300);
     });
 
-// ========== ПЕРЕХВАТ ВСЕХ ССЫЛОК ==========
-// Заставляем все ссылки открываться в браузере ПатриотОС
-
-// Функция для открытия ссылки в браузере ПатриотОС
-function openInPatriotBrowser(url) {
-    // Показываем окно браузера, если оно скрыто
-    if (browserWindow.classList.contains('hidden')) {
-        browserWindow.classList.remove('hidden');
-        playNotification();
-    }
-    
-    // Очищаем URL от якоря (#) и параметров для красоты
-    const cleanUrl = url.split('#')[0];
-    
-    // Устанавливаем URL в адресную строку
-    browserAddress.value = cleanUrl;
-    
-    // Загружаем сайт
-    showSite(cleanUrl);
-}
-
-// Полностью блокируем все попытки открыть новое окно
-window.open = function(url, name, features) {
-    console.log('Блокировка window.open:', url);
-    if (url) {
-        openInPatriotBrowser(url);
-    }
-    return {
-        closed: false,
-        focus: function() {},
-        close: function() {}
-    };
-};
-
-// Блокируем target="_blank" на всех ссылках
-document.addEventListener('click', function(e) {
-    // Ищем ссылку, по которой кликнули
-    const link = e.target.closest('a');
-    if (link && link.href) {
-        // Если это ссылка на другой сайт или с target="_blank"
-        if (link.target === '_blank' || !link.href.includes(window.location.hostname)) {
-            e.preventDefault();
-            e.stopPropagation();
-            openInPatriotBrowser(link.href);
-            return false;
-        }
-    }
-}, true);
-
-// Следим за iframe и перехватываем всё, что там происходит
-let iframeBlocked = false;
-browserFrame.addEventListener('load', function() {
-    try {
-        // Пытаемся внедриться в iframe и перехватить там ссылки
-        const iframeDoc = browserFrame.contentDocument || browserFrame.contentWindow.document;
-        
-        // Добавляем мета-тег, запрещающий открытие новых окон
-        const meta = iframeDoc.createElement('meta');
-        meta.setAttribute('http-equiv', 'Content-Security-Policy');
-        meta.setAttribute('content', "frame-ancestors 'self'");
-        iframeDoc.head.appendChild(meta);
-        
-        // Перехватываем все клики внутри iframe
-        iframeDoc.addEventListener('click', function(e) {
-            const iframeLink = e.target.closest('a');
-            if (iframeLink && iframeLink.href) {
-                e.preventDefault();
-                e.stopPropagation();
-                openInPatriotBrowser(iframeLink.href);
-                return false;
-            }
-        }, true);
-        
-        // Переопределяем window.open внутри iframe
-        const iframeWindow = browserFrame.contentWindow;
-        iframeWindow.open = function(url, name, features) {
-            openInPatriotBrowser(url);
-            return null;
-        };
-        
-    } catch (err) {
-        // Если не можем достучаться до iframe (кросс-домен) - это нормально
-        console.log('Не могу достучаться до iframe (кросс-домен)');
-    }
-});
-
-// Бесконечная защита от новых окон
-setInterval(function() {
-    // Проверяем, не появилось ли новое окно
-    if (window.frames.length > 1) {
-        // Если появился новый iframe - удаляем его
-        while (window.frames.length > 1) {
-            document.body.removeChild(document.querySelectorAll('iframe')[1]);
-        }
-    }
-    
-    // Проверяем, не пытается ли iframe сбежать
-    try {
-        const iframeLocation = browserFrame.contentWindow.location.href;
-        if (iframeLocation && iframeLocation !== 'about:blank') {
-            // Обновляем адресную строку
-            browserAddress.value = iframeLocation;
-        }
-    } catch (err) {
-        // Ошибка доступа - значит iframe на чужом домене
-        // Это нормально, ничего не делаем
-    }
-}, 500);
-
-// ========== ПАТРИОТИЧЕСКАЯ ОБРАБОТКА ОШИБОК ==========
-// Любая ошибка = вражеские происки
-
-// Функция показа патриотического сообщения об ошибке
-function showPatriotError(message, details = '') {
-    // Создаём красивое окошко с ошибкой
-    const errorBox = document.createElement('div');
-    errorBox.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, #8b0000, #4a0000);
-        border: 4px solid #d2a679;
-        border-radius: 15px;
-        padding: 25px;
-        color: white;
-        font-family: 'Playfair Display', serif;
-        text-align: center;
-        z-index: 10000;
-        box-shadow: 0 0 50px rgba(0,0,0,0.8);
-        max-width: 400px;
-        animation: patriotErrorFade 0.5s;
-    `;
-    
-    errorBox.innerHTML = `
-        <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
-        <h2 style="margin: 0 0 15px 0; color: #d2a679;">ПАТРИОТИЧЕСКАЯ ЗАЩИТА</h2>
-        <p style="margin: 10px 0; font-size: 16px; line-height: 1.5;">${message}</p>
-        <p style="margin: 15px 0 10px 0; font-size: 14px; color: #ffaaaa;">${details}</p>
-        <button onclick="this.parentElement.remove()" style="
-            background: #d2a679;
-            border: none;
-            color: #4a0000;
-            padding: 10px 30px;
-            border-radius: 30px;
-            font-family: 'Courier Prime', monospace;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 15px;
-            border: 2px solid #ffd700;
-        ">ПРИНЯТЬ</button>
-    `;
-    
-    document.body.appendChild(errorBox);
-    
-    // Автоматически убираем через 5 секунд
-    setTimeout(() => {
-        if (errorBox.parentElement) errorBox.remove();
-    }, 5000);
-    
-    // Играем патриотическое уведомление
-    playUvedomlenie();
-}
-
-// Перехватываем все ошибки загрузки в браузере
-browserFrame.addEventListener('error', function(e) {
-    console.log('Ошибка загрузки в браузере:', e);
-    
-    // Определяем, какой сайт пытались загрузить
-    let failedUrl = browserAddress.value;
-    
-    showPatriotError(
-        'Сайт не может быть загружен!',
-        `Ресурс «${failedUrl}» не имеет серверов на территории Российской Федерации.\nДоступ запрещён в соответствии с политикой цифрового суверенитета.`
-    );
-    
-    // Возвращаемся на домашнюю страницу
-    showHome();
-});
-
-// Перехватываем ошибки загрузки iframe
-browserFrame.addEventListener('load', function() {
-    try {
-        // Проверяем, загрузился ли сайт
-        const iframeDoc = browserFrame.contentDocument || browserFrame.contentWindow.document;
-        if (!iframeDoc || iframeDoc.body.innerHTML === '') {
-            throw new Error('Пустая страница');
-        }
-    } catch (err) {
-        // Если не можем прочитать документ - значит сайт не загрузился
-        showPatriotError(
-            'Соединение прервано!',
-            'Иностранный ресурс отказался устанавливать соединение с российскими серверами.\nВозможно, сайт внесён в реестр запрещённых.'
-        );
-        showHome();
-    }
-});
-
-// Глобальный перехват всех ошибок в системе
-window.addEventListener('error', function(e) {
-    // Игнорируем ошибки, которые уже обработаны
-    if (e.target === browserFrame) return;
-    
-    console.log('Глобальная ошибка:', e);
-    
-    // Определяем, что пошло не так
-    let errorMessage = 'Техническая неполадка';
-    let errorDetails = 'Система заблокировала подозрительную активность.';
-    
-    if (e.target && e.target.tagName === 'IMG') {
-        // Ошибка загрузки картинки
-        errorMessage = 'Изображение не загружено!';
-        errorDetails = 'Файл содержит неподтверждённую символику или загружен с иностранного сервера.';
-    } else if (e.target && e.target.tagName === 'AUDIO') {
-        // Ошибка загрузки звука
-        errorMessage = 'Звуковой файл заблокирован!';
-        errorDetails = 'Аудио не прошло проверку на патриотичность.\nИспользуйте только Гимн РФ.';
-    }
-    
-    showPatriotError(errorMessage, errorDetails);
-    
-    // Предотвращаем стандартную обработку ошибки
-    e.preventDefault();
-});
-
-// Перехватываем ошибки загрузки ресурсов
-const originalFetch = window.fetch;
-window.fetch = function(url, options) {
-    console.log('Попытка загрузки ресурса:', url);
-    
-    // Если ресурс не на российском домене
-    if (typeof url === 'string' && !url.includes('.ru')) {
-        showPatriotError(
-            'Ресурс заблокирован!',
-            `Запрос к «${url}» отклонён.\nТолько российские серверы гарантируют безопасность.`
-        );
-        return Promise.reject(new Error('Блокировка патриотом'));
-    }
-    
-    return originalFetch(url, options);
-};
-
-// Перехватываем все XMLHttpRequest запросы
-const originalXHROpen = XMLHttpRequest.prototype.open;
-XMLHttpRequest.prototype.open = function(method, url) {
-    console.log('XHR запрос к:', url);
-    
-    if (typeof url === 'string' && !url.includes('.ru')) {
-        showPatriotError(
-            'Сетевое соединение заблокировано!',
-            `Попытка соединения с иностранным сервером «${url}» пресечена.\nПатриотОС защищает ваши данные.`
-        );
-        return;
-    }
-    
-    return originalXHROpen.apply(this, arguments);
-};
-
-// Добавляем стили для анимации
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes patriotErrorFade {
-        from {
-            opacity: 0;
-            transform: translate(-50%, -60%);
-        }
-        to {
-            opacity: 1;
-            transform: translate(-50%, -50%);
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Перехватываем ошибки DNS (имитация)
-const originalResolve = window.resolve;
-window.resolve = function(hostname) {
-    if (!hostname.includes('.ru')) {
-        showPatriotError(
-            'DNS-запрос заблокирован!',
-            `Запрос к «${hostname}» не может быть обработан.\nИностранные DNS-серверы не отвечают.`
-        );
-        return null;
-    }
-    return originalResolve ? originalResolve(hostname) : null;
-};
-
-// Для демо - периодически проверяем "патриотичность" соединения
-setInterval(function() {
-    // Проверяем, не пытается ли кто-то подключиться к иностранным серверам
-    if (navigator.onLine) {
-        // Имитация проверки
-        const random = Math.random();
-        if (random < 0.01) { // 1% шанс "обнаружить угрозу"
-            showPatriotError(
-                'Обнаружена сетевая угроза!',
-                'Система зафиксировала попытку соединения с неподтверждённым сервером.\nСоединение разорвано в целях безопасности.'
-            );
-        }
-    }
-}, 30000); // Каждые 30 секунд
-
-// ========== ПРОВОДНИК (ДОКУМЕНТЫ) ==========
-// Создаём виртуальную файловую систему
-
-// Создаём окно проводника, если его ещё нет
-if (!document.getElementById('files-window')) {
-    const filesWindowHTML = `
-        <div id="files-window" class="window hidden">
-            <div class="close-btn" id="close-files">X</div>
-            <div class="window-header">
-                <span class="window-title">📁 Мои Документы</span>
-            </div>
-            <div class="files-content">
-                <div class="files-sidebar">
-                    <div class="files-sidebar-item" data-path="root">
-                        <span>📁 Мой компьютер</span>
-                    </div>
-                    <div class="files-sidebar-item" data-path="documents">
-                        <span>📄 Мои документы</span>
-                    </div>
-                    <div class="files-sidebar-item" data-path="images">
-                        <span>🖼️ Изображения</span>
-                    </div>
-                    <div class="files-sidebar-item" data-path="music">
-                        <span>🎵 Моя музыка</span>
-                    </div>
-                    <div class="files-sidebar-item" data-path="system">
-                        <span>⚙️ Системные папки</span>
-                    </div>
-                </div>
-                <div class="files-main">
-                    <div class="files-toolbar">
-                        <button class="files-btn" id="files-new-folder">📁 Новая папка</button>
-                        <button class="files-btn" id="files-new-file">📄 Новый файл</button>
-                        <button class="files-btn" id="files-refresh">🔄 Обновить</button>
-                    </div>
-                    <div class="files-grid" id="files-grid">
-                        <!-- Сюда будут загружаться файлы -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Добавляем в DOM
-    document.body.insertAdjacentHTML('beforeend', filesWindowHTML);
-}
-
-// Стили для проводника
-const filesStyles = `
-    #files-window {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%) scale(1);
-        width: min(800px, 90vw);
-        height: min(500px, 70vh);
-        background: linear-gradient(to bottom, #3a3a3a, #222);
-        border-radius: 15px;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 2px 3px rgba(255,255,255,0.2);
-        border: 1px solid #111;
-        z-index: 80;
-        opacity: 1;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        color: #f0e6d2;
-    }
-    
-    #files-window.hidden {
-        transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0;
-        pointer-events: none;
-    }
-    
-    .window-header {
-        background: #2a2a2a;
-        padding: 12px 15px;
-        border-bottom: 2px solid #5a3e2b;
-        font-family: 'Playfair Display', serif;
-        font-size: 18px;
-        color: #d2a679;
-    }
-    
-    .files-content {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-    }
-    
-    .files-sidebar {
-        width: 180px;
-        background: rgba(0,0,0,0.5);
-        border-right: 1px solid #5a3e2b;
-        padding: 10px;
-        overflow-y: auto;
-    }
-    
-    .files-sidebar-item {
-        padding: 8px 10px;
-        margin-bottom: 5px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.2s;
-        color: #ddd;
-    }
-    
-    .files-sidebar-item:hover {
-        background: rgba(210, 166, 121, 0.3);
-    }
-    
-    .files-sidebar-item.active {
-        background: #d2a679;
-        color: #222;
-    }
-    
-    .files-main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-    
-    .files-toolbar {
-        padding: 10px;
-        border-bottom: 1px solid #5a3e2b;
-        display: flex;
-        gap: 10px;
-    }
-    
-    .files-btn {
-        background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
-        border: 1px solid #888;
-        color: white;
-        padding: 5px 15px;
-        border-radius: 15px;
-        cursor: pointer;
-        font-family: 'Courier Prime', monospace;
-        font-size: 12px;
-    }
-    
-    .files-btn:active {
-        transform: translateY(2px);
-    }
-    
-    .files-grid {
-        flex: 1;
-        padding: 15px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 15px;
-        overflow-y: auto;
-        align-content: start;
-    }
-    
-    .files-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-align: center;
-    }
-    
-    .files-item:hover {
-        background: rgba(210, 166, 121, 0.3);
-    }
-    
-    .files-item.folder .files-item-icon {
-        font-size: 40px;
-        filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
-    }
-    
-    .files-item.file .files-item-icon {
-        font-size: 32px;
-        filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
-    }
-    
-    .files-item-name {
-        margin-top: 5px;
-        font-size: 12px;
-        word-break: break-word;
-        max-width: 100%;
-    }
-    
-    .files-item-input {
-        width: 90%;
-        background: #111;
-        border: 1px solid #d2a679;
-        color: white;
-        padding: 2px 5px;
-        font-family: 'Courier Prime', monospace;
-        font-size: 12px;
-        text-align: center;
-    }
-`;
-
-// Добавляем стили
-const styleSheet = document.createElement('style');
-styleSheet.textContent = filesStyles;
-document.head.appendChild(styleSheet);
-
-// ========== ФАЙЛОВАЯ СИСТЕМА ==========
-// Виртуальная файловая система в localStorage
-
-class PatriotFileSystem {
-    constructor() {
-        this.root = this.loadFS();
-        this.currentPath = 'root';
-    }
-    
-    loadFS() {
-        const saved = localStorage.getItem('patriotFS');
-        if (saved) {
-            return JSON.parse(saved);
-        }
-        
-        // Начальная структура
-        return {
-            name: 'root',
-            type: 'folder',
-            children: {
-                'Документы': {
-                    name: 'Документы',
-                    type: 'folder',
-                    children: {
-                        'Важный документ.txt': {
-                            name: 'Важный документ.txt',
-                            type: 'file',
-                            content: 'Слава Российской Федерации! 🇷🇺',
-                            size: 28
-                        }
-                    }
-                },
-                'Изображения': {
-                    name: 'Изображения',
-                    type: 'folder',
-                    children: {
-                        'Флаг РФ.png': {
-                            name: 'Флаг РФ.png',
-                            type: 'file',
-                            content: 'wallpapers/flag.png',
-                            size: 1024
-                        },
-                        'Герб РФ.png': {
-                            name: 'Герб РФ.png',
-                            type: 'file',
-                            content: 'wallpapers/gerb.png',
-                            size: 1024
-                        },
-                        'Берёза.png': {
-                            name: 'Берёза.png',
-                            type: 'file',
-                            content: 'wallpapers/bereza.png',
-                            size: 1024
-                        }
-                    }
-                },
-                'Музыка': {
-                    name: 'Музыка',
-                    type: 'folder',
-                    children: {
-                        'Гимн РФ.mp3': {
-                            name: 'Гимн РФ.mp3',
-                            type: 'file',
-                            content: 'sounds/gimn.mp3',
-                            size: 4096
-                        },
-                        'Уведомление.mp3': {
-                            name: 'Уведомление.mp3',
-                            type: 'file',
-                            content: 'sounds/uvedomlenie.mp3',
-                            size: 1024
-                        }
-                    }
-                }
-            }
-        };
-    }
-    
-    saveFS() {
-        localStorage.setItem('patriotFS', JSON.stringify(this.root));
-    }
-    
-    getFolder(path) {
-        if (path === 'root') return this.root;
-        
-        const parts = path.split('/');
-        let current = this.root;
-        
-        for (const part of parts) {
-            if (part && current.children && current.children[part]) {
-                current = current.children[part];
-            } else {
-                return null;
-            }
-        }
-        return current;
-    }
-    
-    createItem(path, name, type) {
-        const folder = this.getFolder(path);
-        if (!folder || folder.type !== 'folder') return false;
-        
-        if (folder.children[name]) return false;
-        
-        folder.children[name] = {
-            name: name,
-            type: type,
-            children: type === 'folder' ? {} : undefined,
-            content: type === 'file' ? '' : undefined,
-            size: type === 'file' ? 0 : undefined,
-            created: new Date().toISOString()
-        };
-        
-        this.saveFS();
-        return true;
-    }
-    
-    deleteItem(path, name) {
-        const folder = this.getFolder(path);
-        if (!folder || !folder.children[name]) return false;
-        
-        delete folder.children[name];
-        this.saveFS();
-        return true;
-    }
-    
-    renameItem(path, oldName, newName) {
-        const folder = this.getFolder(path);
-        if (!folder || !folder.children[oldName]) return false;
-        
-        folder.children[newName] = folder.children[oldName];
-        folder.children[newName].name = newName;
-        delete folder.children[oldName];
-        
-        this.saveFS();
-        return true;
-    }
-}
-
-// Инициализируем файловую систему
-const patriotFS = new PatriotFileSystem();
-
-// Получаем элементы проводника
-const filesWindow = document.getElementById('files-window');
-const filesGrid = document.getElementById('files-grid');
-const closeFiles = document.getElementById('close-files');
-const openFiles = document.getElementById('open-files');
-const newFolderBtn = document.getElementById('files-new-folder');
-const newFileBtn = document.getElementById('files-new-file');
-const refreshBtn = document.getElementById('files-refresh');
-
-// Если нет кнопки "Документы" в доке, добавим
-if (!document.querySelector('.icon[onclick*="filesWindow"]')) {
-    const dock = document.querySelector('.dock');
-    const filesIcon = document.createElement('div');
-    filesIcon.className = 'icon';
-    filesIcon.id = 'open-files';
-    filesIcon.innerHTML = `
-        <div class="icon-img" style="background: linear-gradient(135deg, #8b6b4d, #5a3e2b); border: 2px solid #d2a679; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 24px;">📁</span>
-        </div>
-        <span>Документы</span>
-    `;
-    dock.appendChild(filesIcon);
-}
-
-// Обработчики открытия/закрытия
-document.getElementById('open-files').addEventListener('click', () => {
-    filesWindow.classList.remove('hidden');
-    playNotification();
-    renderFiles('root');
-});
-
-closeFiles.addEventListener('click', () => {
-    filesWindow.classList.add('hidden');
-    playNotification();
-});
-
-// Рендер файлов
-function renderFiles(path) {
-    const folder = patriotFS.getFolder(path);
-    if (!folder) return;
-    
-    patriotFS.currentPath = path;
-    
-    let html = '';
-    
-    // Добавляем папку "Назад", если не в корне
-    if (path !== 'root') {
-        html += `
-            <div class="files-item folder" onclick="navigateUp()">
-                <div class="files-item-icon">📂</div>
-                <div class="files-item-name">...</div>
-            </div>
-        `;
-    }
-    
-    // Сортируем: сначала папки, потом файлы
-    const items = Object.values(folder.children).sort((a, b) => {
-        if (a.type === 'folder' && b.type !== 'folder') return -1;
-        if (a.type !== 'folder' && b.type === 'folder') return 1;
-        return a.name.localeCompare(b.name);
-    });
-    
-    items.forEach(item => {
-        const icon = item.type === 'folder' ? '📁' : '📄';
-        html += `
-            <div class="files-item ${item.type}" ondblclick="openItem('${path}', '${item.name}')" data-name="${item.name}">
-                <div class="files-item-icon">${icon}</div>
-                <div class="files-item-name">${item.name}</div>
-            </div>
-        `;
-    });
-    
-    filesGrid.innerHTML = html;
-}
-
-// Открытие элемента
-window.openItem = function(path, name) {
-    const folder = patriotFS.getFolder(path);
-    const item = folder.children[name];
-    
-    if (item.type === 'folder') {
-        // Открываем папку
-        renderFiles(path + (path === 'root' ? '' : '/') + name);
-    } else {
-        // Открываем файл
-        if (name.endsWith('.mp3')) {
-            // Воспроизводим звук
-            const audio = new Audio(item.content);
-            audio.volume = 0.4;
-            audio.play();
-            alert(`🎵 Воспроизведение: ${name}\nНастоящий патриот слушает только гимн!`);
-        } else if (name.endsWith('.png') || name.endsWith('.jpg')) {
-            // Показываем картинку
-            alert(`🖼️ Просмотр: ${name}\nДостойное изображение!`);
-        } else {
-            // Текстовый файл
-            alert(`📄 ${name}\n\n${item.content || 'Пустой файл'}`);
-        }
-    }
-};
-
-// Навигация вверх
-window.navigateUp = function() {
-    const current = patriotFS.currentPath;
-    if (current === 'root') return;
-    
-    const parts = current.split('/');
-    parts.pop();
-    const parent = parts.join('/') || 'root';
-    renderFiles(parent);
-};
-
-// Новая папка
-newFolderBtn.addEventListener('click', () => {
-    const name = prompt('Введите название папки:');
-    if (name) {
-        if (patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
-            renderFiles(patriotFS.currentPath);
-            playUvedomlenie();
-        } else {
-            alert('Папка с таким названием уже существует!');
-        }
-    }
-});
-
-// Новый файл
-newFileBtn.addEventListener('click', () => {
-    const name = prompt('Введите название файла (с расширением):');
-    if (name) {
-        if (patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
-            renderFiles(patriotFS.currentPath);
-            playUvedomlenie();
-        } else {
-            alert('Файл с таким названием уже существует!');
-        }
-    }
-});
-
-// Обновить
-refreshBtn.addEventListener('click', () => {
-    renderFiles(patriotFS.currentPath);
-    playUvedomlenie();
-});
-
-// Навигация по боковой панели
-document.querySelectorAll('.files-sidebar-item').forEach(item => {
-    item.addEventListener('click', () => {
-        document.querySelectorAll('.files-sidebar-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        
-        const path = item.dataset.path;
-        renderFiles(path);
-    });
-});
-
-// Контекстное меню (удаление/переименование)
-filesGrid.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    
-    const item = e.target.closest('.files-item');
-    if (!item || item.querySelector('.files-item-name').textContent === '...') return;
-    
-    const name = item.dataset.name;
-    
-    const action = confirm(`Действия с "${name}":\nOK - удалить\nОтмена - переименовать`);
-    
-    if (action) {
-        // Удаление
-        if (patriotFS.deleteItem(patriotFS.currentPath, name)) {
-            renderFiles(patriotFS.currentPath);
-            playUvedomlenie();
-        }
-    } else {
-        // Переименование
-        const newName = prompt('Новое название:', name);
-        if (newName && newName !== name) {
-            if (patriotFS.renameItem(patriotFS.currentPath, name, newName)) {
-                renderFiles(patriotFS.currentPath);
-                playUvedomlenie();
-            }
-        }
-    }
-});
-    
+    window.addEventListener('load', () => setTimeout(playVhod, 500));
 </script>
 </body>
 </html>
