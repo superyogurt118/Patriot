@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>patriotOS 0.3.2beta</title>
+    <title>patriotOS 0.4.0beta</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap');
 
@@ -231,12 +231,81 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
+        /* Иконка RuStore */
+        .rustore-icon {
+            background: linear-gradient(135deg, #d4a017, #8b5a2b);
+            border: 2px solid #ffd700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+        .rustore-icon::after {
+            content: '📦';
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
         .icon span {
             margin-top: 8px;
             color: #fff;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             font-size: 14px;
             white-space: nowrap;
+        }
+
+        /* Область для иконок приложений на рабочем столе */
+        .desktop-icons {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            align-content: start;
+            justify-items: center;
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            width: 80px;
+            padding: 10px 5px;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(210, 166, 121, 0.3);
+        }
+
+        .desktop-icon:active .desktop-icon-img {
+            transform: translateY(4px) scale(0.95);
+        }
+
+        .desktop-icon-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.5);
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .desktop-icon-name {
+            margin-top: 5px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            font-size: 12px;
+            text-align: center;
+            word-break: break-word;
         }
 
         /* ОКНО КАЛЬКУЛЯТОРА */
@@ -379,6 +448,137 @@
         .close-btn:active {
             transform: scale(0.9) translateY(2px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        /* ОКНО RuStore */
+        #rustore-window {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: min(600px, 90vw);
+            height: min(500px, 70vh);
+            background: linear-gradient(to bottom, #3a3a3a, #222);
+            border-radius: 15px;
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.8),
+                inset 0 2px 3px rgba(255,255,255,0.2),
+                inset 0 -2px 5px rgba(0,0,0,0.8);
+            border: 1px solid #111;
+            z-index: 90;
+            opacity: 1;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #f0e6d2;
+        }
+
+        #rustore-window.hidden {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .rustore-header {
+            background: #2a2a2a;
+            padding: 15px;
+            border-bottom: 2px solid #d2a679;
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: #d2a679;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rustore-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .rustore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .rustore-item {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #5a3e2b;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .rustore-item:hover {
+            background: rgba(210, 166, 121, 0.3);
+            border-color: #d2a679;
+        }
+
+        .rustore-item-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .rustore-item-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .rustore-item-url {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .rustore-add {
+            background: rgba(0,0,0,0.5);
+            border: 2px dashed #d2a679;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .rustore-add h3 {
+            color: #d2a679;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .rustore-add input {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #5a3e2b;
+            border-radius: 5px;
+            color: white;
+            font-family: 'Courier Prime', monospace;
+            margin-bottom: 10px;
+        }
+
+        .rustore-add input:focus {
+            border-color: #d2a679;
+            outline: none;
+        }
+
+        .rustore-add button {
+            background: linear-gradient(to bottom, #d2a679, #b88655);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .rustore-add button:active {
+            transform: translateY(2px);
         }
 
         /* ОКНО НАСТРОЕК */
@@ -854,6 +1054,14 @@
             .icon span {
                 font-size: 12px;
             }
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 10px;
+                padding: 10px;
+            }
+            .desktop-icon {
+                width: 70px;
+            }
             .wallpaper-grid {
                 grid-template-columns: 1fr;
             }
@@ -889,7 +1097,7 @@
     <!-- Рабочий стол -->
     <div id="desktop">
         
-        <!-- Док с иконками -->
+        <!-- Вертикальный док слева -->
         <div class="dock">
             <div class="icon" id="open-calc">
                 <div class="icon-img calc-icon"></div>
@@ -898,6 +1106,10 @@
             <div class="icon" id="open-browser">
                 <div class="icon-img browser-icon"></div>
                 <span>Браузер</span>
+            </div>
+            <div class="icon" id="open-rustore">
+                <div class="icon-img rustore-icon"></div>
+                <span>RuStore</span>
             </div>
             <div class="icon" id="open-settings">
                 <div class="icon-img settings-icon"></div>
@@ -909,6 +1121,11 @@
                 </div>
                 <span>Документы</span>
             </div>
+        </div>
+
+        <!-- Область для иконок приложений на рабочем столе -->
+        <div class="desktop-icons" id="desktop-icons">
+            <!-- Сюда будут добавляться приложения из RuStore -->
         </div>
 
         <!-- Окно калькулятора -->
@@ -966,6 +1183,27 @@
                     <p>Поисковая система №1 в России</p>
                     <p>Найдётся всё. Только у нас.</p>
                     <div class="patriot-note">Браузер ПатриотОС — только проверенные сайты</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Окно RuStore -->
+        <div id="rustore-window" class="hidden">
+            <div class="close-btn" id="close-rustore">X</div>
+            <div class="rustore-header">
+                <span>📦 RuStore — Магазин приложений</span>
+            </div>
+            <div class="rustore-content">
+                <div class="rustore-grid" id="rustore-grid">
+                    <!-- Предустановленные приложения будут загружены сюда -->
+                </div>
+                
+                <div class="rustore-add">
+                    <h3>➕ Добавить приложение на рабочий стол</h3>
+                    <input type="text" id="rustore-name" placeholder="Название (например, ВКонтакте)">
+                    <input type="text" id="rustore-url" placeholder="Ссылка (например, vk.com)">
+                    <button id="rustore-add-btn">Добавить на рабочий стол</button>
+                    <p style="font-size: 12px; color: #aaa; margin-top: 10px;">Только российские домены (.ru, .рф, vk.com, yandex.ru и т.д.)</p>
                 </div>
             </div>
         </div>
@@ -1028,7 +1266,7 @@
             <div class="settings-section">
                 <h3>ℹ️ О СИСТЕМЕ</h3>
                 <div style="line-height: 1.6;">
-                    <div><strong>ПатриотОС 0.3.2beta</strong></div>
+                    <div><strong>ПатриотОС 0.4.0beta</strong></div>
                     <div>Девиз: «Своих не бросаем. Чужих не запускаем.»</div>
                     <div style="margin-top: 10px; font-size: 12px;">Разработчик: Губкобобоамёбо</div>
                     <div style="font-size: 12px;">Надзор: активен ✓</div>
@@ -1082,7 +1320,7 @@
         
         const originalCreateElement = document.createElement;
         document.createElement = function(tagName) {
-            if (tagName.toLowerCase() === 'iframe') {
+            if (tagName.toLowerCase() === 'iframe' && document.querySelectorAll('iframe').length > 1) {
                 return originalCreateElement.call(document, 'div');
             }
             return originalCreateElement.call(document, tagName);
@@ -1206,6 +1444,7 @@
         const randomIndex = Math.floor(Math.random() * wallpapersArray.length);
         desktop.style.backgroundImage = wallpapersArray[randomIndex];
         setTimeout(highlightSelectedWallpaper, 100);
+        loadDesktopIcons(); // Загружаем иконки приложений
     });
 
     function setWallpaper(wallpaperName) {
@@ -1234,6 +1473,7 @@
     const settingsWindow = document.getElementById('settings-window');
     const browserWindow = document.getElementById('browser-window');
     const filesWindow = document.getElementById('files-window');
+    const rustoreWindow = document.getElementById('rustore-window');
     
     document.getElementById('open-calc').addEventListener('click', () => {
         calcWindow.classList.remove('hidden');
@@ -1273,6 +1513,16 @@
         playNotification();
     });
 
+    document.getElementById('open-rustore').addEventListener('click', () => {
+        rustoreWindow.classList.remove('hidden');
+        playNotification();
+        renderRustore();
+    });
+    document.getElementById('close-rustore').addEventListener('click', () => {
+        rustoreWindow.classList.add('hidden');
+        playNotification();
+    });
+
     // ========== БРАУЗЕР ==========
     const browserFrame = document.getElementById('browser-frame');
     const browserHome = document.getElementById('browser-home');
@@ -1286,7 +1536,7 @@
 
     let history = [];
     let currentHistoryIndex = -1;
-    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru'];
+    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru', '.рф'];
     const forbiddenSearchTerms = [
         'наркотики', 'порно', 'взлом', 'хакинг', 'оружие', 'взрывчатка',
         'террор', 'экстремизм', 'педофилия', 'суицид', 'насилие',
@@ -1310,7 +1560,7 @@
         if (!query) return;
 
         if (isSearchForbidden(query)) {
-            alert('⛔ Поисковый запрос нарушает законодательство Российской Федерации. Доступ запрещён.');
+            showPatriotError('Поисковый запрос заблокирован!', 'Запрос нарушает законодательство Российской Федерации.');
             browserSearch.value = '';
             return;
         }
@@ -1334,7 +1584,7 @@
         let isAllowed = allowedDomains.some(domain => fullUrl.includes(domain));
 
         if (!isAllowed) {
-            alert('⛔ Доступ к иностранным сайтам запрещён. Только проверенные российские ресурсы.');
+            showPatriotError('Доступ запрещён!', 'Только проверенные российские ресурсы.');
             showHome();
             return;
         }
@@ -1518,7 +1768,6 @@
         getFolder(path) {
             if (path === 'root') return this.root;
             
-            // Обрабатываем пути с русскими названиями
             if (path === 'Документы') return this.root.children['Документы'];
             if (path === 'Изображения') return this.root.children['Изображения'];
             if (path === 'Музыка') return this.root.children['Музыка'];
@@ -1536,7 +1785,6 @@
         }
         
         createItem(path, name, type) {
-            // Проверка на патриотичность имени
             if (!this.isPatrioticName(name)) {
                 alert('⛔ Имя файла должно быть патриотичным! Только русский язык, никаких иностранных слов.');
                 return false;
@@ -1556,9 +1804,7 @@
             return true;
         }
         
-        // Проверка имени на патриотичность
         isPatrioticName(name) {
-            // Только русские буквы, цифры, точка и дефис
             const patriotRegex = /^[а-яА-ЯёЁ0-9\s\.\-]+$/;
             return patriotRegex.test(name);
         }
@@ -1572,7 +1818,6 @@
         }
         
         renameItem(path, oldName, newName) {
-            // Проверка на патриотичность нового имени
             if (!this.isPatrioticName(newName)) {
                 alert('⛔ Имя файла должно быть патриотичным! Только русский язык, никаких иностранных слов.');
                 return false;
@@ -1597,22 +1842,16 @@
     const refreshBtn = document.getElementById('files-refresh');
 
     function renderFiles(path) {
-        console.log('Рендерим путь:', path);
         const folder = patriotFS.getFolder(path);
-        if (!folder) {
-            console.log('Папка не найдена:', path);
-            return;
-        }
+        if (!folder) return;
         patriotFS.currentPath = path;
         
         let html = '';
         
-        // Добавляем папку "Назад", если не в корне
         if (path !== 'root') {
             html += `<div class="files-item folder" onclick="navigateUp()"><div class="files-item-icon">📂</div><div class="files-item-name">...</div></div>`;
         }
         
-        // Сортируем: сначала папки, потом файлы
         const items = Object.values(folder.children || {}).sort((a, b) => {
             if (a.type === 'folder' && b.type !== 'folder') return -1;
             if (a.type !== 'folder' && b.type === 'folder') return 1;
@@ -1621,7 +1860,6 @@
         
         items.forEach(item => {
             const icon = item.type === 'folder' ? '📁' : '📄';
-            // Экранируем кавычки в имени
             const escapedName = item.name.replace(/'/g, "\\'");
             html += `<div class="files-item ${item.type}" ondblclick="openItem('${path}', '${escapedName}')" data-name="${item.name}">
                 <div class="files-item-icon">${icon}</div><div class="files-item-name">${item.name}</div>
@@ -1631,25 +1869,16 @@
     }
 
     window.openItem = function(path, name) {
-        console.log('Открываем элемент:', path, name);
         const folder = patriotFS.getFolder(path);
-        if (!folder) {
-            console.log('Папка не найдена:', path);
-            return;
-        }
+        if (!folder) return;
         
         const item = folder.children[name];
-        if (!item) {
-            console.log('Элемент не найден:', name);
-            return;
-        }
+        if (!item) return;
         
         if (item.type === 'folder') {
-            // Открываем папку
             const newPath = path === 'root' ? name : path + '/' + name;
             renderFiles(newPath);
         } else {
-            // Открываем файл
             if (name.endsWith('.mp3')) {
                 const audio = new Audio(item.content);
                 audio.volume = 0.4;
@@ -1667,7 +1896,6 @@
         const current = patriotFS.currentPath;
         if (current === 'root') return;
         
-        // Если текущий путь - это корневая папка (Документы, Изображения, Музыка)
         if (current === 'Документы' || current === 'Изображения' || current === 'Музыка') {
             renderFiles('root');
             return;
@@ -1730,6 +1958,131 @@
                 playUvedomlenie();
             }
         }
+    });
+
+    // ========== RuStore ==========
+    const rustoreGrid = document.getElementById('rustore-grid');
+    const rustoreName = document.getElementById('rustore-name');
+    const rustoreUrl = document.getElementById('rustore-url');
+    const rustoreAddBtn = document.getElementById('rustore-add-btn');
+    const desktopIcons = document.getElementById('desktop-icons');
+
+    // Предустановленные приложения
+    const preinstalledApps = [
+        { name: 'ВКонтакте', url: 'vk.com', icon: '🇻', color: '#4a76a8' },
+        { name: 'RuTube', url: 'rutube.ru', icon: '📺', color: '#2b5f8a' },
+        { name: 'Яндекс', url: 'yandex.ru', icon: 'Я', color: '#ff0000' },
+        { name: 'Госуслуги', url: 'gosuslugi.ru', icon: '🏛️', color: '#0066b3' },
+        { name: 'Сбербанк', url: 'sberbank.ru', icon: '🏦', color: '#1f6b3a' },
+        { name: 'ДваГИС', url: '2gis.ru', icon: '🗺️', color: '#2b5f8a' },
+        { name: 'Почта Mail.ru', url: 'mail.ru', icon: '📧', color: '#1f6b3a' },
+        { name: 'VK Музыка', url: 'vk.com/audio', icon: '🎵', color: '#4a76a8' }
+    ];
+
+    // Загруженные приложения из localStorage
+    let installedApps = JSON.parse(localStorage.getItem('patriotApps')) || [];
+
+    function renderRustore() {
+        let html = '';
+        
+        // Сначала предустановленные
+        preinstalledApps.forEach(app => {
+            const isInstalled = installedApps.some(a => a.url === app.url);
+            html += `
+                <div class="rustore-item" onclick="installApp('${app.name}', '${app.url}', '${app.icon}', '${app.color}')">
+                    <div class="rustore-item-icon" style="background: ${app.color}; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                        <span style="font-size: 24px;">${app.icon}</span>
+                    </div>
+                    <div class="rustore-item-name">${app.name}</div>
+                    <div class="rustore-item-url">${app.url}</div>
+                    ${isInstalled ? '<div style="color: #4CAF50; margin-top: 5px;">✓ Установлено</div>' : ''}
+                </div>
+            `;
+        });
+        
+        rustoreGrid.innerHTML = html;
+    }
+
+    window.installApp = function(name, url, icon, color) {
+        // Проверяем, не установлено ли уже
+        if (installedApps.some(a => a.url === url)) {
+            alert('Приложение уже установлено на рабочий стол!');
+            return;
+        }
+        
+        // Добавляем в список установленных
+        installedApps.push({ name, url, icon, color });
+        localStorage.setItem('patriotApps', JSON.stringify(installedApps));
+        
+        // Добавляем на рабочий стол
+        addDesktopIcon(name, url, icon, color);
+        
+        playUvedomlenie();
+        alert(`✅ Приложение "${name}" добавлено на рабочий стол!`);
+    };
+
+    function addDesktopIcon(name, url, icon, color) {
+        const iconElement = document.createElement('div');
+        iconElement.className = 'desktop-icon';
+        iconElement.setAttribute('data-url', url);
+        iconElement.onclick = () => {
+            // Открываем в браузере
+            browserWindow.classList.remove('hidden');
+            showSite(url);
+        };
+        
+        iconElement.innerHTML = `
+            <div class="desktop-icon-img" style="background: ${color || '#8b6b4d'};">${icon || '📱'}</div>
+            <div class="desktop-icon-name">${name}</div>
+        `;
+        
+        desktopIcons.appendChild(iconElement);
+    }
+
+    function loadDesktopIcons() {
+        // Загружаем сохранённые приложения
+        installedApps.forEach(app => {
+            addDesktopIcon(app.name, app.url, app.icon, app.color);
+        });
+    }
+
+    rustoreAddBtn.addEventListener('click', () => {
+        const name = rustoreName.value.trim();
+        let url = rustoreUrl.value.trim();
+        
+        if (!name || !url) {
+            alert('Введите название и ссылку!');
+            return;
+        }
+        
+        // Проверяем домен
+        const isRussianDomain = allowedDomains.some(domain => url.includes(domain)) || url.includes('.ru') || url.includes('.рф');
+        if (!isRussianDomain) {
+            alert('⛔ Только российские домены!');
+            return;
+        }
+        
+        // Добавляем протокол если нет
+        if (!url.startsWith('http')) {
+            url = 'https://' + url;
+        }
+        
+        // Генерируем иконку из первой буквы
+        const icon = name.charAt(0).toUpperCase();
+        
+        // Добавляем в установленные
+        installedApps.push({ name, url, icon, color: '#8b6b4d' });
+        localStorage.setItem('patriotApps', JSON.stringify(installedApps));
+        
+        // Добавляем на рабочий стол
+        addDesktopIcon(name, url, icon, '#8b6b4d');
+        
+        // Очищаем поля
+        rustoreName.value = '';
+        rustoreUrl.value = '';
+        
+        playUvedomlenie();
+        alert(`✅ Приложение "${name}" добавлено на рабочий стол!`);
     });
 
     // ========== БЛОКИРОВКА F12 ==========
