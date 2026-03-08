@@ -720,28 +720,6 @@
             font-family: 'Inter', sans-serif;
         }
         
-        .browser-search-row {
-            display: flex; 
-            gap: 8px;
-        }
-        
-        .browser-search-bar {
-            flex: 1; 
-            padding: 8px 12px; 
-            border: 1px solid #ddd;
-            border-radius: 8px; 
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .browser-search-btn {
-            background: var(--blue); 
-            color: white; 
-            border: none;
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            cursor: pointer;
-        }
-        
         #browser-frame {
             width: 100%; 
             height: calc(100% - 110px);
@@ -1001,8 +979,7 @@
                 font-size: 20px;
             }
 
-            .browser-address-bar,
-            .browser-search-bar {
+            .browser-address-bar {
                 font-size: 14px;
             }
 
@@ -1217,10 +1194,6 @@
                         <input type="text" class="browser-address-bar" id="browser-address" placeholder="yandex.ru" value="yandex.ru">
                         <button class="browser-nav-btn" id="browser-go">▶</button>
                     </div>
-                    <div class="browser-search-row">
-                        <input type="text" class="browser-search-bar" id="browser-search" placeholder="Поиск в Яндексе...">
-                        <button class="browser-search-btn" id="browser-search-btn">Найти</button>
-                    </div>
                 </div>
                 <div style="flex:1; position: relative;">
                     <iframe id="browser-frame" src="about:blank"></iframe>
@@ -1385,8 +1358,8 @@
 
     document.addEventListener('touchstart', (e) => {
         if (e.target.closest('.icon') || e.target.closest('.win-btn') || e.target.closest('.calc-btn') || 
-            e.target.closest('.files-btn') || e.target.closest('.browser-nav-btn') || e.target.closest('.browser-search-btn') ||
-            e.target.closest('.datetime-panel') || e.target.closest('.start-button') || e.target.closest('.start-app-item') || e.target.closest('.start-footer-item')) {
+            e.target.closest('.files-btn') || e.target.closest('.browser-nav-btn') || e.target.closest('.datetime-panel') || 
+            e.target.closest('.start-button') || e.target.closest('.start-app-item') || e.target.closest('.start-footer-item')) {
             e.preventDefault();
         }
     }, { passive: false });
@@ -1801,48 +1774,15 @@
     const browserBack = document.getElementById('browser-back');
     const browserForward = document.getElementById('browser-forward');
     const browserRefresh = document.getElementById('browser-refresh');
-    const browserSearch = document.getElementById('browser-search');
-    const browserSearchBtn = document.getElementById('browser-search-btn');
 
     let history = [];
     let currentHistoryIndex = -1;
     const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru', '.рф', '.github.io', 'timoshamoscow.github.io'];
-    
-    const forbiddenSearchTerms = [
-        'наркотики', 'порно', 'взлом', 'хакинг', 'оружие', 'взрывчатка',
-        'террор', 'экстремизм', 'педофилия', 'суицид', 'насилие',
-        'лгбт', 'мятеж', 'переворот', 'санкции', 'диверсия', 'шпионаж'
-    ];
 
     function showHome() {
         browserFrame.style.display = 'none';
         browserHome.style.display = 'flex';
         browserAddress.value = 'yandex.ru';
-    }
-
-    function isSearchForbidden(query) {
-        const lowerQuery = query.toLowerCase();
-        return forbiddenSearchTerms.some(term => lowerQuery.includes(term));
-    }
-
-    function performSearch() {
-        const query = browserSearch.value.trim();
-        if (!query) return;
-
-        if (isSearchForbidden(query)) {
-            alert('⛔ Запрос заблокирован!');
-            browserSearch.value = '';
-            return;
-        }
-
-        browserFrame.style.display = 'block';
-        browserHome.style.display = 'none';
-        const searchResultsUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}&pc=1`;
-        browserFrame.src = searchResultsUrl;
-        browserAddress.value = 'yandex.ru/search';
-        history = history.slice(0, currentHistoryIndex + 1);
-        history.push('yandex-search');
-        currentHistoryIndex = history.length - 1;
     }
 
     function showSite(url) {
@@ -1885,16 +1825,6 @@
             const url = browserAddress.value.trim();
             if (url) showSite(url);
         }
-    });
-
-    browserSearchBtn.addEventListener('click', performSearch);
-    browserSearchBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        performSearch();
-    }, { passive: false });
-
-    browserSearch.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') performSearch();
     });
 
     browserBack.addEventListener('click', () => {
