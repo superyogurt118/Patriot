@@ -1047,13 +1047,13 @@
                     <div class="files-sidebar-item" data-path="root">
                         <span>📁 Мой компьютер</span>
                     </div>
-                    <div class="files-sidebar-item" data-path="documents">
+                    <div class="files-sidebar-item" data-path="Документы">
                         <span>📄 Мои документы</span>
                     </div>
-                    <div class="files-sidebar-item" data-path="images">
+                    <div class="files-sidebar-item" data-path="Изображения">
                         <span>🖼️ Изображения</span>
                     </div>
-                    <div class="files-sidebar-item" data-path="music">
+                    <div class="files-sidebar-item" data-path="Музыка">
                         <span>🎵 Моя музыка</span>
                     </div>
                 </div>
@@ -1517,18 +1517,34 @@
         
         getFolder(path) {
             if (path === 'root') return this.root;
+            
+            // Обрабатываем пути с русскими названиями
+            if (path === 'Документы') return this.root.children['Документы'];
+            if (path === 'Изображения') return this.root.children['Изображения'];
+            if (path === 'Музыка') return this.root.children['Музыка'];
+            
             const parts = path.split('/');
             let current = this.root;
             for (const part of parts) {
-                if (part && current.children?.[part]) current = current.children[part];
-                else return null;
+                if (part && current.children && current.children[part]) {
+                    current = current.children[part];
+                } else {
+                    return null;
+                }
             }
             return current;
         }
         
         createItem(path, name, type) {
+            // Проверка на патриотичность имени
+            if (!this.isPatrioticName(name)) {
+                alert('⛔ Имя файла должно быть патриотичным! Только русский язык, никаких иностранных слов.');
+                return false;
+            }
+            
             const folder = this.getFolder(path);
             if (!folder || folder.type !== 'folder' || folder.children[name]) return false;
+            
             folder.children[name] = {
                 name, type,
                 children: type === 'folder' ? {} : undefined,
@@ -1540,6 +1556,13 @@
             return true;
         }
         
+        // Проверка имени на патриотичность
+        isPatrioticName(name) {
+            // Только русские буквы, цифры, точка и дефис
+            const patriotRegex = /^[а-яА-ЯёЁ0-9\s\.\-]+$/;
+            return patriotRegex.test(name);
+        }
+        
         deleteItem(path, name) {
             const folder = this.getFolder(path);
             if (!folder || !folder.children[name]) return false;
@@ -1549,8 +1572,15 @@
         }
         
         renameItem(path, oldName, newName) {
+            // Проверка на патриотичность нового имени
+            if (!this.isPatrioticName(newName)) {
+                alert('⛔ Имя файла должно быть патриотичным! Только русский язык, никаких иностранных слов.');
+                return false;
+            }
+            
             const folder = this.getFolder(path);
             if (!folder || !folder.children[oldName]) return false;
+            
             folder.children[newName] = folder.children[oldName];
             folder.children[newName].name = newName;
             delete folder.children[oldName];
@@ -1567,16 +1597,23 @@
     const refreshBtn = document.getElementById('files-refresh');
 
     function renderFiles(path) {
+        console.log('Рендерим путь:', path);
         const folder = patriotFS.getFolder(path);
-        if (!folder) return;
+        if (!folder) {
+            console.log('Папка не найдена:', path);
+            return;
+        }
         patriotFS.currentPath = path;
         
         let html = '';
+        
+        // Добавляем папку "Назад", если не в корне
         if (path !== 'root') {
             html += `<div class="files-item folder" onclick="navigateUp()"><div class="files-item-icon">📂</div><div class="files-item-name">...</div></div>`;
         }
         
-        const items = Object.values(folder.children).sort((a, b) => {
+        // Сортируем: сначала папки, потом файлы
+        const items = Object.values(folder.children || {}).sort((a, b) => {
             if (a.type === 'folder' && b.type !== 'folder') return -1;
             if (a.type !== 'folder' && b.type === 'folder') return 1;
             return a.name.localeCompare(b.name);
@@ -1584,7 +1621,9 @@
         
         items.forEach(item => {
             const icon = item.type === 'folder' ? '📁' : '📄';
-            html += `<div class="files-item ${item.type}" ondblclick="openItem('${path}', '${item.name.replace(/'/g, "\\'")}')" data-name="${item.name}">
+            // Экранируем кавычки в имени
+            const escapedName = item.name.replace(/'/g, "\\'");
+            html += `<div class="files-item ${item.type}" ondblclick="openItem('${path}', '${escapedName}')" data-name="${item.name}">
                 <div class="files-item-icon">${icon}</div><div class="files-item-name">${item.name}</div>
             </div>`;
         });
@@ -1592,11 +1631,25 @@
     }
 
     window.openItem = function(path, name) {
+        console.log('Открываем элемент:', path, name);
         const folder = patriotFS.getFolder(path);
+        if (!folder) {
+            console.log('Папка не найдена:', path);
+            return;
+        }
+        
         const item = folder.children[name];
+        if (!item) {
+            console.log('Элемент не найден:', name);
+            return;
+        }
+        
         if (item.type === 'folder') {
-            renderFiles(path + (path === 'root' ? '' : '/') + name);
+            // Открываем папку
+            const newPath = path === 'root' ? name : path + '/' + name;
+            renderFiles(newPath);
         } else {
+            // Открываем файл
             if (name.endsWith('.mp3')) {
                 const audio = new Audio(item.content);
                 audio.volume = 0.4;
@@ -1613,25 +1666,37 @@
     window.navigateUp = function() {
         const current = patriotFS.currentPath;
         if (current === 'root') return;
+        
+        // Если текущий путь - это корневая папка (Документы, Изображения, Музыка)
+        if (current === 'Документы' || current === 'Изображения' || current === 'Музыка') {
+            renderFiles('root');
+            return;
+        }
+        
         const parts = current.split('/');
         parts.pop();
-        renderFiles(parts.join('/') || 'root');
+        const parent = parts.join('/') || 'root';
+        renderFiles(parent);
     };
 
     newFolderBtn.addEventListener('click', () => {
-        const name = prompt('Введите название папки:');
-        if (name && patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
-            renderFiles(patriotFS.currentPath);
-            playUvedomlenie();
-        } else alert('Папка с таким названием уже существует!');
+        const name = prompt('Введите название папки (только русские буквы):');
+        if (name) {
+            if (patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
+                renderFiles(patriotFS.currentPath);
+                playUvedomlenie();
+            }
+        }
     });
 
     newFileBtn.addEventListener('click', () => {
-        const name = prompt('Введите название файла (с расширением):');
-        if (name && patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
-            renderFiles(patriotFS.currentPath);
-            playUvedomlenie();
-        } else alert('Файл с таким названием уже существует!');
+        const name = prompt('Введите название файла с расширением (только русские буквы):');
+        if (name) {
+            if (patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
+                renderFiles(patriotFS.currentPath);
+                playUvedomlenie();
+            }
+        }
     });
 
     refreshBtn.addEventListener('click', () => {
@@ -1659,7 +1724,7 @@
                 playUvedomlenie();
             }
         } else {
-            const newName = prompt('Новое название:', name);
+            const newName = prompt('Новое название (только русские буквы):', name);
             if (newName && newName !== name && patriotFS.renameItem(patriotFS.currentPath, name, newName)) {
                 renderFiles(patriotFS.currentPath);
                 playUvedomlenie();
