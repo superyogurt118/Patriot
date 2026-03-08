@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PatriotOS 0.5.1beta</title>
+    <title>PatriotOS 0.5.3beta</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
@@ -107,10 +107,52 @@
             position: absolute; 
             inset: 0;
             display: flex; 
-            padding: 24px; 
-            gap: 24px;
+            flex-direction: column;
+            padding: 24px;
             background-size: cover;
             background-position: center;
+        }
+
+        /* Верхняя панель */
+        .top-panel {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            height: 60px;
+        }
+
+        .start-button {
+            width: 60px;
+            height: 60px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .start-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .start-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Основной контейнер */
+        .main-content {
+            display: flex;
+            gap: 24px;
+            flex: 1;
+            min-height: 0;
         }
 
         /* Левая панель с доком и временем */
@@ -445,6 +487,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
 
         .calendar-day:hover {
@@ -455,13 +498,15 @@
             background: var(--blue);
             color: white;
             font-weight: 600;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 87, 183, 0.3);
+            z-index: 1;
         }
 
         .calendar-day.holiday {
             background: rgba(213, 43, 30, 0.1);
             color: var(--red);
             font-weight: 600;
-            position: relative;
         }
 
         .calendar-day.holiday::after {
@@ -500,6 +545,126 @@
             padding: 5px 10px;
             border-radius: 20px;
             font-weight: 600;
+        }
+
+        /* МОДАЛЬНОЕ ОКНО ПУСК */
+        .start-modal {
+            position: absolute;
+            top: 84px;
+            left: 24px;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border: 1px solid var(--white);
+            overflow: hidden;
+            z-index: 2000;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .start-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-20px);
+        }
+
+        .start-header {
+            background: linear-gradient(135deg, var(--blue), var(--red));
+            padding: 20px;
+            color: white;
+        }
+
+        .start-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .start-header p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .start-search {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f2;
+        }
+
+        .start-search input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+
+        .start-apps {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .start-app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .start-app-item:hover {
+            background: #f5f5f7;
+        }
+
+        .start-app-item:active {
+            transform: scale(0.95);
+        }
+
+        .start-app-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .start-app-name {
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+        }
+
+        .start-footer {
+            padding: 15px;
+            border-top: 1px solid #f0f0f2;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .start-footer-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .start-footer-item:hover {
+            background: #f5f5f7;
         }
 
         /* НАСТРОЙКИ */
@@ -644,6 +809,11 @@
             background: #f0f0f5; 
         }
         
+        .rustore-item.installed {
+            border: 2px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.05);
+        }
+        
         .rustore-item-icon {
             width: 54px; 
             height: 54px; 
@@ -651,6 +821,13 @@
             margin: 0 auto 10px; 
             background-size: cover; 
             background-position: center;
+        }
+        
+        .installed-badge {
+            color: #4CAF50;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
         }
         
         .rustore-add {
@@ -756,6 +933,26 @@
         @media (max-width: 768px) {
             #desktop {
                 padding: 12px;
+            }
+
+            .top-panel {
+                margin-bottom: 12px;
+                height: 50px;
+            }
+
+            .start-button {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .start-modal {
+                top: 74px;
+                left: 12px;
+                width: 280px;
+            }
+
+            .main-content {
                 gap: 12px;
             }
 
@@ -915,41 +1112,81 @@
 
     <!-- Рабочий стол -->
     <div id="desktop" style="background-image: url('wallpapers/flag.png');">
-        <!-- Левая панель с доком и временем -->
-        <div class="left-panel">
-            <div class="dock">
-                <div class="icon" data-window="calc-window">
-                    <div class="icon-img calc-icon">🔢</div>
-                    <span>Счётчик</span>
-                </div>
-                <div class="icon" data-window="browser-window">
-                    <div class="icon-img" style="background-image: url('images/yandex.png');"></div>
-                    <span>Браузер</span>
-                </div>
-                <div class="icon" data-window="rustore-window">
-                    <div class="icon-img" style="background-image: url('images/rustore.png');"></div>
-                    <span>RuStore</span>
-                </div>
-                <div class="icon" data-window="settings-window">
-                    <div class="icon-img settings-icon">⚙️</div>
-                    <span>Настройки</span>
-                </div>
-                <div class="icon" data-window="files-window">
-                    <div class="icon-img files-icon">📁</div>
-                    <span>Документы</span>
-                </div>
-            </div>
-
-            <!-- Панель с датой и временем -->
-            <div class="datetime-panel" id="datetime-panel">
-                <div class="time-panel" id="current-time">12:00</div>
-                <div class="date-panel" id="current-date">1 января</div>
-                <div class="holiday-indicator" id="holiday-indicator">⭐</div>
+        <!-- Верхняя панель с кнопкой Пуск -->
+        <div class="top-panel">
+            <div class="start-button" id="start-button">
+                🔴
             </div>
         </div>
 
-        <!-- Иконки приложений -->
-        <div class="desktop-icons" id="desktop-icons"></div>
+        <!-- Модальное окно Пуск -->
+        <div id="start-modal" class="start-modal hidden">
+            <div class="start-header">
+                <h2>ПатриотОС 0.5.3beta</h2>
+                <p>Своих не бросаем</p>
+            </div>
+            
+            <div class="start-search">
+                <input type="text" placeholder="Поиск приложений..." id="start-search">
+            </div>
+            
+            <div class="start-apps" id="start-apps">
+                <!-- Приложения будут добавлены через JS -->
+            </div>
+            
+            <div class="start-footer">
+                <div class="start-footer-item" onclick="toggleWin('settings-window'); toggleStartMenu();">
+                    <span>⚙️</span>
+                    <span>Настройки</span>
+                </div>
+                <div class="start-footer-item" onclick="toggleWin('calendar-window'); toggleStartMenu();">
+                    <span>📅</span>
+                    <span>Календарь</span>
+                </div>
+                <div class="start-footer-item" onclick="localStorage.clear(); alert('Данные очищены!'); location.reload();">
+                    <span>🗑️</span>
+                    <span>Сброс</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Левая панель с доком и временем -->
+            <div class="left-panel">
+                <div class="dock">
+                    <div class="icon" data-window="calc-window">
+                        <div class="icon-img calc-icon">🔢</div>
+                        <span>Счётчик</span>
+                    </div>
+                    <div class="icon" data-window="browser-window">
+                        <div class="icon-img" style="background-image: url('images/yandex.png');"></div>
+                        <span>Браузер</span>
+                    </div>
+                    <div class="icon" data-window="rustore-window">
+                        <div class="icon-img" style="background-image: url('images/rustore.png');"></div>
+                        <span>RuStore</span>
+                    </div>
+                    <div class="icon" data-window="settings-window">
+                        <div class="icon-img settings-icon">⚙️</div>
+                        <span>Настройки</span>
+                    </div>
+                    <div class="icon" data-window="files-window">
+                        <div class="icon-img files-icon">📁</div>
+                        <span>Документы</span>
+                    </div>
+                </div>
+
+                <!-- Панель с датой и временем -->
+                <div class="datetime-panel" id="datetime-panel">
+                    <div class="time-panel" id="current-time">12:00</div>
+                    <div class="date-panel" id="current-date">1 января</div>
+                    <div class="holiday-indicator" id="holiday-indicator">⭐</div>
+                </div>
+            </div>
+
+            <!-- Иконки приложений -->
+            <div class="desktop-icons" id="desktop-icons"></div>
+        </div>
 
         <!-- Окно калькулятора -->
         <div id="calc-window" class="window hidden" style="width: 320px; top: 100px; left: 150px;">
@@ -1053,7 +1290,7 @@
             </div>
             <div class="window-content">
                 <div class="flag-line"></div>
-                <h2 style="margin: 0 0 10px; font-size: 20px;">ПатриотОС 0.5.1beta</h2>
+                <h2 style="margin: 0 0 10px; font-size: 20px;">ПатриотОС 0.5.3beta</h2>
                 
                 <div class="settings-card">
                     <h3 style="margin: 0 0 10px;">🖼️ ОБОИ</h3>
@@ -1083,7 +1320,7 @@
                 </div>
 
                 <div class="settings-card">
-                    <p><strong>Версия:</strong> 0.5.1beta</p>
+                    <p><strong>Версия:</strong> 0.5.3beta</p>
                     <p><strong>Безопасность:</strong> Активна ✓</p>
                     <p><strong>Язык:</strong> Русский (Системный)</p>
                     <p style="color: var(--red); font-size: 12px;">Английский/Украинский — блокировка</p>
@@ -1165,7 +1402,7 @@
 <script>
     // ========== МОБИЛЬНАЯ ПОДДЕРЖКА ==========
     document.addEventListener('touchmove', (e) => {
-        if (e.target.closest('.window') || e.target.closest('.dock') || e.target.closest('.desktop-icons') || e.target.closest('.datetime-panel')) {
+        if (e.target.closest('.window') || e.target.closest('.dock') || e.target.closest('.desktop-icons') || e.target.closest('.datetime-panel') || e.target.closest('.top-panel') || e.target.closest('.start-modal')) {
             e.preventDefault();
         }
     }, { passive: false });
@@ -1173,7 +1410,7 @@
     document.addEventListener('touchstart', (e) => {
         if (e.target.closest('.icon') || e.target.closest('.win-btn') || e.target.closest('.calc-btn') || 
             e.target.closest('.files-btn') || e.target.closest('.browser-nav-btn') || e.target.closest('.browser-search-btn') ||
-            e.target.closest('.datetime-panel')) {
+            e.target.closest('.datetime-panel') || e.target.closest('.start-button') || e.target.closest('.start-app-item') || e.target.closest('.start-footer-item')) {
             e.preventDefault();
         }
     }, { passive: false });
@@ -1366,6 +1603,68 @@
             toggleWin(icon.dataset.window);
         }, { passive: false });
     });
+
+    // ========== МЕНЮ ПУСК ==========
+    const startButton = document.getElementById('start-button');
+    const startModal = document.getElementById('start-modal');
+    const startApps = document.getElementById('start-apps');
+    const startSearch = document.getElementById('start-search');
+
+    function toggleStartMenu() {
+        startModal.classList.toggle('hidden');
+    }
+
+    startButton.addEventListener('click', toggleStartMenu);
+    startButton.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        toggleStartMenu();
+    }, { passive: false });
+
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', (e) => {
+        if (!startModal.classList.contains('hidden') && 
+            !startModal.contains(e.target) && 
+            !startButton.contains(e.target)) {
+            startModal.classList.add('hidden');
+        }
+    });
+
+    // Заполнение меню приложениями
+    function renderStartMenu() {
+        const apps = [
+            { name: 'Счётчик', icon: '🔢', action: () => toggleWin('calc-window') },
+            { name: 'Браузер', icon: '🌐', action: () => toggleWin('browser-window') },
+            { name: 'RuStore', icon: '📦', action: () => toggleWin('rustore-window') },
+            { name: 'Настройки', icon: '⚙️', action: () => toggleWin('settings-window') },
+            { name: 'Документы', icon: '📁', action: () => toggleWin('files-window') },
+            { name: 'Календарь', icon: '📅', action: () => toggleWin('calendar-window') }
+        ];
+
+        let html = '';
+        apps.forEach(app => {
+            html += `
+                <div class="start-app-item" onclick="${app.action}; toggleStartMenu();">
+                    <div class="start-app-icon">${app.icon}</div>
+                    <div class="start-app-name">${app.name}</div>
+                </div>
+            `;
+        });
+        startApps.innerHTML = html;
+
+        // Поиск
+        startSearch.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.start-app-item');
+            items.forEach(item => {
+                const name = item.querySelector('.start-app-name').textContent.toLowerCase();
+                if (name.includes(query)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
 
     // ========== КАЛЕНДАРЬ ==========
     const datetimePanel = document.getElementById('datetime-panel');
@@ -1702,13 +2001,13 @@
     function renderRustore() {
         let html = '';
         preinstalledApps.forEach(app => {
-            const isInstalled = installedApps.some(a => a.url === app.url);
+            const isInstalled = true; // Все предустановленные приложения считаем установленными
             html += `
-                <div class="rustore-item" data-app='${JSON.stringify(app)}'>
+                <div class="rustore-item ${isInstalled ? 'installed' : ''}" data-app='${JSON.stringify(app)}'>
                     <div class="rustore-item-icon" style="background-image: url('${app.icon}');"></div>
                     <div class="rustore-item-name">${app.name}</div>
                     <div class="rustore-item-url">${app.url}</div>
-                    ${isInstalled ? '<div style="color: #4CAF50; margin-top: 5px;">✓ Установлено</div>' : ''}
+                    <div class="installed-badge">✓ Установлено</div>
                 </div>
             `;
         });
@@ -1717,10 +2016,21 @@
         document.querySelectorAll('.rustore-item').forEach(item => {
             const app = JSON.parse(item.dataset.app);
             
-            item.addEventListener('click', () => installApp(app.name, app.url, app.icon));
+            item.addEventListener('click', () => {
+                if (!installedApps.some(a => a.url === app.url)) {
+                    installApp(app.name, app.url, app.icon);
+                } else {
+                    alert(`✅ ${app.name} уже установлено`);
+                }
+            });
+            
             item.addEventListener('touchstart', (e) => {
                 e.preventDefault();
-                installApp(app.name, app.url, app.icon);
+                if (!installedApps.some(a => a.url === app.url)) {
+                    installApp(app.name, app.url, app.icon);
+                } else {
+                    alert(`✅ ${app.name} уже установлено`);
+                }
             }, { passive: false });
         });
     }
@@ -1762,7 +2072,9 @@
 
     function loadDesktopIcons() {
         desktopIcons.innerHTML = '';
+        // Добавляем все предустановленные приложения
         preinstalledApps.forEach(app => addDesktopIcon(app.name, app.url, app.icon));
+        // Добавляем пользовательские
         installedApps.forEach(app => {
             if (!preinstalledApps.some(p => p.url === app.url)) {
                 addDesktopIcon(app.name, app.url, app.icon);
@@ -1790,6 +2102,7 @@
         addDesktopIcon(name, url, icon);
         rustoreName.value = rustoreUrl.value = '';
         playUvedomlenie();
+        renderRustore();
     });
 
     rustoreAddBtn.addEventListener('touchstart', (e) => {
@@ -2134,6 +2447,7 @@
         renderRustore();
         loadDesktopIcons();
         renderCalendar(new Date());
+        renderStartMenu();
         setTimeout(playVhod, 500);
     });
 </script>
