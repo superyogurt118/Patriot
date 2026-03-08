@@ -1494,6 +1494,201 @@ setInterval(function() {
         // Это нормально, ничего не делаем
     }
 }, 500);
+
+// ========== ПАТРИОТИЧЕСКАЯ ОБРАБОТКА ОШИБОК ==========
+// Любая ошибка = вражеские происки
+
+// Функция показа патриотического сообщения об ошибке
+function showPatriotError(message, details = '') {
+    // Создаём красивое окошко с ошибкой
+    const errorBox = document.createElement('div');
+    errorBox.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #8b0000, #4a0000);
+        border: 4px solid #d2a679;
+        border-radius: 15px;
+        padding: 25px;
+        color: white;
+        font-family: 'Playfair Display', serif;
+        text-align: center;
+        z-index: 10000;
+        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        max-width: 400px;
+        animation: patriotErrorFade 0.5s;
+    `;
+    
+    errorBox.innerHTML = `
+        <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
+        <h2 style="margin: 0 0 15px 0; color: #d2a679;">ПАТРИОТИЧЕСКАЯ ЗАЩИТА</h2>
+        <p style="margin: 10px 0; font-size: 16px; line-height: 1.5;">${message}</p>
+        <p style="margin: 15px 0 10px 0; font-size: 14px; color: #ffaaaa;">${details}</p>
+        <button onclick="this.parentElement.remove()" style="
+            background: #d2a679;
+            border: none;
+            color: #4a0000;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-family: 'Courier Prime', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            border: 2px solid #ffd700;
+        ">ПРИНЯТЬ</button>
+    `;
+    
+    document.body.appendChild(errorBox);
+    
+    // Автоматически убираем через 5 секунд
+    setTimeout(() => {
+        if (errorBox.parentElement) errorBox.remove();
+    }, 5000);
+    
+    // Играем патриотическое уведомление
+    playUvedomlenie();
+}
+
+// Перехватываем все ошибки загрузки в браузере
+browserFrame.addEventListener('error', function(e) {
+    console.log('Ошибка загрузки в браузере:', e);
+    
+    // Определяем, какой сайт пытались загрузить
+    let failedUrl = browserAddress.value;
+    
+    showPatriotError(
+        'Сайт не может быть загружен!',
+        `Ресурс «${failedUrl}» не имеет серверов на территории Российской Федерации.\nДоступ запрещён в соответствии с политикой цифрового суверенитета.`
+    );
+    
+    // Возвращаемся на домашнюю страницу
+    showHome();
+});
+
+// Перехватываем ошибки загрузки iframe
+browserFrame.addEventListener('load', function() {
+    try {
+        // Проверяем, загрузился ли сайт
+        const iframeDoc = browserFrame.contentDocument || browserFrame.contentWindow.document;
+        if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+            throw new Error('Пустая страница');
+        }
+    } catch (err) {
+        // Если не можем прочитать документ - значит сайт не загрузился
+        showPatriotError(
+            'Соединение прервано!',
+            'Иностранный ресурс отказался устанавливать соединение с российскими серверами.\nВозможно, сайт внесён в реестр запрещённых.'
+        );
+        showHome();
+    }
+});
+
+// Глобальный перехват всех ошибок в системе
+window.addEventListener('error', function(e) {
+    // Игнорируем ошибки, которые уже обработаны
+    if (e.target === browserFrame) return;
+    
+    console.log('Глобальная ошибка:', e);
+    
+    // Определяем, что пошло не так
+    let errorMessage = 'Техническая неполадка';
+    let errorDetails = 'Система заблокировала подозрительную активность.';
+    
+    if (e.target && e.target.tagName === 'IMG') {
+        // Ошибка загрузки картинки
+        errorMessage = 'Изображение не загружено!';
+        errorDetails = 'Файл содержит неподтверждённую символику или загружен с иностранного сервера.';
+    } else if (e.target && e.target.tagName === 'AUDIO') {
+        // Ошибка загрузки звука
+        errorMessage = 'Звуковой файл заблокирован!';
+        errorDetails = 'Аудио не прошло проверку на патриотичность.\nИспользуйте только Гимн РФ.';
+    }
+    
+    showPatriotError(errorMessage, errorDetails);
+    
+    // Предотвращаем стандартную обработку ошибки
+    e.preventDefault();
+});
+
+// Перехватываем ошибки загрузки ресурсов
+const originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    console.log('Попытка загрузки ресурса:', url);
+    
+    // Если ресурс не на российском домене
+    if (typeof url === 'string' && !url.includes('.ru')) {
+        showPatriotError(
+            'Ресурс заблокирован!',
+            `Запрос к «${url}» отклонён.\nТолько российские серверы гарантируют безопасность.`
+        );
+        return Promise.reject(new Error('Блокировка патриотом'));
+    }
+    
+    return originalFetch(url, options);
+};
+
+// Перехватываем все XMLHttpRequest запросы
+const originalXHROpen = XMLHttpRequest.prototype.open;
+XMLHttpRequest.prototype.open = function(method, url) {
+    console.log('XHR запрос к:', url);
+    
+    if (typeof url === 'string' && !url.includes('.ru')) {
+        showPatriotError(
+            'Сетевое соединение заблокировано!',
+            `Попытка соединения с иностранным сервером «${url}» пресечена.\nПатриотОС защищает ваши данные.`
+        );
+        return;
+    }
+    
+    return originalXHROpen.apply(this, arguments);
+};
+
+// Добавляем стили для анимации
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes patriotErrorFade {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -60%);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// Перехватываем ошибки DNS (имитация)
+const originalResolve = window.resolve;
+window.resolve = function(hostname) {
+    if (!hostname.includes('.ru')) {
+        showPatriotError(
+            'DNS-запрос заблокирован!',
+            `Запрос к «${hostname}» не может быть обработан.\nИностранные DNS-серверы не отвечают.`
+        );
+        return null;
+    }
+    return originalResolve ? originalResolve(hostname) : null;
+};
+
+// Для демо - периодически проверяем "патриотичность" соединения
+setInterval(function() {
+    // Проверяем, не пытается ли кто-то подключиться к иностранным серверам
+    if (navigator.onLine) {
+        // Имитация проверки
+        const random = Math.random();
+        if (random < 0.01) { // 1% шанс "обнаружить угрозу"
+            showPatriotError(
+                'Обнаружена сетевая угроза!',
+                'Система зафиксировала попытку соединения с неподтверждённым сервером.\nСоединение разорвано в целях безопасности.'
+            );
+        }
+    }
+}, 30000); // Каждые 30 секунд
+    
 </script>
 </body>
 </html>
