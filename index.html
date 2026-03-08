@@ -1133,7 +1133,7 @@
     let currentHistoryIndex = -1;
 
     // Разрешённые домены
-    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru'];
+    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru'];
 
     // НАСТРОЙКА: Запрещённые слова для поиска (нарушающие законодательство)
     const forbiddenSearchTerms = [
@@ -1160,32 +1160,35 @@
         return false;
     }
 
-    // Функция поиска
-    function performSearch() {
-        const query = browserSearch.value.trim();
-        if (!query) return;
+// Функция поиска через Яндекс.XML
+function performSearch() {
+    const query = browserSearch.value.trim();
+    if (!query) return;
 
-        // Проверяем на запрещённые слова
-        if (isSearchForbidden(query)) {
-            alert('⛔ Поисковый запрос нарушает законодательство Российской Федерации. Доступ запрещён.');
-            browserSearch.value = '';
-            return;
-        }
-
-        // Формируем URL для поиска в Яндексе
-        const searchUrl = `https://yandex.ru/search/?text=${encodeURIComponent(query)}`;
-        
-        // Переходим на страницу поиска
-        browserFrame.style.display = 'block';
-        browserHome.style.display = 'none';
-        browserFrame.src = searchUrl;
-        browserAddress.value = 'yandex.ru/search';
-        
-        // Добавляем в историю
-        history = history.slice(0, currentHistoryIndex + 1);
-        history.push('yandex.ru/search');
-        currentHistoryIndex = history.length - 1;
+    // Проверяем на запрещённые слова
+    if (isSearchForbidden(query)) {
+        alert('⛔ Поисковый запрос нарушает законодательство Российской Федерации. Доступ запрещён.');
+        browserSearch.value = '';
+        return;
     }
+
+    // Показываем результаты в iframe
+    browserFrame.style.display = 'block';
+    browserHome.style.display = 'none';
+    
+    // Используем Яндекс.XML (официальный API для встраивания)
+    // Важно: здесь мы показываем страницу с результатами, а не главную Яндекса
+    const searchResultsUrl = `https://yandex.ru/search/touch/?text=${encodeURIComponent(query)}&lr=213`;
+    
+    browserFrame.src = searchResultsUrl;
+    browserAddress.value = 'Поиск Яндекса';
+    
+    // Добавляем в историю
+    history = history.slice(0, currentHistoryIndex + 1);
+    history.push('yandex-search');
+    currentHistoryIndex = history.length - 1;
+}
+
 
     function showSite(url) {
         let fullUrl = url;
