@@ -686,30 +686,6 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
     }
     setInterval(updClock, 1000); updClock();
 
-    // ========== ЭКРАН БЛОКИРОВКИ ==========
-    const thumb = document.getElementById('slider-thumb');
-    const track = document.getElementById('slider-track');
-    const lockScreen = document.getElementById('lock-screen');
-    let isDrag = false;
-
-    thumb.onmousedown = (e) => { isDrag = true; e.preventDefault(); };
-    document.onmousemove = (e) => {
-        if(!isDrag) return;
-        let x = e.clientX - track.getBoundingClientRect().left - 28;
-        if(x < 3) x = 3;
-        if(x > 241) { 
-            x = 241; isDrag = false;
-            playVhod();
-            lockScreen.classList.add('unlocked');
-        }
-        thumb.style.left = x + 'px';
-    };
-    document.onmouseup = () => {
-        if(!lockScreen.classList.contains('unlocked')) {
-            isDrag = false; thumb.style.left = '3px';
-        }
-    };
-
     // ========== ЗВУКИ ==========
     let gimnAudio = null, uvedAudio = null, vhodAudio = null;
 
