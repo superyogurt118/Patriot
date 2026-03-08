@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>patriotOS 0.3.1beta</title>
+    <title>patriotOS 0.3.2beta</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap');
 
@@ -561,6 +561,12 @@
             padding: 12px;
             border-bottom: 2px solid #5a3e2b;
             display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .browser-nav-row {
+            display: flex;
             align-items: center;
             gap: 10px;
         }
@@ -598,6 +604,47 @@
 
         .browser-address-bar:focus {
             border-color: #d2a679;
+        }
+
+        /* НОВАЯ ПОИСКОВАЯ СТРОКА */
+        .browser-search-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 0;
+        }
+
+        .browser-search-bar {
+            flex: 1;
+            background: #111;
+            border: 1px solid #5a3e2b;
+            border-radius: 20px;
+            padding: 8px 15px;
+            color: #f0e6d2;
+            font-family: 'Courier Prime', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .browser-search-bar:focus {
+            border-color: #d2a679;
+        }
+
+        .browser-search-btn {
+            background: linear-gradient(to bottom, #d2a679, #b88655);
+            border: 1px solid #8b5a2b;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .browser-search-btn:active {
+            transform: translateY(2px);
         }
 
         .browser-content {
@@ -759,11 +806,19 @@
         <div id="browser-window" class="hidden">
             <div class="close-btn" id="close-browser">X</div>
             <div class="browser-header">
-                <button class="browser-nav-btn" id="browser-back">←</button>
-                <button class="browser-nav-btn" id="browser-forward">→</button>
-                <button class="browser-nav-btn" id="browser-refresh">↻</button>
-                <input type="text" class="browser-address-bar" id="browser-address" placeholder="yandex.ru" value="yandex.ru">
-                <button class="browser-nav-btn" id="browser-go">▶</button>
+                <div class="browser-nav-row">
+                    <button class="browser-nav-btn" id="browser-back">←</button>
+                    <button class="browser-nav-btn" id="browser-forward">→</button>
+                    <button class="browser-nav-btn" id="browser-refresh">↻</button>
+                    <input type="text" class="browser-address-bar" id="browser-address" placeholder="yandex.ru" value="yandex.ru">
+                    <button class="browser-nav-btn" id="browser-go">▶</button>
+                </div>
+                
+                <!-- НОВАЯ ПОИСКОВАЯ СТРОКА -->
+                <div class="browser-search-row">
+                    <input type="text" class="browser-search-bar" id="browser-search" placeholder="Поиск в Яндексе...">
+                    <button class="browser-search-btn" id="browser-search-btn">Найти</button>
+                </div>
             </div>
             <div class="browser-content">
                 <iframe id="browser-frame" src="about:blank"></iframe>
@@ -835,7 +890,7 @@
             <div class="settings-section">
                 <h3>ℹ️ О СИСТЕМЕ</h3>
                 <div style="line-height: 1.6;">
-                    <div><strong>ПатриотОС 0.3.1beta</strong></div>
+                    <div><strong>ПатриотОС 0.3.2beta</strong></div>
                     <div>Девиз: «Своих не бросаем. Чужих не запускаем.»</div>
                     <div style="margin-top: 10px; font-size: 12px;">Разработчик: Губкобобоамёбо</div>
                     <div style="font-size: 12px;">Надзор: активен ✓</div>
@@ -1069,14 +1124,67 @@
     const browserBack = document.getElementById('browser-back');
     const browserForward = document.getElementById('browser-forward');
     const browserRefresh = document.getElementById('browser-refresh');
+    
+    // НОВЫЕ ЭЛЕМЕНТЫ ПОИСКА
+    const browserSearch = document.getElementById('browser-search');
+    const browserSearchBtn = document.getElementById('browser-search-btn');
 
     let history = [];
     let currentHistoryIndex = -1;
+
+    // Разрешённые домены
+    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru'];
+
+    // НАСТРОЙКА: Запрещённые слова для поиска (нарушающие законодательство)
+    const forbiddenSearchTerms = [
+        'наркотики', 'порно', 'взлом', 'хакинг', 'оружие', 'взрывчатка',
+        'террор', 'экстремизм', 'педофилия', 'суицид', 'насилие',
+        'пропаганда', 'лгбт', 'нетрадиционные отношения', 'мятеж',
+        'переворот', 'санкции', 'диверсия', 'шпионаж'
+    ];
 
     function showHome() {
         browserFrame.style.display = 'none';
         browserHome.style.display = 'flex';
         browserAddress.value = 'yandex.ru';
+    }
+
+    // Функция проверки поискового запроса
+    function isSearchForbidden(query) {
+        const lowerQuery = query.toLowerCase();
+        for (let term of forbiddenSearchTerms) {
+            if (lowerQuery.includes(term)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Функция поиска
+    function performSearch() {
+        const query = browserSearch.value.trim();
+        if (!query) return;
+
+        // Проверяем на запрещённые слова
+        if (isSearchForbidden(query)) {
+            alert('⛔ Поисковый запрос нарушает законодательство Российской Федерации. Доступ запрещён.');
+            browserSearch.value = '';
+            return;
+        }
+
+        // Формируем URL для поиска в Яндексе
+        const searchUrl = `https://yandex.ru/search/?text=${encodeURIComponent(query)}`;
+        
+        // Переходим на страницу поиска
+        browserFrame.style.display = 'block';
+        browserHome.style.display = 'none';
+        browserFrame.src = searchUrl;
+        browserAddress.value = 'yandex.ru/search';
+        
+        // Добавляем в историю
+        history = history.slice(0, currentHistoryIndex + 1);
+        history.push('yandex.ru/search');
+        currentHistoryIndex = history.length - 1;
     }
 
     function showSite(url) {
@@ -1086,7 +1194,6 @@
         }
         
         // Проверка на патриотичность (только российские сайты)
-        const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru'];
         let isAllowed = false;
         for (let domain of allowedDomains) {
             if (fullUrl.includes(domain)) {
@@ -1112,6 +1219,7 @@
         currentHistoryIndex = history.length - 1;
     }
 
+    // Обработчики для адресной строки
     browserGo.addEventListener('click', () => {
         const url = browserAddress.value.trim();
         if (url) {
@@ -1128,6 +1236,15 @@
         }
     });
 
+    // Обработчики для поисковой строки
+    browserSearchBtn.addEventListener('click', performSearch);
+    browserSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+    // Навигация
     browserBack.addEventListener('click', () => {
         if (currentHistoryIndex > 0) {
             currentHistoryIndex--;
