@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PatriotOS 0.4.5beta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>PatriotOS 0.5.0beta</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
@@ -17,11 +17,18 @@
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        * { box-sizing: border-box; outline: none; }
+        * { 
+            box-sizing: border-box; 
+            outline: none; 
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
 
         body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
+            margin: 0; 
+            padding: 0;
+            width: 100%; 
+            height: 100%;
             overflow: hidden;
             font-family: 'Inter', sans-serif;
             user-select: none;
@@ -29,90 +36,142 @@
             background-attachment: fixed;
         }
 
-        #os-container { width: 100vw; height: 100vh; position: relative; }
+        #os-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+        }
 
         /* ЭКРАН БЛОКИРОВКИ */
         #lock-screen {
-            position: absolute; inset: 0;
+            position: absolute; 
+            inset: 0;
             background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(25px);
             z-index: 1000;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
             transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        #lock-screen.unlocked { transform: translateY(-100%); }
+        #lock-screen.unlocked { 
+            transform: translateY(-100%); 
+        }
 
         .clock {
             font-size: clamp(5rem, 15vw, 8rem);
-            font-weight: 300; color: var(--white);
-            margin-bottom: 40px; letter-spacing: -2px;
+            font-weight: 300; 
+            color: var(--white);
+            margin-bottom: 40px; 
+            letter-spacing: -2px;
         }
 
-        .slider-track {
-            width: 300px; height: 64px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 32px; position: relative;
+        .login-button {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 16px 40px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
-        .slider-thumb {
-            width: 56px; height: 56px;
-            position: absolute; top: 3px; left: 3px;
-            background: var(--white); border-radius: 50%;
-            cursor: pointer; display: flex;
-            justify-content: center; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: left 0.1s linear;
+        .login-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
         }
 
-        .slider-thumb::after { content: '🇷🇺'; font-size: 20px; }
+        .login-button:active {
+            transform: scale(0.95);
+        }
+
+        .login-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+        }
 
         /* РАБОЧИЙ СТОЛ */
         #desktop {
-            position: absolute; inset: 0;
-            display: flex; padding: 24px; gap: 24px;
+            position: absolute; 
+            inset: 0;
+            display: flex; 
+            padding: 24px; 
+            gap: 24px;
             background-size: cover;
             background-position: center;
         }
 
         .dock {
-            width: 90px; height: fit-content;
+            width: 90px; 
+            height: fit-content;
             align-self: center;
             background: var(--glass);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            display: flex; flex-direction: column;
-            align-items: center; padding: 24px 0; gap: 20px;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            padding: 24px 0; 
+            gap: 20px;
             box-shadow: var(--shadow);
         }
 
         .icon {
-            display: flex; flex-direction: column;
-            align-items: center; cursor: pointer; width: 100%;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            cursor: pointer; 
+            width: 100%;
         }
 
         .icon-img {
-            width: 54px; height: 54px;
-            border-radius: 14px; background: var(--white);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 54px; 
+            height: 54px;
+            border-radius: 14px; 
+            background: var(--white);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 24px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-size: cover;
+            background-position: center;
         }
 
-        .icon:active .icon-img { transform: scale(0.9); }
+        .icon:active .icon-img { 
+            transform: scale(0.9); 
+        }
 
-        .calc-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-        .browser-icon { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
-        .rustore-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .settings-icon { background: linear-gradient(135deg, #f5f7fa, #c3cfe2); }
-        .files-icon { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+        .calc-icon { 
+            background: linear-gradient(135deg, #4facfe, #00f2fe); 
+        }
+        .settings-icon { 
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2); 
+        }
+        .files-icon { 
+            background: linear-gradient(135deg, #a8edea, #fed6e3); 
+        }
 
         .icon span {
-            margin-top: 6px; color: var(--white);
-            font-size: 11px; font-weight: 500; opacity: 0.9;
+            margin-top: 6px; 
+            color: var(--white);
+            font-size: 11px; 
+            font-weight: 500; 
+            opacity: 0.9;
         }
 
         /* Область для иконок приложений */
@@ -124,27 +183,42 @@
             padding: 20px;
             align-content: start;
             justify-items: center;
+            height: fit-content;
+            max-height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .desktop-icon {
-            display: flex; flex-direction: column;
-            align-items: center; cursor: pointer;
-            width: 70px; padding: 10px 5px;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            cursor: pointer;
+            width: 70px; 
+            padding: 10px 5px;
         }
 
-        .desktop-icon:active .desktop-icon-img { transform: scale(0.9); }
+        .desktop-icon:active .desktop-icon-img { 
+            transform: scale(0.9); 
+        }
 
         .desktop-icon-img {
-            width: 54px; height: 54px;
-            border-radius: 14px; background: var(--white);
-            background-size: cover; background-position: center;
+            width: 54px; 
+            height: 54px;
+            border-radius: 14px; 
+            background: var(--white);
+            background-size: cover; 
+            background-position: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.2s;
         }
 
         .desktop-icon-name {
-            margin-top: 6px; color: var(--white);
-            font-size: 11px; font-weight: 500; opacity: 0.9;
+            margin-top: 6px; 
+            color: var(--white);
+            font-size: 11px; 
+            font-weight: 500; 
+            opacity: 0.9;
             text-align: center;
         }
 
@@ -155,251 +229,523 @@
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.25);
             border: 1px solid var(--white);
-            overflow: hidden; display: flex; flex-direction: column;
-            min-width: 320px; transition: opacity 0.3s, transform 0.3s;
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            min-width: 320px; 
+            transition: opacity 0.3s, transform 0.3s;
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 40px);
         }
 
-        .window.hidden { opacity: 0; pointer-events: none; transform: scale(0.9); }
-        .window.maximized { inset: 10px !important; width: calc(100% - 20px) !important; height: calc(100% - 20px) !important; transform: none !important; }
+        .window.hidden { 
+            opacity: 0; 
+            pointer-events: none; 
+            transform: scale(0.9); 
+        }
+        
+        .window.maximized { 
+            inset: 10px !important; 
+            width: calc(100% - 20px) !important; 
+            height: calc(100% - 20px) !important; 
+            transform: none !important; 
+            max-width: calc(100vw - 20px) !important;
+            max-height: calc(100vh - 20px) !important;
+        }
 
         .window-header {
-            background: #f5f5f7; padding: 14px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid #e0e0e0; cursor: move;
+            background: #f5f5f7; 
+            padding: 14px 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0; 
+            cursor: move;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
-        .window-title { font-weight: 600; font-size: 14px; color: #1d1d1f; }
+        .window-title { 
+            font-weight: 600; 
+            font-size: 14px; 
+            color: #1d1d1f; 
+        }
 
-        .window-controls { display: flex; gap: 8px; align-items: center; }
+        .window-controls { 
+            display: flex; 
+            gap: 8px; 
+            align-items: center; 
+        }
 
         .win-btn {
-            width: 12px; height: 12px;
-            border-radius: 50%; border: none; cursor: pointer;
+            width: 12px; 
+            height: 12px;
+            border-radius: 50%; 
+            border: none; 
+            cursor: pointer;
+            padding: 0;
         }
-        .close { background: #ff5f57; }
-        .min { background: #ffbd2e; }
-        .max { background: #27c93f; }
+        
+        .close { 
+            background: #ff5f57; 
+        }
+        .min { 
+            background: #ffbd2e; 
+        }
+        .max { 
+            background: #27c93f; 
+        }
 
         /* ПРИЛОЖЕНИЯ: КОНТЕНТ */
-        .window-content { flex: 1; overflow: auto; padding: 20px; color: #333; }
+        .window-content { 
+            flex: 1; 
+            overflow: auto; 
+            padding: 20px; 
+            color: #333;
+            -webkit-overflow-scrolling: touch;
+        }
 
         /* КАЛЬКУЛЯТОР */
         .calc-display {
-            background: #f0f0f2; padding: 20px;
-            border-radius: 12px; text-align: right;
-            font-size: 32px; font-weight: 300; margin-bottom: 15px;
+            background: #f0f0f2; 
+            padding: 20px;
+            border-radius: 12px; 
+            text-align: right;
+            font-size: 32px; 
+            font-weight: 300; 
+            margin-bottom: 15px;
         }
-        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        
+        .calc-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+        }
+        
         .calc-btn {
-            padding: 15px; border: none; border-radius: 10px;
-            background: #eee; font-size: 18px; cursor: pointer;
+            padding: 15px; 
+            border: none; 
+            border-radius: 10px;
+            background: #eee; 
+            font-size: 18px; 
+            cursor: pointer;
             transition: background 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
-        .calc-btn:hover { background: #e0e0e5; }
-        .calc-btn.op { background: var(--blue); color: white; }
-        .calc-btn.clear { background: var(--red); color: white; }
+        
+        .calc-btn:hover { 
+            background: #e0e0e5; 
+        }
+        
+        .calc-btn.op { 
+            background: var(--blue); 
+            color: white; 
+        }
+        
+        .calc-btn.clear { 
+            background: var(--red); 
+            color: white; 
+        }
 
         /* НАСТРОЙКИ */
         .settings-card {
-            background: #f9f9fb; border-radius: 15px;
-            padding: 20px; border: 1px solid #f0f0f2; margin-top: 10px;
+            background: #f9f9fb; 
+            border-radius: 15px;
+            padding: 20px; 
+            border: 1px solid #f0f0f2; 
+            margin-top: 10px;
         }
+        
         .flag-line {
-            height: 4px; border-radius: 2px; margin-bottom: 15px;
+            height: 4px; 
+            border-radius: 2px; 
+            margin-bottom: 15px;
             background: linear-gradient(to right, white 33.3%, var(--blue) 33.3%, var(--blue) 66.6%, var(--red) 66.6%);
         }
+        
         .btn-blue {
-            background: var(--blue); color: white; border: none;
-            padding: 12px 20px; border-radius: 10px; width: 100%;
-            font-weight: 600; cursor: pointer; margin-top: 10px;
+            background: var(--blue); 
+            color: white; 
+            border: none;
+            padding: 12px 20px; 
+            border-radius: 10px; 
+            width: 100%;
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 10px;
+        }
+
+        .sound-btn {
+            background: #eee;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .sound-btn.playing {
+            background: var(--blue);
+            color: white;
         }
 
         /* БРАУЗЕР */
         .browser-header {
-            background: #f5f5f7; padding: 10px;
+            background: #f5f5f7; 
+            padding: 10px;
             border-bottom: 1px solid #e0e0e0;
         }
+        
         .browser-nav-row {
-            display: flex; gap: 8px; margin-bottom: 8px;
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 8px;
         }
+        
         .browser-nav-btn {
-            background: #eee; border: none;
-            width: 30px; height: 30px; border-radius: 8px;
-            cursor: pointer; font-size: 16px;
+            background: #eee; 
+            border: none;
+            width: 30px; 
+            height: 30px; 
+            border-radius: 8px;
+            cursor: pointer; 
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+        
         .browser-address-bar {
-            flex: 1; padding: 8px 12px; border: 1px solid #ddd;
-            border-radius: 8px; font-family: 'Inter', sans-serif;
+            flex: 1; 
+            padding: 8px 12px; 
+            border: 1px solid #ddd;
+            border-radius: 8px; 
+            font-family: 'Inter', sans-serif;
         }
+        
         .browser-search-row {
-            display: flex; gap: 8px;
+            display: flex; 
+            gap: 8px;
         }
+        
         .browser-search-bar {
-            flex: 1; padding: 8px 12px; border: 1px solid #ddd;
-            border-radius: 8px; font-family: 'Inter', sans-serif;
+            flex: 1; 
+            padding: 8px 12px; 
+            border: 1px solid #ddd;
+            border-radius: 8px; 
+            font-family: 'Inter', sans-serif;
         }
+        
         .browser-search-btn {
-            background: var(--blue); color: white; border: none;
-            padding: 8px 16px; border-radius: 8px; cursor: pointer;
+            background: var(--blue); 
+            color: white; 
+            border: none;
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            cursor: pointer;
         }
+        
         #browser-frame {
-            width: 100%; height: calc(100% - 100px);
+            width: 100%; 
+            height: calc(100% - 110px);
             border: none;
         }
+        
         .browser-home {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            background: #f0f0f2; pointer-events: none;
+            position: absolute; 
+            inset: 0;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            background: #f0f0f2; 
+            pointer-events: none;
         }
+        
         .yandex-logo {
-            font-size: 72px; font-weight: bold; color: #ff0000;
+            font-size: 72px; 
+            font-weight: bold; 
+            color: #ff0000;
         }
 
         /* RuStore */
         .rustore-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 15px; margin-bottom: 20px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px; 
+            margin-bottom: 20px;
         }
+        
         .rustore-item {
-            background: #f9f9fb; border: 1px solid #f0f0f2;
-            border-radius: 12px; padding: 15px; text-align: center;
-            cursor: pointer; transition: all 0.2s;
+            background: #f9f9fb; 
+            border: 1px solid #f0f0f2;
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: center;
+            cursor: pointer; 
+            transition: all 0.2s;
         }
-        .rustore-item:hover { background: #f0f0f5; }
+        
+        .rustore-item:hover { 
+            background: #f0f0f5; 
+        }
+        
         .rustore-item-icon {
-            width: 54px; height: 54px; border-radius: 12px;
-            margin: 0 auto 10px; background-size: cover; background-position: center;
+            width: 54px; 
+            height: 54px; 
+            border-radius: 12px;
+            margin: 0 auto 10px; 
+            background-size: cover; 
+            background-position: center;
         }
+        
         .rustore-add {
-            background: #f9f9fb; border: 2px dashed #ccc;
-            border-radius: 12px; padding: 20px; margin-top: 20px;
+            background: #f9f9fb; 
+            border: 2px dashed #ccc;
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-top: 20px;
         }
+        
         .rustore-add input {
-            width: 100%; padding: 10px; margin-bottom: 10px;
-            border: 1px solid #ddd; border-radius: 8px;
+            width: 100%; 
+            padding: 10px; 
+            margin-bottom: 10px;
+            border: 1px solid #ddd; 
+            border-radius: 8px;
         }
 
         /* Документы */
-        .files-content { display: flex; height: 100%; }
+        .files-content { 
+            display: flex; 
+            height: 100%; 
+        }
+        
         .files-sidebar {
-            width: 180px; background: #f5f5f7;
-            border-right: 1px solid #e0e0e0; padding: 10px;
+            width: 180px; 
+            background: #f5f5f7;
+            border-right: 1px solid #e0e0e0; 
+            padding: 10px;
         }
+        
         .files-sidebar-item {
-            padding: 8px 12px; margin-bottom: 5px;
-            border-radius: 8px; cursor: pointer;
+            padding: 8px 12px; 
+            margin-bottom: 5px;
+            border-radius: 8px; 
+            cursor: pointer;
         }
-        .files-sidebar-item:hover { background: #e0e0e5; }
-        .files-sidebar-item.active { background: var(--blue); color: white; }
-        .files-main { flex: 1; display: flex; flex-direction: column; }
+        
+        .files-sidebar-item:hover { 
+            background: #e0e0e5; 
+        }
+        
+        .files-sidebar-item.active { 
+            background: var(--blue); 
+            color: white; 
+        }
+        
+        .files-main { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
         .files-toolbar {
-            padding: 10px; border-bottom: 1px solid #e0e0e0;
-            display: flex; gap: 8px;
+            padding: 10px; 
+            border-bottom: 1px solid #e0e0e0;
+            display: flex; 
+            gap: 8px;
         }
+        
         .files-btn {
-            background: #eee; border: none; padding: 6px 12px;
-            border-radius: 8px; cursor: pointer;
+            background: #eee; 
+            border: none; 
+            padding: 6px 12px;
+            border-radius: 8px; 
+            cursor: pointer;
         }
+        
         .files-grid {
-            flex: 1; padding: 15px; overflow-y: auto;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            flex: 1; 
+            padding: 15px; 
+            overflow-y: auto;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
             gap: 15px;
+            -webkit-overflow-scrolling: touch;
         }
+        
         .files-item {
-            display: flex; flex-direction: column;
-            align-items: center; cursor: pointer; padding: 10px;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            cursor: pointer; 
+            padding: 10px;
         }
-        .files-item:hover { background: #f5f5f7; border-radius: 8px; }
-        .files-item-icon { font-size: 32px; }
-        .files-item-name { font-size: 12px; text-align: center; margin-top: 5px; }
+        
+        .files-item:hover { 
+            background: #f5f5f7; 
+            border-radius: 8px; 
+        }
+        
+        .files-item-icon { 
+            font-size: 32px; 
+        }
+        
+        .files-item-name { 
+            font-size: 12px; 
+            text-align: center; 
+            margin-top: 5px; 
+        }
 
-	.login-button {
-		background: rgba(255, 255, 255, 0.15);
-		backdrop-filter: blur(10px);
-		border: 2px solid rgba(255, 255, 255, 0.3);
-		border-radius: 40px;
-		padding: 16px 40px;
-		color: white;
-		font-family: 'Inter', sans-serif;
-		font-size: 18px;
-		font-weight: 600;
-		letter-spacing: 2px;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		gap: 15px;
-		transition: all 0.3s ease;
-		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-	}
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            #desktop {
+                padding: 12px;
+                gap: 12px;
+            }
 
-	.login-button:hover {
-		background: rgba(255, 255, 255, 0.25);
-		border-color: rgba(255, 255, 255, 0.5);
-		transform: scale(1.05);
-	}
+            .dock {
+                width: 70px;
+                padding: 16px 0;
+                gap: 16px;
+            }
 
-	.login-button:active {
-		transform: scale(0.95);
-	}
+            .icon-img {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
 
-	.login-button:focus {
-		outline: none;
-		box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
-	}
+            .icon span {
+                font-size: 10px;
+            }
 
-	@media (max-width: 600px) {
-		.login-button {
-			padding: 20px 50px;
-			font-size: 20px;
-		}
-	}
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .desktop-icon {
+                width: 60px;
+            }
+
+            .desktop-icon-img {
+                width: 44px;
+                height: 44px;
+            }
+
+            .window {
+                min-width: 280px;
+            }
+
+            #browser-window {
+                width: 95vw !important;
+                height: 80vh !important;
+            }
+
+            .browser-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .browser-address-bar,
+            .browser-search-bar {
+                font-size: 14px;
+            }
+
+            .rustore-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .files-sidebar {
+                width: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dock {
+                width: 60px;
+            }
+
+            .icon-img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .window-controls {
+                gap: 4px;
+            }
+
+            .win-btn {
+                width: 10px;
+                height: 10px;
+            }
+
+            .calc-btn {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .files-sidebar {
+                width: 120px;
+            }
+
+            .files-sidebar-item {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div id="os-container">
     
-	<div id="lock-screen">
-		<div class="clock" id="time-display">
-			12:00
-		</div>
+    <!-- Экран блокировки -->
+    <div id="lock-screen">
+        <div class="clock" id="time-display">
+            12:00
+        </div>
 
-		<button class="login-button" id="login-btn">
-			<span>Войти</span>
-			<span style="font-size: 24px;">🔴</span>
-		</button>
+        <button class="login-button" id="login-btn">
+            <span>Войти</span>
+            <span style="font-size: 24px;">🔴</span>
+        </button>
 
-		<p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px;">
-			Нажмите для входа
-		</p>
-	</div>
+        <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px;">
+            Нажмите для входа
+        </p>
+    </div>
 
+    <!-- Рабочий стол -->
     <div id="desktop" style="background-image: url('wallpapers/flag.png');">
+        <!-- Док -->
         <div class="dock">
-            <div class="icon" onclick="toggleWin('calc-window')">
+            <div class="icon" data-window="calc-window">
                 <div class="icon-img calc-icon">🔢</div>
                 <span>Счётчик</span>
             </div>
-            <div class="icon" onclick="toggleWin('browser-window')">
-                 <div class="icon-img" style="background-image: url('images/yandex.png'); background-size: cover;"></div>
-                 <span>Браузер</span>
+            <div class="icon" data-window="browser-window">
+                <div class="icon-img" style="background-image: url('images/yandex.png');"></div>
+                <span>Браузер</span>
             </div>
-
-            <div class="icon" onclick="toggleWin('rustore-window')">
-                 <div class="icon-img" style="background-image: url('images/rustore.png'); background-size: cover;"></div>
-                 <span>RuStore</span>
+            <div class="icon" data-window="rustore-window">
+                <div class="icon-img" style="background-image: url('images/rustore.png');"></div>
+                <span>RuStore</span>
             </div>
-            <div class="icon" onclick="toggleWin('settings-window')">
+            <div class="icon" data-window="settings-window">
                 <div class="icon-img settings-icon">⚙️</div>
                 <span>Настройки</span>
             </div>
-            <div class="icon" onclick="toggleWin('files-window')">
+            <div class="icon" data-window="files-window">
                 <div class="icon-img files-icon">📁</div>
                 <span>Документы</span>
             </div>
         </div>
 
+        <!-- Иконки приложений -->
         <div class="desktop-icons" id="desktop-icons"></div>
 
         <!-- Окно калькулятора -->
@@ -407,31 +753,31 @@
             <div class="window-header">
                 <span class="window-title">🔢 Счётчик</span>
                 <div class="window-controls">
-                    <button class="win-btn min" onclick="minimizeWin('calc-window')"></button>
-                    <button class="win-btn max" onclick="toggleMaximize('calc-window')"></button>
-                    <button class="win-btn close" onclick="closeWin('calc-window')"></button>
+                    <button class="win-btn min" data-win="calc-window" data-action="minimize"></button>
+                    <button class="win-btn max" data-win="calc-window" data-action="maximize"></button>
+                    <button class="win-btn close" data-win="calc-window" data-action="close"></button>
                 </div>
             </div>
             <div class="window-content">
                 <div class="calc-display" id="calc-res">0</div>
                 <div class="calc-grid">
-                    <button class="calc-btn clear" onclick="cClear()">C</button>
-                    <button class="calc-btn op" onclick="cOp('/')">/</button>
-                    <button class="calc-btn op" onclick="cOp('*')">*</button>
-                    <button class="calc-btn op" onclick="cOp('-')">-</button>
-                    <button class="calc-btn" onclick="cNum('7')">7</button>
-                    <button class="calc-btn" onclick="cNum('8')">8</button>
-                    <button class="calc-btn" onclick="cNum('9')">9</button>
-                    <button class="calc-btn op" style="grid-row: span 2; height: 100%;" onclick="cRes()">=</button>
-                    <button class="calc-btn" onclick="cNum('4')">4</button>
-                    <button class="calc-btn" onclick="cNum('5')">5</button>
-                    <button class="calc-btn" onclick="cNum('6')">6</button>
-                    <button class="calc-btn" onclick="cNum('1')">1</button>
-                    <button class="calc-btn" onclick="cNum('2')">2</button>
-                    <button class="calc-btn" onclick="cNum('3')">3</button>
-                    <button class="calc-btn op" onclick="cOp('+')">+</button>
-                    <button class="calc-btn" style="grid-column: span 2;" onclick="cNum('0')">0</button>
-                    <button class="calc-btn" onclick="cNum('.')">.</button>
+                    <button class="calc-btn clear" data-calc="clear">C</button>
+                    <button class="calc-btn op" data-calc="op">/</button>
+                    <button class="calc-btn op" data-calc="op">*</button>
+                    <button class="calc-btn op" data-calc="op">-</button>
+                    <button class="calc-btn" data-calc="num">7</button>
+                    <button class="calc-btn" data-calc="num">8</button>
+                    <button class="calc-btn" data-calc="num">9</button>
+                    <button class="calc-btn op" style="grid-row: span 2; height: 100%;" data-calc="equals">=</button>
+                    <button class="calc-btn" data-calc="num">4</button>
+                    <button class="calc-btn" data-calc="num">5</button>
+                    <button class="calc-btn" data-calc="num">6</button>
+                    <button class="calc-btn" data-calc="num">1</button>
+                    <button class="calc-btn" data-calc="num">2</button>
+                    <button class="calc-btn" data-calc="num">3</button>
+                    <button class="calc-btn op" data-calc="op">+</button>
+                    <button class="calc-btn" style="grid-column: span 2;" data-calc="num">0</button>
+                    <button class="calc-btn" data-calc="num">.</button>
                 </div>
             </div>
         </div>
@@ -441,9 +787,9 @@
             <div class="window-header">
                 <span class="window-title">🌐 Браузер</span>
                 <div class="window-controls">
-                    <button class="win-btn min" onclick="minimizeWin('browser-window')"></button>
-                    <button class="win-btn max" onclick="toggleMaximize('browser-window')"></button>
-                    <button class="win-btn close" onclick="closeWin('browser-window')"></button>
+                    <button class="win-btn min" data-win="browser-window" data-action="minimize"></button>
+                    <button class="win-btn max" data-win="browser-window" data-action="maximize"></button>
+                    <button class="win-btn close" data-win="browser-window" data-action="close"></button>
                 </div>
             </div>
             <div style="flex:1; display: flex; flex-direction: column;">
@@ -476,9 +822,9 @@
             <div class="window-header">
                 <span class="window-title">📦 RuStore</span>
                 <div class="window-controls">
-                    <button class="win-btn min" onclick="minimizeWin('rustore-window')"></button>
-                    <button class="win-btn max" onclick="toggleMaximize('rustore-window')"></button>
-                    <button class="win-btn close" onclick="closeWin('rustore-window')"></button>
+                    <button class="win-btn min" data-win="rustore-window" data-action="minimize"></button>
+                    <button class="win-btn max" data-win="rustore-window" data-action="maximize"></button>
+                    <button class="win-btn close" data-win="rustore-window" data-action="close"></button>
                 </div>
             </div>
             <div class="window-content">
@@ -497,14 +843,14 @@
             <div class="window-header">
                 <span class="window-title">⚙️ Настройки</span>
                 <div class="window-controls">
-                    <button class="win-btn min" onclick="minimizeWin('settings-window')"></button>
-                    <button class="win-btn max" onclick="toggleMaximize('settings-window')"></button>
-                    <button class="win-btn close" onclick="closeWin('settings-window')"></button>
+                    <button class="win-btn min" data-win="settings-window" data-action="minimize"></button>
+                    <button class="win-btn max" data-win="settings-window" data-action="maximize"></button>
+                    <button class="win-btn close" data-win="settings-window" data-action="close"></button>
                 </div>
             </div>
             <div class="window-content">
                 <div class="flag-line"></div>
-                <h2 style="margin: 0 0 10px; font-size: 20px;">ПатриотОС 0.4.5</h2>
+                <h2 style="margin: 0 0 10px; font-size: 20px;">ПатриотОС 0.5.0beta</h2>
                 
                 <div class="settings-card">
                     <h3 style="margin: 0 0 10px;">🖼️ ОБОИ</h3>
@@ -523,25 +869,25 @@
 
                 <div class="settings-card">
                     <h3 style="margin: 0 0 10px;">🔊 ЗВУКИ</h3>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <span>Гимн РФ</span>
                         <button class="sound-btn" id="play-gimn">▶</button>
                     </div>
-                    <div style="display: flex; justify-content: space-between;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span>Уведомление</span>
                         <button class="sound-btn" id="play-uved">▶</button>
                     </div>
                 </div>
 
                 <div class="settings-card">
-                    <p><strong>Версия:</strong> 0.4.5beta</p>
+                    <p><strong>Версия:</strong> 0.5.0beta</p>
                     <p><strong>Безопасность:</strong> Активна ✓</p>
                     <p><strong>Язык:</strong> Русский (Системный)</p>
                     <p style="color: var(--red); font-size: 12px;">Английский/Украинский — блокировка</p>
                 </div>
 
-                <button class="btn-blue" onclick="alert('Обновлений нет. Вы используете самую патриотичную версию!')">Проверить обновления</button>
-                <button class="btn-blue" style="background: var(--red); margin-top: 10px;" onclick="localStorage.clear(); alert('Данные очищены! Страница будет перезагружена.'); location.reload()">Очистить все данные</button>
+                <button class="btn-blue" id="check-updates">Проверить обновления</button>
+                <button class="btn-blue" style="background: var(--red); margin-top: 10px;" id="clear-data">Очистить все данные</button>
             </div>
         </div>
 
@@ -550,9 +896,9 @@
             <div class="window-header">
                 <span class="window-title">📁 Мои Документы</span>
                 <div class="window-controls">
-                    <button class="win-btn min" onclick="minimizeWin('files-window')"></button>
-                    <button class="win-btn max" onclick="toggleMaximize('files-window')"></button>
-                    <button class="win-btn close" onclick="closeWin('files-window')"></button>
+                    <button class="win-btn min" data-win="files-window" data-action="minimize"></button>
+                    <button class="win-btn max" data-win="files-window" data-action="maximize"></button>
+                    <button class="win-btn close" data-win="files-window" data-action="close"></button>
                 </div>
             </div>
             <div class="window-content" style="padding: 0;">
@@ -579,74 +925,98 @@
 </div>
 
 <script>
-
-// ========== СЕНСОРНАЯ ПОДДЕРЖКА ==========
-// Отключаем стандартные жесты браузера
-document.addEventListener('touchmove', (e) => {
-    if (e.target.closest('.window') || e.target.closest('.dock') || e.target.closest('.slider-thumb')) {
-        e.preventDefault();
-    }
-}, { passive: false });
-
-document.addEventListener('touchstart', (e) => {
-    if (e.target.closest('.icon') || e.target.closest('.win-btn') || e.target.closest('.calc-btn')) {
-        e.preventDefault();
-    }
-}, { passive: false });
-
-// Поддержка для всех иконок
-document.querySelectorAll('.icon').forEach(icon => {
-    const onclickAttr = icon.getAttribute('onclick');
-    if (onclickAttr) {
-        const windowId = onclickAttr.match(/'([^']+)'/)?.[1];
-        if (windowId) {
-            icon.removeAttribute('onclick');
-            icon.dataset.window = windowId;
-            
-            icon.addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleWin(windowId);
-            });
-            
-            icon.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                toggleWin(windowId);
-            }, { passive: false });
+    // ========== МОБИЛЬНАЯ ПОДДЕРЖКА ==========
+    // Отключаем стандартные жесты браузера
+    document.addEventListener('touchmove', (e) => {
+        if (e.target.closest('.window') || e.target.closest('.dock') || e.target.closest('.desktop-icons')) {
+            e.preventDefault();
         }
-    }
-});
-
-// Поддержка для кнопок окон
-document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .browser-search-btn').forEach(btn => {
-    btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        // Оригинальный onclick сработает
     }, { passive: false });
-});
 
-	// ========== ВХОД ПО КНОПКЕ ==========
-	const loginBtn = document.getElementById('login-btn');
-	const lockScreen = document.getElementById('lock-screen');
+    document.addEventListener('touchstart', (e) => {
+        if (e.target.closest('.icon') || e.target.closest('.win-btn') || e.target.closest('.calc-btn') || 
+            e.target.closest('.files-btn') || e.target.closest('.browser-nav-btn') || e.target.closest('.browser-search-btn')) {
+            e.preventDefault();
+        }
+    }, { passive: false });
 
-	loginBtn.addEventListener('click', () => {
-		playVhod();
-		lockScreen.classList.add('unlocked');
-	});
+    // Предотвращаем масштабирование
+    document.addEventListener('gesturestart', (e) => e.preventDefault());
+    document.addEventListener('gesturechange', (e) => e.preventDefault());
+    document.addEventListener('gestureend', (e) => e.preventDefault());
 
-	loginBtn.addEventListener('keydown', (e) => {
-		if (e.key === 'Enter' || e.key === ' ') {
-			e.preventDefault();
-			playVhod();
-			lockScreen.classList.add('unlocked');
-		}
-	});
+    // ========== ВХОД ПО КНОПКЕ ==========
+    const loginBtn = document.getElementById('login-btn');
+    const lockScreen = document.getElementById('lock-screen');
 
-	loginBtn.addEventListener('touchstart', (e) => {
-		e.preventDefault();
-		playVhod();
-		lockScreen.classList.add('unlocked');
-	}, { passive: false });
-    
+    loginBtn.addEventListener('click', () => {
+        playVhod();
+        lockScreen.classList.add('unlocked');
+    });
+
+    loginBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            playVhod();
+            lockScreen.classList.add('unlocked');
+        }
+    });
+
+    loginBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        playVhod();
+        lockScreen.classList.add('unlocked');
+    }, { passive: false });
+
+    // ========== ВРЕМЯ ==========
+    function updClock() {
+        const d = new Date();
+        document.getElementById('time-display').innerText = 
+            d.getHours().toString().padStart(2,'0') + ":" + 
+            d.getMinutes().toString().padStart(2,'0');
+    }
+    setInterval(updClock, 1000); 
+    updClock();
+
+    // ========== ЗВУКИ ==========
+    let gimnAudio = null, uvedAudio = null, vhodAudio = null;
+
+    function playGimn() {
+        try {
+            if (gimnAudio) {
+                gimnAudio.pause();
+                gimnAudio.currentTime = 0;
+            }
+            gimnAudio = new Audio('sounds/gimn.mp3');
+            gimnAudio.volume = 0.4;
+            gimnAudio.play().catch(() => {});
+        } catch (e) {}
+    }
+
+    function playVhod() {
+        try {
+            if (vhodAudio) {
+                vhodAudio.pause();
+                vhodAudio.currentTime = 0;
+            }
+            vhodAudio = new Audio('sounds/vhod.mp3');
+            vhodAudio.volume = 0.4;
+            vhodAudio.play().catch(() => {});
+        } catch (e) {}
+    }
+
+    function playUvedomlenie() {
+        try {
+            if (uvedAudio) {
+                uvedAudio.pause();
+                uvedAudio.currentTime = 0;
+            }
+            uvedAudio = new Audio('sounds/uvedomlenie.mp3');
+            uvedAudio.volume = 0.3;
+            uvedAudio.play().catch(() => {});
+        } catch (e) {}
+    }
+
     // ========== УПРАВЛЕНИЕ ОКНАМИ ==========
     function closeWin(id) {
         document.getElementById(id).classList.add('hidden');
@@ -677,59 +1047,94 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         playUvedomlenie();
     }
 
-    // ========== ВРЕМЯ ==========
-    function updClock() {
-        const d = new Date();
-        document.getElementById('time-display').innerText = 
-            d.getHours().toString().padStart(2,'0') + ":" + 
-            d.getMinutes().toString().padStart(2,'0');
-    }
-    setInterval(updClock, 1000); updClock();
+    // Обработчики для кнопок окон
+    document.querySelectorAll('.win-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const winId = btn.dataset.win;
+            const action = btn.dataset.action;
+            
+            if (action === 'close') closeWin(winId);
+            else if (action === 'minimize') minimizeWin(winId);
+            else if (action === 'maximize') toggleMaximize(winId);
+        });
 
-    // ========== ЗВУКИ ==========
-    let gimnAudio = null, uvedAudio = null, vhodAudio = null;
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const winId = btn.dataset.win;
+            const action = btn.dataset.action;
+            
+            if (action === 'close') closeWin(winId);
+            else if (action === 'minimize') minimizeWin(winId);
+            else if (action === 'maximize') toggleMaximize(winId);
+        }, { passive: false });
+    });
 
-    function playGimn() {
-        try {
-            if (gimnAudio) gimnAudio.pause();
-            gimnAudio = new Audio('sounds/gimn.mp3');
-            gimnAudio.volume = 0.4;
-            gimnAudio.play().catch(() => {});
-        } catch (e) {}
-    }
+    // Обработчики для иконок
+    document.querySelectorAll('.icon[data-window]').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleWin(icon.dataset.window);
+        });
 
-    function playVhod() {
-        try {
-            if (vhodAudio) vhodAudio.pause();
-            vhodAudio = new Audio('sounds/vhod.mp3');
-            vhodAudio.volume = 0.4;
-            vhodAudio.play().catch(() => {});
-        } catch (e) {}
-    }
-
-    function playUvedomlenie() {
-        try {
-            if (uvedAudio) uvedAudio.pause();
-            uvedAudio = new Audio('sounds/uvedomlenie.mp3');
-            uvedAudio.volume = 0.3;
-            uvedAudio.play().catch(() => {});
-        } catch (e) {}
-    }
+        icon.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            toggleWin(icon.dataset.window);
+        }, { passive: false });
+    });
 
     // ========== КАЛЬКУЛЯТОР ==========
     let cExp = "";
-    function cNum(n) { cExp += n; document.getElementById('calc-res').innerText = cExp; }
-    function cClear() { cExp = ""; document.getElementById('calc-res').innerText = "0"; }
-    function cOp(op) { cExp += op; document.getElementById('calc-res').innerText = cExp; }
+    const calcDisplay = document.getElementById('calc-res');
+
+    function cNum(n) { 
+        cExp += n; 
+        calcDisplay.innerText = cExp; 
+    }
+    
+    function cClear() { 
+        cExp = ""; 
+        calcDisplay.innerText = "0"; 
+    }
+    
+    function cOp(op) { 
+        cExp += op; 
+        calcDisplay.innerText = cExp; 
+    }
+    
     function cRes() { 
         try { 
             cExp = eval(cExp).toString(); 
-            document.getElementById('calc-res').innerText = cExp; 
+            calcDisplay.innerText = cExp; 
         } catch { 
-            document.getElementById('calc-res').innerText = "Ошибка"; 
+            calcDisplay.innerText = "Ошибка"; 
             cExp = ""; 
         }
     }
+
+    document.querySelectorAll('[data-calc]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const type = btn.dataset.calc;
+            const value = btn.innerText;
+            
+            if (type === 'num') cNum(value);
+            else if (type === 'op') cOp(value);
+            else if (type === 'clear') cClear();
+            else if (type === 'equals') cRes();
+        });
+
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const type = btn.dataset.calc;
+            const value = btn.innerText;
+            
+            if (type === 'num') cNum(value);
+            else if (type === 'op') cOp(value);
+            else if (type === 'clear') cClear();
+            else if (type === 'equals') cRes();
+        }, { passive: false });
+    });
 
     // ========== БРАУЗЕР ==========
     const browserFrame = document.getElementById('browser-frame');
@@ -745,6 +1150,7 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
     let history = [];
     let currentHistoryIndex = -1;
     const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru', '.рф', '.github.io', 'timoshamoscow.github.io'];
+    
     const forbiddenSearchTerms = [
         'наркотики', 'порно', 'взлом', 'хакинг', 'оружие', 'взрывчатка',
         'террор', 'экстремизм', 'педофилия', 'суицид', 'насилие',
@@ -810,6 +1216,13 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         const url = browserAddress.value.trim();
         if (url) showSite(url);
     });
+    
+    browserGo.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const url = browserAddress.value.trim();
+        if (url) showSite(url);
+    }, { passive: false });
+
     browserAddress.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const url = browserAddress.value.trim();
@@ -818,6 +1231,11 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
     });
 
     browserSearchBtn.addEventListener('click', performSearch);
+    browserSearchBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        performSearch();
+    }, { passive: false });
+
     browserSearch.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') performSearch();
     });
@@ -828,26 +1246,44 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
             showSite(history[currentHistoryIndex]);
         }
     });
+    
+    browserBack.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (currentHistoryIndex > 0) {
+            currentHistoryIndex--;
+            showSite(history[currentHistoryIndex]);
+        }
+    }, { passive: false });
+
     browserForward.addEventListener('click', () => {
         if (currentHistoryIndex < history.length - 1) {
             currentHistoryIndex++;
             showSite(history[currentHistoryIndex]);
         }
     });
+    
+    browserForward.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (currentHistoryIndex < history.length - 1) {
+            currentHistoryIndex++;
+            showSite(history[currentHistoryIndex]);
+        }
+    }, { passive: false });
+
     browserRefresh.addEventListener('click', () => {
         if (browserFrame.style.display !== 'none') browserFrame.src = browserFrame.src;
     });
+    
+    browserRefresh.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (browserFrame.style.display !== 'none') browserFrame.src = browserFrame.src;
+    }, { passive: false });
 
     showHome();
 
     // ========== ОБОИ ==========
     const desktop = document.getElementById('desktop');
     const wallpaperOptions = document.querySelectorAll('.wallpaper-option');
-    const wallpapersArray = [
-        'url("wallpapers/flag.png")',
-        'url("wallpapers/gerb.png")',
-        'url("wallpapers/bereza.png")'
-    ];
 
     function setWallpaper(wallpaperName) {
         desktop.style.backgroundImage = `url('wallpapers/${wallpaperName}.png')`;
@@ -856,6 +1292,10 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
 
     wallpaperOptions.forEach(opt => {
         opt.addEventListener('click', () => setWallpaper(opt.dataset.wallpaper));
+        opt.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            setWallpaper(opt.dataset.wallpaper);
+        }, { passive: false });
     });
 
     // ========== RuStore ==========
@@ -868,7 +1308,7 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
     const preinstalledApps = [
         { name: 'ВКонтакте', url: 'vk.com', icon: 'images/vkontakte.png' },
         { name: 'RuTube', url: 'rutube.ru', icon: 'images/rutube.png' },
-        { name: 'MAX', url: 'max.ru/', icon: 'images/max.jpg' },
+        { name: 'MAX', url: 'max.ru', icon: 'images/max.jpg' },
         { name: 'Госуслуги', url: 'gosuslugi.ru', icon: 'images/gosuslugi.jpg' },
         { name: 'Сбербанк', url: 'sberbank.ru', icon: 'images/sber.jpg' },
         { name: 'ДваГИС', url: '2gis.ru', icon: 'images/2gis.png' },
@@ -883,7 +1323,7 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         preinstalledApps.forEach(app => {
             const isInstalled = installedApps.some(a => a.url === app.url);
             html += `
-                <div class="rustore-item" onclick="installApp('${app.name}', '${app.url}', '${app.icon}')">
+                <div class="rustore-item" data-app='${JSON.stringify(app)}'>
                     <div class="rustore-item-icon" style="background-image: url('${app.icon}');"></div>
                     <div class="rustore-item-name">${app.name}</div>
                     <div class="rustore-item-url">${app.url}</div>
@@ -892,6 +1332,17 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
             `;
         });
         rustoreGrid.innerHTML = html;
+
+        // Добавляем обработчики
+        document.querySelectorAll('.rustore-item').forEach(item => {
+            const app = JSON.parse(item.dataset.app);
+            
+            item.addEventListener('click', () => installApp(app.name, app.url, app.icon));
+            item.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                installApp(app.name, app.url, app.icon);
+            }, { passive: false });
+        });
     }
 
     window.installApp = function(name, url, icon) {
@@ -910,10 +1361,18 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         const el = document.createElement('div');
         el.className = 'desktop-icon';
         el.setAttribute('data-url', url);
-        el.onclick = () => {
+        
+        el.addEventListener('click', () => {
             document.getElementById('browser-window').classList.remove('hidden');
             showSite(url);
-        };
+        });
+        
+        el.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            document.getElementById('browser-window').classList.remove('hidden');
+            showSite(url);
+        }, { passive: false });
+        
         el.innerHTML = `
             <div class="desktop-icon-img" style="background-image: url('${icon}');"></div>
             <div class="desktop-icon-name">${name}</div>
@@ -922,7 +1381,13 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
     }
 
     function loadDesktopIcons() {
+        // Очищаем существующие иконки
+        desktopIcons.innerHTML = '';
+        
+        // Добавляем предустановленные
         preinstalledApps.forEach(app => addDesktopIcon(app.name, app.url, app.icon));
+        
+        // Добавляем пользовательские
         installedApps.forEach(app => {
             if (!preinstalledApps.some(p => p.url === app.url)) {
                 addDesktopIcon(app.name, app.url, app.icon);
@@ -952,6 +1417,11 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         playUvedomlenie();
     });
 
+    rustoreAddBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        rustoreAddBtn.click();
+    }, { passive: false });
+
     // ========== ПРОВОДНИК ==========
     class PatriotFileSystem {
         constructor() {
@@ -963,22 +1433,54 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
             const saved = localStorage.getItem('patriotFS');
             if (saved) return JSON.parse(saved);
             return {
-                name: 'root', type: 'folder', children: {
-                    'Документы': { name: 'Документы', type: 'folder', children: {
-                        'Важный документ.txt': { name: 'Важный документ.txt', type: 'file', content: 'Слава Российской Федерации! 🇷🇺' }
-                    } },
-                    'Изображения': { name: 'Изображения', type: 'folder', children: {
-                        'Флаг РФ.png': { name: 'Флаг РФ.png', type: 'file', content: 'wallpapers/flag.png' },
-                        'Герб РФ.png': { name: 'Герб РФ.png', type: 'file', content: 'wallpapers/gerb.png' }
-                    } },
-                    'Музыка': { name: 'Музыка', type: 'folder', children: {
-                        'Гимн РФ.mp3': { name: 'Гимн РФ.mp3', type: 'file', content: 'sounds/gimn.mp3' }
-                    } }
+                name: 'root', 
+                type: 'folder', 
+                children: {
+                    'Документы': { 
+                        name: 'Документы', 
+                        type: 'folder', 
+                        children: {
+                            'Важный документ.txt': { 
+                                name: 'Важный документ.txt', 
+                                type: 'file', 
+                                content: 'Слава Российской Федерации! 🇷🇺' 
+                            }
+                        } 
+                    },
+                    'Изображения': { 
+                        name: 'Изображения', 
+                        type: 'folder', 
+                        children: {
+                            'Флаг РФ.png': { 
+                                name: 'Флаг РФ.png', 
+                                type: 'file', 
+                                content: 'wallpapers/flag.png' 
+                            },
+                            'Герб РФ.png': { 
+                                name: 'Герб РФ.png', 
+                                type: 'file', 
+                                content: 'wallpapers/gerb.png' 
+                            }
+                        } 
+                    },
+                    'Музыка': { 
+                        name: 'Музыка', 
+                        type: 'folder', 
+                        children: {
+                            'Гимн РФ.mp3': { 
+                                name: 'Гимн РФ.mp3', 
+                                type: 'file', 
+                                content: 'sounds/gimn.mp3' 
+                            }
+                        } 
+                    }
                 }
             };
         }
         
-        saveFS() { localStorage.setItem('patriotFS', JSON.stringify(this.root)); }
+        saveFS() { 
+            localStorage.setItem('patriotFS', JSON.stringify(this.root)); 
+        }
         
         getFolder(path) {
             if (path === 'root') return this.root;
@@ -995,7 +1497,12 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
             }
             const folder = this.getFolder(path);
             if (!folder || folder.type !== 'folder' || folder.children[name]) return false;
-            folder.children[name] = { name, type, children: type === 'folder' ? {} : undefined, content: '' };
+            folder.children[name] = { 
+                name, 
+                type, 
+                children: type === 'folder' ? {} : undefined, 
+                content: '' 
+            };
             this.saveFS();
             return true;
         }
@@ -1023,16 +1530,39 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         
         let html = '';
         if (path !== 'root') {
-            html += `<div class="files-item folder" onclick="navigateUp()"><div class="files-item-icon">📂</div><div class="files-item-name">...</div></div>`;
+            html += `<div class="files-item folder" data-folder="up"><div class="files-item-icon">📂</div><div class="files-item-name">...</div></div>`;
         }
         
         Object.values(folder.children || {}).forEach(item => {
             const icon = item.type === 'folder' ? '📁' : '📄';
-            html += `<div class="files-item ${item.type}" ondblclick="openFileItem('${path}', '${item.name}')" data-name="${item.name}">
-                <div class="files-item-icon">${icon}</div><div class="files-item-name">${item.name}</div>
+            html += `<div class="files-item ${item.type}" data-path="${path}" data-name="${item.name}" data-type="${item.type}">
+                <div class="files-item-icon">${icon}</div>
+                <div class="files-item-name">${item.name}</div>
             </div>`;
         });
+        
         filesGrid.innerHTML = html;
+
+        // Добавляем обработчики
+        document.querySelectorAll('.files-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (item.dataset.folder === 'up') {
+                    navigateUp();
+                } else {
+                    openFileItem(item.dataset.path, item.dataset.name);
+                }
+            });
+
+            item.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (item.dataset.folder === 'up') {
+                    navigateUp();
+                } else {
+                    openFileItem(item.dataset.path, item.dataset.name);
+                }
+            }, { passive: false });
+        });
     }
 
     window.openFileItem = function(path, name) {
@@ -1064,6 +1594,11 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         }
     });
 
+    newFolderBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        newFolderBtn.click();
+    }, { passive: false });
+
     newFileBtn.addEventListener('click', () => {
         const name = prompt('Название файла:');
         if (name && patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
@@ -1072,10 +1607,20 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         }
     });
 
+    newFileBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        newFileBtn.click();
+    }, { passive: false });
+
     refreshBtn.addEventListener('click', () => {
         renderFiles(patriotFS.currentPath);
         playUvedomlenie();
     });
+
+    refreshBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        refreshBtn.click();
+    }, { passive: false });
 
     filesSidebarItems.forEach(item => {
         item.addEventListener('click', () => {
@@ -1083,12 +1628,19 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
             item.classList.add('active');
             renderFiles(item.dataset.path);
         });
+
+        item.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            filesSidebarItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            renderFiles(item.dataset.path);
+        }, { passive: false });
     });
 
     filesGrid.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         const item = e.target.closest('.files-item');
-        if (!item || item.querySelector('.files-item-name').textContent === '...') return;
+        if (!item || item.dataset.folder === 'up') return;
         const name = item.dataset.name;
         if (confirm(`Удалить "${name}"?`)) {
             if (patriotFS.deleteItem(patriotFS.currentPath, name)) {
@@ -1098,25 +1650,121 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         }
     });
 
-    // ========== ЗАПУСК ==========
-    window.addEventListener('load', () => {
-        renderFiles('root');
-        renderRustore();
-        loadDesktopIcons();
-        setTimeout(playVhod, 500);
+    // ========== НАСТРОЙКИ ==========
+    document.getElementById('play-gimn').addEventListener('click', playGimn);
+    document.getElementById('play-gimn').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        playGimn();
+    }, { passive: false });
+
+    document.getElementById('play-uved').addEventListener('click', playUvedomlenie);
+    document.getElementById('play-uved').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        playUvedomlenie();
+    }, { passive: false });
+
+    document.getElementById('check-updates').addEventListener('click', () => {
+        alert('Обновлений нет. Вы используете самую патриотичную версию!');
     });
 
-    // Кнопки звуков
-    document.getElementById('play-gimn').addEventListener('click', playGimn);
-    document.getElementById('play-uved').addEventListener('click', playUvedomlenie);
+    document.getElementById('check-updates').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        alert('Обновлений нет. Вы используете самую патриотичную версию!');
+    }, { passive: false });
 
-    // Блокировка F12
+    document.getElementById('clear-data').addEventListener('click', () => {
+        if (confirm('Очистить все данные? Это удалит все файлы и приложения.')) {
+            localStorage.clear();
+            alert('Данные очищены! Страница будет перезагружена.');
+            location.reload();
+        }
+    });
+
+    document.getElementById('clear-data').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (confirm('Очистить все данные? Это удалит все файлы и приложения.')) {
+            localStorage.clear();
+            alert('Данные очищены! Страница будет перезагружена.');
+            location.reload();
+        }
+    }, { passive: false });
+
+    // ========== ПЕРЕТАСКИВАНИЕ ОКОН ==========
+    let draggedWindow = null;
+    let dragOffset = { x: 0, y: 0 };
+    let isDragging = false;
+
+    document.querySelectorAll('.window-header').forEach(header => {
+        header.addEventListener('mousedown', (e) => {
+            const window = header.closest('.window');
+            if (!window || window.classList.contains('maximized') || window.classList.contains('hidden')) return;
+            
+            e.preventDefault();
+            draggedWindow = window;
+            const rect = window.getBoundingClientRect();
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+            isDragging = false;
+        });
+
+        header.addEventListener('touchstart', (e) => {
+            const window = header.closest('.window');
+            if (!window || window.classList.contains('maximized') || window.classList.contains('hidden')) return;
+            
+            e.preventDefault();
+            draggedWindow = window;
+            const touch = e.touches[0];
+            const rect = window.getBoundingClientRect();
+            dragOffset.x = touch.clientX - rect.left;
+            dragOffset.y = touch.clientY - rect.top;
+            isDragging = false;
+        }, { passive: false });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!draggedWindow) return;
+        e.preventDefault();
+        isDragging = true;
+        
+        draggedWindow.style.left = (e.clientX - dragOffset.x) + 'px';
+        draggedWindow.style.top = (e.clientY - dragOffset.y) + 'px';
+        draggedWindow.style.transform = 'none';
+    });
+
+    document.addEventListener('touchmove', (e) => {
+        if (!draggedWindow) return;
+        e.preventDefault();
+        isDragging = true;
+        
+        const touch = e.touches[0];
+        draggedWindow.style.left = (touch.clientX - dragOffset.x) + 'px';
+        draggedWindow.style.top = (touch.clientY - dragOffset.y) + 'px';
+        draggedWindow.style.transform = 'none';
+    }, { passive: false });
+
+    document.addEventListener('mouseup', () => {
+        draggedWindow = null;
+    });
+
+    document.addEventListener('touchend', () => {
+        draggedWindow = null;
+    });
+
+    // ========== БЛОКИРОВКА F12 ==========
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
             e.preventDefault();
             alert('⛔ Доступ запрещён.');
         }
+    });
+
+    // ========== ЗАПУСК ==========
+    window.addEventListener('load', () => {
+        renderFiles('root');
+        renderRustore();
+        loadDesktopIcons();
+        setTimeout(playVhod, 500);
     });
 </script>
 </body>
