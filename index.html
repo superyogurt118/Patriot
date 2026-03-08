@@ -313,19 +313,67 @@
         .files-item:hover { background: #f5f5f7; border-radius: 8px; }
         .files-item-icon { font-size: 32px; }
         .files-item-name { font-size: 12px; text-align: center; margin-top: 5px; }
+
+	.login-button {
+		background: rgba(255, 255, 255, 0.15);
+		backdrop-filter: blur(10px);
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		border-radius: 40px;
+		padding: 16px 40px;
+		color: white;
+		font-family: 'Inter', sans-serif;
+		font-size: 18px;
+		font-weight: 600;
+		letter-spacing: 2px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		transition: all 0.3s ease;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+	}
+
+	.login-button:hover {
+		background: rgba(255, 255, 255, 0.25);
+		border-color: rgba(255, 255, 255, 0.5);
+		transform: scale(1.05);
+	}
+
+	.login-button:active {
+		transform: scale(0.95);
+	}
+
+	.login-button:focus {
+		outline: none;
+		box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+	}
+
+	@media (max-width: 600px) {
+		.login-button {
+			padding: 20px 50px;
+			font-size: 20px;
+		}
+	}
     </style>
 </head>
 <body>
 
 <div id="os-container">
     
-    <div id="lock-screen">
-        <div class="clock" id="time-display">12:00</div>
-        <div class="slider-track" id="slider-track">
-            <div class="slider-thumb" id="slider-thumb"></div>
-        </div>
-        <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-weight: 300;">Проведите для входа</p>
-    </div>
+	<div id="lock-screen">
+		<div class="clock" id="time-display">
+			12:00
+		</div>
+
+		<button class="login-button" id="login-btn">
+			<span>Войти</span>
+			<span style="font-size: 24px;">🔴</span>
+		</button>
+
+		<p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px;">
+			Нажмите для входа
+		</p>
+	</div>
 
     <div id="desktop" style="background-image: url('wallpapers/flag.png');">
         <div class="dock">
@@ -575,6 +623,29 @@ document.querySelectorAll('.win-btn, .calc-btn, .files-btn, .browser-nav-btn, .b
         // Оригинальный onclick сработает
     }, { passive: false });
 });
+
+	// ========== ВХОД ПО КНОПКЕ ==========
+	const loginBtn = document.getElementById('login-btn');
+	const lockScreen = document.getElementById('lock-screen');
+
+	loginBtn.addEventListener('click', () => {
+		playVhod();
+		lockScreen.classList.add('unlocked');
+	});
+
+	loginBtn.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			playVhod();
+			lockScreen.classList.add('unlocked');
+		}
+	});
+
+	loginBtn.addEventListener('touchstart', (e) => {
+		e.preventDefault();
+		playVhod();
+		lockScreen.classList.add('unlocked');
+	}, { passive: false });
     
     // ========== УПРАВЛЕНИЕ ОКНАМИ ==========
     function closeWin(id) {
