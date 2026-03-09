@@ -1003,12 +1003,6 @@ function populateSettingsLangTimezone() {
         playGimn();
     }, { passive: false });
 
-    document.getElementById('play-uved').addEventListener('click', playUvedomlenie);
-    document.getElementById('play-uved').addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        playUvedomlenie();
-    }, { passive: false });
-
     document.getElementById('check-updates').addEventListener('click', () => {
         alert('Обновлений нет. Вы используете самую патриотичную версию!');
     });
