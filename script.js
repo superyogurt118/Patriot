@@ -1,4 +1,4 @@
-// ========== МОБИЛЬНАЯ ПОДДЕРЖКА ==========
+// ========== МОБИЛЬНАЯ ПОДДЕРЖКА ===========
     document.addEventListener('touchmove', (e) => {
         if (e.target.closest('.window') || e.target.closest('.dock') || e.target.closest('.desktop-icons') || e.target.closest('.datetime-panel') || e.target.closest('.top-panel') || e.target.closest('.start-modal')) {
             e.preventDefault();
