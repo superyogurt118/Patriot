@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PatriotOS — Система нового поколения</title>
+    <title data-i18n="system_title">PatriotOS — Система нового поколения</title>
     <link rel="icon" type="image/png" href="images/icon.png">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,11 +18,11 @@
         </div>
 
         <button class="login-button" id="login-btn">
-            <span>Войти</span>
+            <span data-i18n="login">Войти</span>
             <span style="font-size: 24px;">▶️</span>
         </button>
 
-        <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px; font-weight: 600;">
+        <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px; font-weight: 600;" data-i18n="tap_to_enter">
             Нажмите для входа
         </p>
     </div>
@@ -31,7 +31,7 @@
     <div id="desktop" style="background-image: url('wallpapers/flag.png');">
         <!-- Верхняя панель с кнопкой Пуск, доком и датой -->
         <div class="top-panel">
-                <div class="start-button" id="start-button">
+                <div class="start-button" id="start-button" data-i18n="start_button" title="Пуск">
                     🪟
                 </div>
 
@@ -39,23 +39,23 @@
             <div class="dock">
                 <div class="icon" data-window="calc-window">
                     <div class="icon-img" style="background-image: url('images/calculator.png');"></div>
-                    <span>Счётчик</span>
+                    <span data-i18n="calculator">Счётчик</span>
                 </div>
                 <div class="icon" data-window="browser-window">
                     <div class="icon-img" style="background-image: url('images/yandex.png');"></div>
-                    <span>Браузер</span>
+                    <span data-i18n="browser">Браузер</span>
                 </div>
                 <div class="icon" data-window="rustore-window">
                     <div class="icon-img" style="background-image: url('images/rustore.png');"></div>
-                    <span>RuStore</span>
+                    <span data-i18n="rustore">RuStore</span>
                 </div>
                 <div class="icon" data-window="settings-window">
                     <div class="icon-img" style="background-image: url('images/settings.png');"></div>
-                    <span>Настройки</span>
+                    <span data-i18n="settings">Настройки</span>
                 </div>
                 <div class="icon" data-window="files-window">
                     <div class="icon-img" style="background-image: url('images/files.png');"></div>
-                    <span>Документы</span>
+                    <span data-i18n="files">Документы</span>
                 </div>
             </div>
 
@@ -70,12 +70,12 @@
         <!-- Модальное окно Пуск -->
         <div id="start-modal" class="start-modal hidden">
             <div class="start-header">
-                <h2>ПатриотОС</h2>
-                <p>Своих не бросаем. Чужих не пускаем</p>
+                <h2 data-i18n="os_name">ПатриотОС</h2>
+                <p data-i18n="slogan">Своих не бросаем. Чужих не пускаем</p>
             </div>
             
             <div class="start-search">
-                <input type="text" placeholder="Поиск приложений..." id="start-search">
+                <input type="text" data-i18n-placeholder="search_apps" placeholder="Поиск приложений..." id="start-search">
             </div>
             
             <div class="start-apps" id="start-apps">
@@ -85,15 +85,15 @@
             <div class="start-footer">
                 <div class="start-footer-item" data-window="settings-window">
                     <span>⚙️</span>
-                    <span>Настройки</span>
+                    <span data-i18n="settings">Настройки</span>
                 </div>
                 <div class="start-footer-item" data-window="calendar-window">
                     <span>📅</span>
-                    <span>Календарь</span>
+                    <span data-i18n="calendar">Календарь</span>
                 </div>
                 <div class="start-footer-item" onclick="localStorage.clear(); alert('Данные очищены!'); location.reload();">
                     <span>🗑️</span>
-                    <span>Сброс</span>
+                    <span data-i18n="reset">Сброс</span>
                 </div>
             </div>
         </div>
@@ -106,9 +106,9 @@
         <!-- Окно калькулятора -->
         <div id="calc-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">🔢 Счётчик</span>
+                <span class="window-title" data-i18n="calculator">🔢 Счётчик</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="calc-window" data-action="close"></button>
+                    <button class="win-btn close" data-win="calc-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
             <div class="window-content">
@@ -138,27 +138,27 @@
         <!-- Окно браузера -->
         <div id="browser-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">🌐 Браузер</span>
+                <span class="window-title" data-i18n="browser">🌐 Браузер</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="browser-window" data-action="close"></button>
+                    <button class="win-btn close" data-win="browser-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
             <div style="flex:1; display: flex; flex-direction: column;">
                 <div class="browser-header">
                     <div class="browser-nav-row">
-                        <button class="browser-nav-btn" id="browser-back">←</button>
-                        <button class="browser-nav-btn" id="browser-forward">→</button>
-                        <button class="browser-nav-btn" id="browser-refresh">↻</button>
-                        <input type="text" class="browser-address-bar" id="browser-address" placeholder="yandex.ru" value="yandex.ru">
-                        <button class="browser-nav-btn" id="browser-go">▶</button>
+                        <button class="browser-nav-btn" id="browser-back" title="Назад">←</button>
+                        <button class="browser-nav-btn" id="browser-forward" title="Вперёд">→</button>
+                        <button class="browser-nav-btn" id="browser-refresh" title="Обновить">↻</button>
+                        <input type="text" class="browser-address-bar" id="browser-address" data-i18n-placeholder="address_placeholder" placeholder="yandex.ru" value="yandex.ru">
+                        <button class="browser-nav-btn" id="browser-go" data-i18n="go">▶</button>
                     </div>
                 </div>
                 <div style="flex:1; position: relative;">
                     <iframe id="browser-frame" src="about:blank"></iframe>
                     <div class="browser-home" id="browser-home">
                         <div class="yandex-logo">Я</div>
-                        <h1 style="font-family: 'Inter';">Яндекс</h1>
-                        <p>Поисковая система №1 в России</p>
+                        <h1 style="font-family: 'Inter';" data-i18n="yandex">Яндекс</h1>
+                        <p data-i18n="yandex_desc">Поисковая система №1 в России</p>
                     </div>
                 </div>
             </div>
@@ -167,18 +167,18 @@
         <!-- Окно RuStore -->
         <div id="rustore-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">📦 RuStore</span>
+                <span class="window-title" data-i18n="rustore">📦 RuStore</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="rustore-window" data-action="close"></button>
+                    <button class="win-btn close" data-win="rustore-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
             <div class="window-content">
                 <div class="rustore-grid" id="rustore-grid"></div>
                 <div class="rustore-add">
-                    <h3 style="margin: 0 0 15px;">➕ Добавить приложение</h3>
-                    <input type="text" id="rustore-name" placeholder="Название">
-                    <input type="text" id="rustore-url" placeholder="Ссылка (например, vk.com)">
-                    <button class="btn-blue" id="rustore-add-btn">Добавить на рабочий стол</button>
+                    <h3 style="margin: 0 0 15px;" data-i18n="add_app">➕ Добавить приложение</h3>
+                    <input type="text" id="rustore-name" data-i18n-placeholder="name" placeholder="Название">
+                    <input type="text" id="rustore-url" data-i18n-placeholder="link" placeholder="Ссылка (например, vk.com)">
+                    <button class="btn-blue" id="rustore-add-btn" data-i18n="add_to_desktop">Добавить на рабочий стол</button>
                 </div>
             </div>
         </div>
@@ -188,7 +188,7 @@
             <div class="window-header">
                 <span class="window-title" data-i18n="rusmusic">🎵 Румузыка</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="rusmusic-window" data-action="close"></button>
+                    <button class="win-btn close" data-win="rusmusic-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
             <div class="window-content" style="text-align: center;">
@@ -203,7 +203,7 @@
                             <div style="font-weight: 700; font-size: 18px;" data-i18n="gimn">Гимн Российской Федерации</div>
                             <div style="font-size: 14px; opacity: 0.6;" data-i18n="gimn_desc">Государственный гимн</div>
                         </div>
-                        <button class="music-play-btn" data-src="sounds/gimn.mp3" style="background: var(--blue); color: white; border: none; width: 50px; height: 50px; border-radius: 25px; font-size: 24px; cursor: pointer;">▶</button>
+                        <button class="music-play-btn" data-src="sounds/gimn.mp3" style="background: var(--blue); color: white; border: none; width: 50px; height: 50px; border-radius: 25px; font-size: 24px; cursor: pointer;" title="Воспроизвести">▶</button>
                     </div>
                     
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -212,7 +212,7 @@
                             <div style="font-weight: 700; font-size: 18px;" data-i18n="shaman">Я русский</div>
                             <div style="font-size: 14px; opacity: 0.6;" data-i18n="shaman_desc">SHAMAN</div>
                         </div>
-                        <button class="music-play-btn" data-src="sounds/yarusskiy.mp3" style="background: var(--red); color: white; border: none; width: 50px; height: 50px; border-radius: 25px; font-size: 24px; cursor: pointer;">▶</button>
+                        <button class="music-play-btn" data-src="sounds/yarusskiy.mp3" style="background: var(--red); color: white; border: none; width: 50px; height: 50px; border-radius: 25px; font-size: 24px; cursor: pointer;" title="Воспроизвести">▶</button>
                     </div>
                 </div>
                 
@@ -225,60 +225,69 @@
         <!-- Окно настроек с боковым меню -->
         <div id="settings-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">⚙️ Настройки</span>
+                <span class="window-title" data-i18n="settings">⚙️ Настройки</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="settings-window" data-action="close"></button>
+                    <button class="win-btn close" data-win="settings-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
             <div class="window-content">
                 <div class="flag-line"></div>
-                <h2 style="margin: 0 0 10px; font-size: 20px; font-weight: 700;">PatriotOS</h2>
+                <h2 style="margin: 0 0 10px; font-size: 20px; font-weight: 700;" data-i18n="os_name">PatriotOS</h2>
                 
                 <div class="settings-search">
-                    <input type="text" id="settings-search" placeholder="Поиск в настройках...">
+                    <input type="text" id="settings-search" data-i18n-placeholder="search_settings" placeholder="Поиск в настройках...">
                 </div>
 
                 <div class="settings-layout">
                     <div class="settings-sidebar" id="settings-sidebar">
-                        <div class="settings-sidebar-item active" data-tab="main">Основные</div>
-                        <div class="settings-sidebar-item" data-tab="langtime">Язык и время</div>
-                        <div class="settings-sidebar-item" data-tab="wallpaper">Обои</div>
-                        <div class="settings-sidebar-item" data-tab="sounds">Звуки</div>
-                        <div class="settings-sidebar-item" data-tab="system">Система</div>
+                        <div class="settings-sidebar-item active" data-tab="main" data-i18n="main">Основные</div>
+                        <div class="settings-sidebar-item" data-tab="langtime" data-i18n="langtime">Язык и время</div>
+                        <div class="settings-sidebar-item" data-tab="wallpaper" data-i18n="wallpapers">Обои</div>
+                        <div class="settings-sidebar-item" data-tab="sounds" data-i18n="sounds">Звуки</div>
+                        <div class="settings-sidebar-item" data-tab="system" data-i18n="system">Система</div>
                     </div>
 
                     <div class="settings-content" id="settings-content">
                         <!-- Вкладка Основные -->
                         <div class="settings-tab" id="tab-main">
                             <div class="settings-card">
-                                <h3 style="margin: 0 0 10px;">Основные параметры</h3>
-                                <p>Здесь можно настроить общие параметры системы.</p>
-                                <label>Имя пользователя</label>
+                                <h3 style="margin: 0 0 10px;" data-i18n="main_params">Основные параметры</h3>
+                                <p data-i18n="main_desc">Здесь можно настроить общие параметры системы.</p>
+                                <label data-i18n="username">Имя пользователя</label>
                                 <input type="text" value="Пользователь" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
-                                <button class="btn-blue">Сохранить</button>
+                                <button class="btn-blue" data-i18n="save">Сохранить</button>
                             </div>
                         </div>
 
                         <!-- Вкладка Язык и время -->
                         <div class="settings-tab hidden" id="tab-langtime">
                             <div class="settings-card">
-                                <h3 style="margin: 0 0 10px;">Язык интерфейса</h3>
-                                <select id="settings-language" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;">
+                                <h3 style="margin: 0 0 10px;" data-i18n="interface_lang">Язык интерфейса</h3>
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                                        <input type="radio" name="system-language" value="ru" checked> 🇷🇺 <span data-i18n="russian_lang">Русский</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="radio" name="system-language" value="by"> 🇧🇾 <span data-i18n="belarusian_lang">Беларуская</span>
+                                    </label>
+                                </div>
+                                <select id="settings-language" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px; display: none;">
                                     <!-- Заполнится JS -->
                                 </select>
-                                <p style="color: var(--red); font-size: 12px;">Иностранные языки приведут к блокировке!</p>
-                                <h3 style="margin: 0 0 10px;">Часовой пояс</h3>
+                                <p style="color: var(--red); font-size: 12px;" data-i18n="foreign_warning">Иностранные языки приведут к блокировке!</p>
+                                <h3 style="margin: 0 0 10px;" data-i18n="timezone">Часовой пояс</h3>
                                 <select id="settings-timezone" style="width:100%; padding:10px; border-radius:8px;">
                                     <!-- Заполнится JS -->
                                 </select>
-                                <button class="btn-blue" id="save-langtime">Сохранить</button>
+                                <button class="btn-blue" id="apply-language" style="margin-top: 10px;" data-i18n="apply_lang">Применить язык</button>
+                                <button class="btn-blue" id="save-langtime" style="margin-top: 10px;" data-i18n="save_langtime">Сохранить</button>
                             </div>
                         </div>
 
                         <!-- Вкладка Обои -->
                         <div class="settings-tab hidden" id="tab-wallpaper">
                             <div class="settings-card">
-                                <h3 style="margin: 0 0 10px;">Обои рабочего стола</h3>
+                                <h3 style="margin: 0 0 10px;" data-i18n="desktop_wallpaper">Обои рабочего стола</h3>
                                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
                                     <div class="wallpaper-option" data-wallpaper="flag">
                                         <img src="wallpapers/flag.png" alt="Флаг" style="width: 100%; border-radius: 8px; cursor: pointer;">
@@ -302,10 +311,10 @@
                         <!-- Вкладка Звуки -->
                         <div class="settings-tab hidden" id="tab-sounds">
                             <div class="settings-card">
-                                <h3 style="margin: 0 0 10px;">Звуки</h3>
+                                <h3 style="margin: 0 0 10px;" data-i18n="sounds">Звуки</h3>
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <span>Гимн РФ</span>
-                                    <button class="sound-btn" id="play-gimn">▶</button>
+                                    <span data-i18n="anthem">Гимн РФ</span>
+                                    <button class="sound-btn" id="play-gimn" title="Воспроизвести">▶</button>
                                 </div>
                             </div>
                         </div>
@@ -313,12 +322,12 @@
                         <!-- Вкладка Система -->
                         <div class="settings-tab hidden" id="tab-system">
                             <div class="settings-card">
-                                <h3 style="margin: 0 0 10px;">Информация о системе</h3>
-                                <p><strong>Версия:</strong> 0.6.2</p>
-                                <p><strong>Безопасность:</strong> Активна ✓</p>
-                                <p><strong>Язык:</strong> Русский (Системный)</p>
-                                <button class="btn-blue" id="check-updates">Проверить обновления</button>
-                                <button class="btn-blue" style="background: var(--red); margin-top: 10px;" id="clear-data">Очистить все данные</button>
+                                <h3 style="margin: 0 0 10px;" data-i18n="system_info">Информация о системе</h3>
+                                <p><strong data-i18n="version">Версия:</strong> 0.6.2</p>
+                                <p><strong data-i18n="security">Безопасность:</strong> <span data-i18n="active">Активна ✓</span></p>
+                                <p><strong data-i18n="system_lang">Язык:</strong> <span data-i18n="russian">Русский (Системный)</span></p>
+                                <button class="btn-blue" id="check-updates" data-i18n="check_updates">Проверить обновления</button>
+                                <button class="btn-blue" style="background: var(--red); margin-top: 10px;" id="clear-data" data-i18n="clear_data">Очистить все данные</button>
                             </div>
                         </div>
                     </div>
@@ -329,24 +338,24 @@
         <!-- Окно документов -->
         <div id="files-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">📁 Мои Документы</span>
+                <span class="window-title" data-i18n="files">📁 Мои Документы</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="files-window" data-action="close"></button>
+                    <button class="win-btn close" data-win="files-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
             <div class="window-content" style="padding: 0;">
                 <div class="files-content">
                     <div class="files-sidebar">
-                        <div class="files-sidebar-item active" data-path="root">📁 Мой компьютер</div>
-                        <div class="files-sidebar-item" data-path="Документы">📄 Мои документы</div>
-                        <div class="files-sidebar-item" data-path="Изображения">🖼️ Изображения</div>
-                        <div class="files-sidebar-item" data-path="Музыка">🎵 Моя музыка</div>
+                        <div class="files-sidebar-item active" data-path="root" data-i18n="my_computer">📁 Мой компьютер</div>
+                        <div class="files-sidebar-item" data-path="Документы" data-i18n="my_docs">📄 Мои документы</div>
+                        <div class="files-sidebar-item" data-path="Изображения" data-i18n="images">🖼️ Изображения</div>
+                        <div class="files-sidebar-item" data-path="Музыка" data-i18n="music">🎵 Моя музыка</div>
                     </div>
                     <div class="files-main">
                         <div class="files-toolbar">
-                            <button class="files-btn" id="files-new-folder">📁 Новая папка</button>
-                            <button class="files-btn" id="files-new-file">📄 Новый файл</button>
-                            <button class="files-btn" id="files-refresh">🔄 Обновить</button>
+                            <button class="files-btn" id="files-new-folder" data-i18n="new_folder">📁 Новая папка</button>
+                            <button class="files-btn" id="files-new-file" data-i18n="new_file">📄 Новый файл</button>
+                            <button class="files-btn" id="files-refresh" data-i18n="refresh">🔄 Обновить</button>
                         </div>
                         <div class="files-grid" id="files-grid"></div>
                     </div>
@@ -357,29 +366,29 @@
         <!-- Окно календаря -->
         <div id="calendar-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title">📅 Календарь праздников РФ</span>
+                <span class="window-title" data-i18n="calendar">📅 Календарь праздников РФ</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="calendar-window" data-action="close"></button>
+                    <button class="win-btn close" data-win="calendar-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
             <div class="window-content">
                 <div class="calendar-header">
-                    <button class="browser-nav-btn" id="calendar-prev">←</button>
+                    <button class="browser-nav-btn" id="calendar-prev" title="Предыдущий месяц">←</button>
                     <div>
                         <span class="calendar-month" id="calendar-month">Март</span>
                         <span class="calendar-year" id="calendar-year">2026</span>
                     </div>
-                    <button class="browser-nav-btn" id="calendar-next">→</button>
+                    <button class="browser-nav-btn" id="calendar-next" title="Следующий месяц">→</button>
                 </div>
                 
                 <div class="calendar-weekdays">
-                    <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+                    <div data-i18n="monday">Пн</div><div data-i18n="tuesday">Вт</div><div data-i18n="wednesday">Ср</div><div data-i18n="thursday">Чт</div><div data-i18n="friday">Пт</div><div data-i18n="saturday">Сб</div><div data-i18n="sunday">Вс</div>
                 </div>
                 
                 <div class="calendar-days" id="calendar-days"></div>
                 
                 <div class="holiday-list" id="holiday-list">
-                    <h4>Праздники в этом месяце:</h4>
+                    <h4 data-i18n="holidays_this_month">Праздники в этом месяце:</h4>
                     <ul id="month-holidays">
                         <li>8 марта — Международный женский день</li>
                     </ul>
