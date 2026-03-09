@@ -1028,6 +1028,67 @@ function populateSettingsLangTimezone() {
         }
     }, { passive: false });
 
+    // ========== ПЛЕЕР РУМУЗЫКА ==========
+    // Текущий воспроизводящийся аудио
+    let currentPlayerAudio = null;
+    let currentPlayBtn = null;
+
+    // Функция для плеера
+    function setupMusicPlayer() {
+        document.querySelectorAll('.music-play-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const src = btn.dataset.src;
+                
+                // Если уже играет этот же трек — ставим на паузу
+                if (currentPlayerAudio && currentPlayerAudio.src.includes(src)) {
+                    if (!currentPlayerAudio.paused) {
+                        currentPlayerAudio.pause();
+                        btn.textContent = '▶';
+                    } else {
+                        currentPlayerAudio.play();
+                        btn.textContent = '⏸';
+                    }
+                    return;
+                }
+                
+                // Останавливаем предыдущий трек
+                if (currentPlayerAudio) {
+                    currentPlayerAudio.pause();
+                    if (currentPlayBtn) {
+                        currentPlayBtn.textContent = '▶';
+                    }
+                }
+                
+                // Создаём новый аудио
+                try {
+                    currentPlayerAudio = new Audio(src);
+                    currentPlayerAudio.volume = 0.5;
+                    currentPlayerAudio.play().catch(() => {});
+                    
+                    // Меняем кнопки
+                    btn.textContent = '⏸';
+                    if (currentPlayBtn) {
+                        currentPlayBtn.textContent = '▶';
+                    }
+                    currentPlayBtn = btn;
+                    
+                    // Когда трек заканчивается
+                    currentPlayerAudio.addEventListener('ended', () => {
+                        btn.textContent = '▶';
+                        currentPlayBtn = null;
+                        currentPlayerAudio = null;
+                    });
+                } catch (e) {}
+            });
+            
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                btn.click();
+            }, { passive: false });
+        });
+    }
+
     // ========== ЗАПУСК ==========
     window.addEventListener('load', () => {
         renderFiles('root');
