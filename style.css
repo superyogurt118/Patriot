@@ -1,0 +1,1185 @@
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --white: #ffffff;
+            --blue: #0057b7;
+            --red: #d52b1e;
+            --glass-light: rgba(255, 255, 255, 0.15);
+            --glass-border-light: rgba(255, 255, 255, 0.3);
+            --bg-gradient: linear-gradient(135deg, #002f6c 0%, #0057b7 50%, #d52b1e 100%);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            outline: none; 
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        body, html {
+            margin: 0; 
+            padding: 0;
+            width: 100%; 
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+        }
+
+        #os-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+        }
+
+        /* ЭКРАН БЛОКИРОВКИ */
+        #lock-screen {
+            position: absolute; 
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(25px);
+            z-index: 1000;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        #lock-screen.unlocked { 
+            transform: translateY(-100%); 
+        }
+
+        .clock {
+            font-size: clamp(5rem, 15vw, 8rem);
+            font-weight: 700; 
+            color: var(--white);
+            margin-bottom: 40px; 
+            letter-spacing: -2px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .login-button {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 16px 40px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .login-button:active {
+            transform: scale(0.95);
+        }
+
+        .login-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+        }
+
+        /* ЭКРАН ПЕРВОНАЧАЛЬНОЙ НАСТРОЙКИ */
+        #setup-screen {
+            position: absolute; 
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s;
+        }
+
+        #setup-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .setup-card {
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            color: #333;
+        }
+
+        .setup-card h2 {
+            margin: 0 0 10px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        .setup-card p {
+            margin: 0 0 25px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .setup-field {
+            margin-bottom: 20px;
+        }
+
+        .setup-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .setup-field select, .setup-field input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            background: white;
+        }
+
+        .setup-button {
+            background: var(--blue);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            width: 100%;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* РАБОЧИЙ СТОЛ */
+        #desktop {
+            position: absolute; 
+            inset: 0;
+            display: flex; 
+            flex-direction: column;
+            padding: 24px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Верхняя панель (светлая) */
+        .top-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 8px 16px;
+            background: var(--glass-light);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            border: 1px solid var(--glass-border-light);
+            box-shadow: var(--shadow);
+            z-index: 100;
+            position: relative;
+        }
+
+        .start-button {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .start-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Док в верхней панели — без квадратов */
+        .top-panel .dock {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 8px 20px;
+        }
+
+        .top-panel .dock .icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .top-panel .dock .icon span {
+            display: none; /* Скрываем подписи в верхнем доке */
+        }
+
+        .top-panel .dock .icon-img {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: transform 0.2s;
+            background-size: cover;
+            background-position: center;
+            /* Убираем белый фон и рамки */
+            background-color: transparent;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .top-panel .dock .icon:active .icon-img { 
+            transform: scale(0.9); 
+        }
+
+        /* Панель даты/времени в верхней панели */
+        .top-panel .datetime-panel {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .top-panel .datetime-panel:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .top-panel .datetime-panel:active {
+            transform: scale(0.95);
+        }
+
+        .top-panel .time-panel {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .top-panel .date-panel {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .top-panel .holiday-indicator {
+            font-size: 18px;
+        }
+
+        /* Основной контейнер */
+        .main-content {
+            flex: 1;
+            display: flex;
+            gap: 24px;
+            min-height: 0;
+        }
+
+        /* Область для иконок приложений */
+        .desktop-icons {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            align-content: start;
+            justify-items: center;
+            height: fit-content;
+            max-height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .desktop-icon {
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            cursor: pointer;
+            width: 70px; 
+            padding: 10px 5px;
+        }
+
+        .desktop-icon:active .desktop-icon-img { 
+            transform: scale(0.9); 
+        }
+
+        .desktop-icon-img {
+            width: 54px; 
+            height: 54px;
+            border-radius: 14px; 
+            background: var(--white);
+            background-size: cover; 
+            background-position: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .desktop-icon-name {
+            margin-top: 6px; 
+            color: var(--white);
+            font-size: 11px; 
+            font-weight: 700; 
+            text-align: center;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+        }
+
+        /* ОКНА — прозрачные, на весь экран */
+        .window {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 0;
+            border: none;
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            transition: opacity 0.3s;
+            z-index: 2000;
+        }
+
+        .window.hidden { 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+
+        .window-header {
+            background: rgba(245, 245, 247, 0.9);
+            padding: 14px 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid rgba(224, 224, 224, 0.5); 
+            backdrop-filter: blur(10px);
+        }
+
+        .window-title { 
+            font-weight: 700; 
+            font-size: 16px; 
+            color: #1d1d1f; 
+        }
+
+        .window-controls { 
+            display: flex; 
+            gap: 8px; 
+            align-items: center; 
+        }
+
+        .win-btn {
+            width: 12px; 
+            height: 12px;
+            border-radius: 50%; 
+            border: none; 
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .close { 
+            background: #ff5f57; 
+        }
+
+        /* ПРИЛОЖЕНИЯ: КОНТЕНТ */
+        .window-content { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 20px; 
+            color: #333;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* КАЛЬКУЛЯТОР */
+        .calc-display {
+            background: rgba(240, 240, 242, 0.7); 
+            padding: 20px;
+            border-radius: 12px; 
+            text-align: right;
+            font-size: 32px; 
+            font-weight: 700; 
+            margin-bottom: 15px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .calc-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+        }
+        
+        .calc-btn {
+            padding: 15px; 
+            border: none; 
+            border-radius: 10px;
+            background: rgba(238, 238, 238, 0.7); 
+            font-size: 18px; 
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            backdrop-filter: blur(5px);
+        }
+        
+        .calc-btn:hover { 
+            background: rgba(224, 224, 229, 0.9); 
+        }
+        
+        .calc-btn.op { 
+            background: rgba(0, 87, 183, 0.8); 
+            color: white; 
+        }
+        
+        .calc-btn.clear { 
+            background: rgba(213, 43, 30, 0.8); 
+            color: white; 
+        }
+
+        /* КАЛЕНДАРЬ */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .calendar-month {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        .calendar-year {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--red);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            font-weight: 600;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .calendar-day:hover {
+            background: rgba(255,255,255,0.6);
+        }
+
+        .calendar-day.today {
+            background: var(--blue);
+            color: white;
+            font-weight: 700;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 87, 183, 0.3);
+            z-index: 1;
+        }
+
+        .calendar-day.holiday {
+            background: rgba(213, 43, 30, 0.2);
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .calendar-day.holiday::after {
+            content: "⭐";
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 10px;
+        }
+
+        .holiday-list {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(249, 249, 251, 0.7);
+            border-radius: 12px;
+            border: 1px solid rgba(240, 240, 242, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .holiday-list h4 {
+            margin: 0 0 10px 0;
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .holiday-list ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .holiday-list li {
+            margin-bottom: 5px;
+        }
+
+        .holiday-list .today-holiday {
+            background: rgba(213, 43, 30, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        /* МОДАЛЬНОЕ ОКНО ПУСК */
+        .start-modal {
+            position: absolute;
+            top: 84px;
+            left: 24px;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border: 1px solid var(--white);
+            overflow: hidden;
+            z-index: 2000;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .start-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-20px);
+        }
+
+        .start-header {
+            background: linear-gradient(135deg, var(--blue), var(--red));
+            padding: 20px;
+            color: white;
+        }
+
+        .start-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .start-header p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .start-search {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f2;
+        }
+
+        .start-search input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .start-apps {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .start-app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .start-app-item:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .start-app-item:active {
+            transform: scale(0.95);
+        }
+
+        .start-app-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .start-app-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+        }
+
+        .start-footer {
+            padding: 15px;
+            border-top: 1px solid #f0f0f2;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .start-footer-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .start-footer-item:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        /* НАСТРОЙКИ — боковое меню */
+        .settings-layout {
+            display: flex;
+            height: 100%;
+            gap: 20px;
+        }
+
+        .settings-sidebar {
+            width: 200px;
+            background: rgba(245, 245, 247, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(224, 224, 224, 0.5);
+        }
+
+        .settings-sidebar-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .settings-sidebar-item:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .settings-sidebar-item.active {
+            background: var(--blue);
+            color: white;
+        }
+
+        .settings-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 5px;
+        }
+
+        .settings-search {
+            margin-bottom: 20px;
+        }
+
+        .settings-search input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .settings-tab {
+            display: block;
+        }
+
+        .settings-tab.hidden {
+            display: none;
+        }
+
+        .settings-card {
+            background: rgba(249, 249, 251, 0.7); 
+            border-radius: 15px;
+            padding: 20px; 
+            border: 1px solid rgba(240, 240, 242, 0.5); 
+            margin-top: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .flag-line {
+            height: 4px; 
+            border-radius: 2px; 
+            margin-bottom: 15px;
+            background: linear-gradient(to right, white 33.3%, var(--blue) 33.3%, var(--blue) 66.6%, var(--red) 66.6%);
+        }
+        
+        .btn-blue {
+            background: var(--blue); 
+            color: white; 
+            border: none;
+            padding: 12px 20px; 
+            border-radius: 10px; 
+            width: 100%;
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 10px;
+        }
+
+        .sound-btn {
+            background: rgba(238, 238, 238, 0.7);
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .sound-btn.playing {
+            background: var(--blue);
+            color: white;
+        }
+
+        /* БРАУЗЕР */
+        .browser-header {
+            background: rgba(245, 245, 247, 0.7); 
+            padding: 10px;
+            border-bottom: 1px solid rgba(224, 224, 224, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .browser-nav-row {
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 8px;
+        }
+        
+        .browser-nav-btn {
+            background: rgba(238, 238, 238, 0.7); 
+            border: none;
+            width: 30px; 
+            height: 30px; 
+            border-radius: 8px;
+            cursor: pointer; 
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .browser-address-bar {
+            flex: 1; 
+            padding: 8px 12px; 
+            border: 1px solid #ddd;
+            border-radius: 8px; 
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            background: rgba(255,255,255,0.5);
+        }
+        
+        #browser-frame {
+            width: 100%; 
+            height: calc(100% - 110px);
+            border: none;
+        }
+        
+        .browser-home {
+            position: absolute; 
+            inset: 0;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            background: rgba(240, 240, 242, 0.7); 
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .yandex-logo {
+            font-size: 72px; 
+            font-weight: bold; 
+            color: #ff0000;
+        }
+
+        /* RuStore */
+        .rustore-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px; 
+            margin-bottom: 20px;
+        }
+        
+        .rustore-item {
+            background: rgba(249, 249, 251, 0.7); 
+            border: 1px solid rgba(240, 240, 242, 0.5);
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: center;
+            cursor: pointer; 
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .rustore-item:hover { 
+            background: rgba(240, 240, 245, 0.9); 
+        }
+        
+        .rustore-item.installed {
+            border: 2px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .rustore-item-icon {
+            width: 54px; 
+            height: 54px; 
+            border-radius: 12px;
+            margin: 0 auto 10px; 
+            background-size: cover; 
+            background-position: center;
+        }
+        
+        .rustore-item-name {
+            font-weight: 700;
+        }
+        
+        .installed-badge {
+            color: #4CAF50;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+        
+        .rustore-add {
+            background: rgba(249, 249, 251, 0.7); 
+            border: 2px dashed #ccc;
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-top: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .rustore-add input {
+            width: 100%; 
+            padding: 10px; 
+            margin-bottom: 10px;
+            border: 1px solid #ddd; 
+            border-radius: 8px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Документы */
+        .files-content { 
+            display: flex; 
+            height: 100%; 
+        }
+        
+        .files-sidebar {
+            width: 180px; 
+            background: rgba(245, 245, 247, 0.7);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(224, 224, 224, 0.5); 
+            padding: 10px;
+            border-radius: 16px 0 0 16px;
+        }
+        
+        .files-sidebar-item {
+            padding: 8px 12px; 
+            margin-bottom: 5px;
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .files-sidebar-item:hover { 
+            background: rgba(224, 224, 229, 0.7); 
+        }
+        
+        .files-sidebar-item.active { 
+            background: var(--blue); 
+            color: white; 
+            font-weight: 700;
+        }
+        
+        .files-main { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .files-toolbar {
+            padding: 10px; 
+            border-bottom: 1px solid rgba(224, 224, 224, 0.5);
+            display: flex; 
+            gap: 8px;
+        }
+        
+        .files-btn {
+            background: rgba(238, 238, 238, 0.7); 
+            border: none; 
+            padding: 6px 12px;
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .files-grid {
+            flex: 1; 
+            padding: 15px; 
+            overflow-y: auto;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .files-item {
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            cursor: pointer; 
+            padding: 10px;
+        }
+        
+        .files-item:hover { 
+            background: rgba(245, 245, 247, 0.7); 
+            border-radius: 8px; 
+        }
+        
+        .files-item-icon { 
+            font-size: 32px; 
+        }
+        
+        .files-item-name { 
+            font-size: 12px; 
+            text-align: center; 
+            margin-top: 5px; 
+            font-weight: 600;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            #desktop {
+                padding: 12px;
+            }
+
+            .top-panel {
+                padding: 6px 12px;
+                gap: 8px;
+            }
+
+            .start-button {
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+            }
+
+            .top-panel .dock {
+                padding: 6px 12px;
+                gap: 12px;
+            }
+
+            .top-panel .dock .icon-img {
+                width: 36px;
+                height: 36px;
+                font-size: 20px;
+            }
+
+            .top-panel .datetime-panel {
+                padding: 6px 12px;
+                gap: 8px;
+            }
+
+            .top-panel .time-panel {
+                font-size: 14px;
+            }
+
+            .top-panel .date-panel {
+                font-size: 12px;
+            }
+
+            .top-panel .holiday-indicator {
+                font-size: 16px;
+            }
+
+            .start-modal {
+                top: 70px;
+                left: 12px;
+                width: 280px;
+            }
+
+            .main-content {
+                gap: 12px;
+            }
+
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .desktop-icon {
+                width: 60px;
+            }
+
+            .desktop-icon-img {
+                width: 44px;
+                height: 44px;
+            }
+
+            .window {
+                /* Fullscreen на мобильных */
+            }
+
+            .settings-layout {
+                flex-direction: column;
+            }
+
+            .settings-sidebar {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .settings-sidebar-item {
+                white-space: nowrap;
+            }
+
+            .browser-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .browser-address-bar {
+                font-size: 14px;
+            }
+
+            .rustore-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .files-sidebar {
+                width: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-panel .dock {
+                gap: 8px;
+                padding: 4px 8px;
+            }
+
+            .top-panel .dock .icon-img {
+                width: 32px;
+                height: 32px;
+            }
+
+            .top-panel .datetime-panel {
+                padding: 4px 8px;
+            }
+
+            .top-panel .time-panel {
+                font-size: 12px;
+            }
+
+            .top-panel .date-panel {
+                display: none;
+            }
+
+            .calc-btn {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .calendar-day {
+                padding: 6px 3px;
+                font-size: 12px;
+            }
+
+            .files-sidebar {
+                width: 120px;
+            }
+
+            .files-sidebar-item {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+        }
