@@ -983,12 +983,12 @@ function updateLanguage() {
 
     function loadDesktopIcons() {
         desktopIcons.innerHTML = '';
-        // Добавляем все предустановленные приложения
-        preinstalledApps.forEach(app => addDesktopIcon(app.name, app.url, app.icon));
+        // Добавляем все предустановленные приложения с правильными параметрами
+        preinstalledApps.forEach(app => addDesktopIcon(app.name, app.url, app.icon, app.isPlayer || false));
         // Добавляем пользовательские
         installedApps.forEach(app => {
             if (!preinstalledApps.some(p => p.url === app.url)) {
-                addDesktopIcon(app.name, app.url, app.icon);
+                addDesktopIcon(app.name, app.url, app.icon, app.isPlayer || false);
             }
         });
     }
