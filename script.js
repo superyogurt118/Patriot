@@ -721,6 +721,11 @@
                                 name: 'Гимн РФ.mp3', 
                                 type: 'file', 
                                 content: 'sounds/gimn.mp3' 
+                            },
+                            'Я Русский — Шаман.mp3': { 
+                                name: 'Я Русский — Шаман.mp3', 
+                                type: 'file', 
+                                content: 'sounds/yarusskiy.mp3' 
                             }
                         } 
                     }
