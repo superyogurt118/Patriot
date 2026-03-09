@@ -944,20 +944,50 @@
         });
     });
 
-    // Заполнение списков языков и часовых поясов из настроек (копируем из первоначальных)
-    function populateSettingsLangTimezone() {
-        // Языки
-        const langOptions = setupLang.innerHTML;
-        settingsLangSelect.innerHTML = langOptions;
-        // Часовые пояса
-        const tzOptions = setupTz.innerHTML;
-        settingsTzSelect.innerHTML = tzOptions;
+// Заполнение списков языков и часовых поясов
+function populateSettingsLangTimezone() {
+    // Языки
+    const languages = [
+        { value: 'ru', text: 'Русский' },
+        { value: 'be', text: 'Белорусский' },
+        { value: 'ba', text: 'Башкирский' },
+        { value: 'sah', text: 'Якутский' },
+        { value: 'tt', text: 'Татарский' },
+        { value: 'kpy', text: 'Корякский' }
+    ];
+    
+    let langHtml = '';
+    languages.forEach(lang => {
+        langHtml += `<option value="${lang.value}">${lang.text}</option>`;
+    });
+    settingsLangSelect.innerHTML = langHtml;
 
-        // Если есть сохранённые, установить их
-        const saved = JSON.parse(localStorage.getItem('patriotSetup') || '{}');
-        if (saved.language) settingsLangSelect.value = saved.language;
-        if (saved.timezone) settingsTzSelect.value = saved.timezone;
-    }
+    // Часовые пояса
+    const timezones = [
+        { value: 'Europe/Kaliningrad', text: 'Калининград (MSK-1)' },
+        { value: 'Europe/Moscow', text: 'Москва (MSK)' },
+        { value: 'Europe/Samara', text: 'Самара (MSK+1)' },
+        { value: 'Asia/Yekaterinburg', text: 'Екатеринбург (MSK+2)' },
+        { value: 'Asia/Omsk', text: 'Омск (MSK+3)' },
+        { value: 'Asia/Krasnoyarsk', text: 'Красноярск (MSK+4)' },
+        { value: 'Asia/Irkutsk', text: 'Иркутск (MSK+5)' },
+        { value: 'Asia/Yakutsk', text: 'Якутск (MSK+6)' },
+        { value: 'Asia/Vladivostok', text: 'Владивосток (MSK+7)' },
+        { value: 'Asia/Magadan', text: 'Магадан (MSK+8)' },
+        { value: 'Asia/Kamchatka', text: 'Камчатка (MSK+9)' }
+    ];
+    
+    let tzHtml = '';
+    timezones.forEach(tz => {
+        tzHtml += `<option value="${tz.value}">${tz.text}</option>`;
+    });
+    settingsTzSelect.innerHTML = tzHtml;
+
+    // Если есть сохранённые, установить их
+    const saved = JSON.parse(localStorage.getItem('patriotSetup') || '{}');
+    if (saved.language) settingsLangSelect.value = saved.language;
+    if (saved.timezone) settingsTzSelect.value = saved.timezone;
+}
 
     document.getElementById('save-langtime').addEventListener('click', () => {
         const language = settingsLangSelect.value;
