@@ -568,7 +568,7 @@
                 <div class="rustore-item ${isInstalled ? 'installed' : ''}" data-app='${JSON.stringify(app)}'>
                     <div class="rustore-item-icon" style="background-image: url('${app.icon}');"></div>
                     <div class="rustore-item-name">${app.name}</div>
-                    <div class="rustore-item-url">${app.url}</div>
+                    <div class="rustore-item-url">${app.isPlayer ? '🎵 Плеер' : app.url}</div>
                     <div class="installed-badge">✓ Установлено</div>
                 </div>
             `;
@@ -580,7 +580,7 @@
             
             item.addEventListener('click', () => {
                 if (!installedApps.some(a => a.url === app.url)) {
-                    installApp(app.name, app.url, app.icon);
+                    installApp(app.name, app.url, app.icon, app.isPlayer || false);
                 } else {
                     alert(`✅ ${app.name} уже установлено`);
                 }
@@ -589,7 +589,7 @@
             item.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 if (!installedApps.some(a => a.url === app.url)) {
-                    installApp(app.name, app.url, app.icon);
+                    installApp(app.name, app.url, app.icon, app.isPlayer || false);
                 } else {
                     alert(`✅ ${app.name} уже установлено`);
                 }
@@ -597,33 +597,46 @@
         });
     }
 
-    window.installApp = function(name, url, icon) {
+    window.installApp = function(name, url, icon, isPlayer = false) {
         if (installedApps.some(a => a.url === url)) {
             alert('Приложение уже установлено!');
             return;
         }
-        installedApps.push({ name, url, icon });
+        installedApps.push({ name, url, icon, isPlayer });
         localStorage.setItem('patriotApps', JSON.stringify(installedApps));
-        addDesktopIcon(name, url, icon);
+        addDesktopIcon(name, url, icon, isPlayer);
         playUvedomlenie();
         renderRustore();
     };
 
-    function addDesktopIcon(name, url, icon) {
+    function addDesktopIcon(name, url, icon, isPlayer = false) {
         const el = document.createElement('div');
         el.className = 'desktop-icon';
         el.setAttribute('data-url', url);
         
-        el.addEventListener('click', () => {
-            openWin('browser-window');
-            showSite(url);
-        });
-        
-        el.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            openWin('browser-window');
-            showSite(url);
-        }, { passive: false });
+        if (isPlayer) {
+            // Для плеера
+            el.addEventListener('click', () => {
+                openWin('rusmusic-window');
+            });
+            
+            el.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                openWin('rusmusic-window');
+            }, { passive: false });
+        } else {
+            // Для обычных сайтов
+            el.addEventListener('click', () => {
+                openWin('browser-window');
+                showSite(url);
+            });
+            
+            el.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                openWin('browser-window');
+                showSite(url);
+            }, { passive: false });
+        }
         
         el.innerHTML = `
             <div class="desktop-icon-img" style="background-image: url('${icon}');"></div>
@@ -1093,6 +1106,7 @@ function populateSettingsLangTimezone() {
     window.addEventListener('load', () => {
         renderFiles('root');
         renderRustore();
+        setupMusicPlayer();
         loadDesktopIcons();
         renderCalendar(new Date());
         renderStartMenu();
