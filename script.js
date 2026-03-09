@@ -555,7 +555,7 @@
         { name: 'RuTube', url: 'rutube.ru', icon: 'images/rutube.png' },
         { name: 'MAX', url: 'web.max.ru', icon: 'images/max.jpg' },
         { name: 'Госуслуги', url: 'gosuslugi.ru', icon: 'images/gosuslugi.jpg' },
-        { name: 'VK Музыка', url: 'vk.com/audio', icon: 'images/VKmusica.png' }
+        { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isPlayer: true }
     ];
 
     let installedApps = JSON.parse(localStorage.getItem('patriotApps')) || [];
