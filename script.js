@@ -17,31 +17,6 @@
     document.addEventListener('gesturechange', (e) => e.preventDefault());
     document.addEventListener('gestureend', (e) => e.preventDefault());
 
-    // ========== ПЕРВОНАЧАЛЬНАЯ НАСТРОЙКА ==========
-    const setupScreen = document.getElementById('setup-screen');
-    const setupLang = document.getElementById('setup-language');
-    const setupTz = document.getElementById('setup-timezone');
-    const setupSave = document.getElementById('setup-save');
-
-    // Проверяем, есть ли уже настройки
-    if (!localStorage.getItem('patriotSetup')) {
-        setupScreen.classList.remove('hidden');
-    } else {
-        setupScreen.classList.add('hidden');
-    }
-
-    setupSave.addEventListener('click', () => {
-        const language = setupLang.value;
-        const timezone = setupTz.value;
-        // Сохраняем
-        localStorage.setItem('patriotSetup', JSON.stringify({ language, timezone }));
-        setupScreen.classList.add('hidden');
-        // Применяем язык (пока просто заглушка)
-        alert(`Выбран язык: ${setupLang.selectedOptions[0].text}, часовой пояс: ${setupTz.selectedOptions[0].text}`);
-        // Можно обновить интерфейс, но для демо достаточно
-        location.reload(); // Перезагрузим, чтобы применить
-    });
-
     // ========== ВХОД ПО КНОПКЕ ==========
     const loginBtn = document.getElementById('login-btn');
     const lockScreen = document.getElementById('lock-screen');
