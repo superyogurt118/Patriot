@@ -615,8 +615,9 @@
         el.setAttribute('data-url', url);
         
         if (isPlayer) {
-            // Для плеера
-            el.addEventListener('click', () => {
+            // Для плеера — открываем окно музыки
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
                 openWin('rusmusic-window');
             });
             
@@ -625,14 +626,24 @@
                 openWin('rusmusic-window');
             }, { passive: false });
         } else {
-            // Для обычных сайтов
-            el.addEventListener('click', () => {
+            // Для обычных сайтов — проверяем, не решётка ли это
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (url === '#' || url === '') {
+                    // Если ссылка пустая или решётка — ничего не делаем или показываем сообщение
+                    alert('Это приложение не поддерживает браузер');
+                    return;
+                }
                 openWin('browser-window');
                 showSite(url);
             });
             
             el.addEventListener('touchstart', (e) => {
                 e.preventDefault();
+                if (url === '#' || url === '') {
+                    alert('Это приложение не поддерживает браузер');
+                    return;
+                }
                 openWin('browser-window');
                 showSite(url);
             }, { passive: false });
