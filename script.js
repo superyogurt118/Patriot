@@ -226,12 +226,9 @@
     // Заполнение меню приложениями
     function renderStartMenu() {
         const apps = [
-            { name: 'Счётчик', icon: '🔢', windowId: 'calc-window' },
-            { name: 'Браузер', icon: '🌐', windowId: 'browser-window' },
-            { name: 'RuStore', icon: '📦', windowId: 'rustore-window' },
+            { name: 'Магазин приложений', icon: '📦', windowId: 'rustore-window' },
             { name: 'Настройки', icon: '⚙️', windowId: 'settings-window' },
             { name: 'Документы', icon: '📁', windowId: 'files-window' },
-            { name: 'Календарь', icon: '📅', windowId: 'calendar-window' }
         ];
 
         let html = '';
@@ -438,7 +435,7 @@
 
     let history = [];
     let currentHistoryIndex = -1;
-    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru', '.рф', '.github.io', 'timoshamoscow.github.io'];
+    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru', '.рф'];
 
     function showHome() {
         browserFrame.style.display = 'none';
@@ -558,9 +555,6 @@
         { name: 'RuTube', url: 'rutube.ru', icon: 'images/rutube.png' },
         { name: 'MAX', url: 'web.max.ru', icon: 'images/max.jpg' },
         { name: 'Госуслуги', url: 'gosuslugi.ru', icon: 'images/gosuslugi.jpg' },
-        { name: 'Сбербанк', url: 'sberbank.ru', icon: 'images/sber.jpg' },
-        { name: 'ДваГИС', url: '2gis.ru', icon: 'images/2gis.png' },
-        { name: 'Почта Mail.ru', url: 'mail.ru', icon: 'images/mailru.png' },
         { name: 'VK Музыка', url: 'vk.com/audio', icon: 'images/VKmusica.png' }
     ];
 
