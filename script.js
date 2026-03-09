@@ -1438,6 +1438,17 @@ function populateSettingsLangTimezone() {
         });
     }
 
+// ========== ПРИМЕНЕНИЕ ЯЗЫКА ==========
+document.getElementById('apply-language')?.addEventListener('click', () => {
+    const selected = document.querySelector('input[name="system-language"]:checked');
+    if (selected) {
+        currentLang = selected.value;
+        updateLanguage();
+        alert(__(currentLang === 'ru' ? 'Язык изменен на русский' : 'Мова зменена на беларускую'));
+        playUvedomlenie();
+    }
+});
+
     // ========== ЗАПУСК ==========
     window.addEventListener('load', () => {
         renderFiles('root');
