@@ -227,6 +227,7 @@
                                 <select id="settings-language" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;">
                                     <!-- Заполнится JS -->
                                 </select>
+                                <p style="color: var(--red); font-size: 12px;">Иностранные языки приведут к блокировке!</p>
                                 <h3 style="margin: 0 0 10px;">Часовой пояс</h3>
                                 <select id="settings-timezone" style="width:100%; padding:10px; border-radius:8px;">
                                     <!-- Заполнится JS -->
@@ -249,6 +250,12 @@
                                     <div class="wallpaper-option" data-wallpaper="bereza">
                                         <img src="wallpapers/bereza.png" alt="Берёза" style="width: 100%; border-radius: 8px; cursor: pointer;">
                                     </div>
+                                    <div class="wallpaper-option" data-wallpaper="kreml">
+                                        <img src="wallpapers/kreml.png" alt="Кремль" style="width: 100%; border-radius: 8px; cursor: pointer;">
+                                    </div>
+                                    <div class="wallpaper-option" data-wallpaper="prostory">
+                                        <img src="wallpapers/prostory.png" alt="Просторы России" style="width: 100%; border-radius: 8px; cursor: pointer;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -261,10 +268,6 @@
                                     <span>Гимн РФ</span>
                                     <button class="sound-btn" id="play-gimn">▶</button>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span>Уведомление</span>
-                                    <button class="sound-btn" id="play-uved">▶</button>
-                                </div>
                             </div>
                         </div>
 
@@ -275,7 +278,6 @@
                                 <p><strong>Версия:</strong> 0.6.2</p>
                                 <p><strong>Безопасность:</strong> Активна ✓</p>
                                 <p><strong>Язык:</strong> Русский (Системный)</p>
-                                <p style="color: var(--red); font-size: 12px;">Английский/Украинский — блокировка</p>
                                 <button class="btn-blue" id="check-updates">Проверить обновления</button>
                                 <button class="btn-blue" style="background: var(--red); margin-top: 10px;" id="clear-data">Очистить все данные</button>
                             </div>
