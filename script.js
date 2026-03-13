@@ -1015,9 +1015,9 @@ document.querySelectorAll('.browser-settings-tab').forEach(tab => {
 const extensions = [
     { name: 'АнтиVPN', desc: 'Блокирует VPN и прокси', icon: '🛡️', installed: false },
     { name: 'Патриотичный фон', desc: 'Триколор на всех сайтах', icon: '🇷🇺', installed: false },
-    { name: 'Защита от иностранщины', desc: 'Блокирует англицизмы', icon: '⚔️', installed: false },
+    { name: 'Защита от деструктивного контента', desc: 'Блокирует англицизмы', icon: '⚔️', installed: false },
     { name: 'Госуслуги помощник', desc: 'Быстрый доступ', icon: '📋', installed: false },
-    { name: 'РКН страж', desc: 'Проверка сайтов', icon: '👁️', installed: true }
+    { name: 'Роскомнадзор помощник', desc: 'Проверка сайтов', icon: '👁️', installed: true }
 ];
 
 function renderExtensions() {
@@ -1079,8 +1079,6 @@ const desktopIcons = document.getElementById('desktop-icons');
 const preinstalledApps = [
     { name: 'ВКонтакте', url: 'vk.com', icon: 'images/vkontakte.png' },
     { name: 'Рувидео', url: '#', icon: 'images/rutube.png', isVideo: true },
-    { name: 'MAX', url: 'web.max.ru', icon: 'images/max.jpg' },
-    { name: 'Госуслуги', url: 'gosuslugi.ru', icon: 'images/gosuslugi.jpg' },
     { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isPlayer: true }
 ];
 
