@@ -1645,10 +1645,8 @@ function setupMusicPlayer() {
 
 // ========== ПЛЕЕР РУВИДЕО (YOUTUBE-LIKE) ==========
 const videos = [
-    { title: 'Гимн России', channel: 'Государственный канал', views: '1.2M', date: '1 год назад', duration: '3:30', src: 'videos/anthem.mp4', poster: 'videos/anthem_poster.jpg' },
-    { title: 'SHAMAN - Я русский', channel: 'SHAMAN', views: '5.4M', date: '2 года назад', duration: '3:45', src: 'videos/shaman.mp4', poster: 'videos/shaman_poster.jpg' },
-    { title: 'День Победы', channel: 'Лев Лещенко', views: '890K', date: '5 лет назад', duration: '4:15', src: 'videos/denpobedy.mp4', poster: 'videos/denpobedy_poster.jpg' },
-    { title: 'Священная война', channel: 'Хор им. Александрова', views: '2.1M', date: '3 года назад', duration: '3:50', src: 'videos/svyaschennaya.mp4', poster: 'videos/svyaschennaya_poster.jpg' }
+    { title: 'Гимн России', channel: 'Государственный канал', views: '1.2M', date: '7 лет назад', duration: '3:30', src: 'videos/anthem.mp4', poster: 'videos/anthem_poster.jpg' },
+    { title: 'SHAMAN - Я русский', channel: 'SHAMAN', views: '5.4M', date: '2 года назад', duration: '3:45', src: 'videos/shaman.mp4', poster: 'videos/shaman_poster.jpg' }
 ];
 
 function setupVideoPlayer() {
