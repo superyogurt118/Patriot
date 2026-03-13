@@ -97,6 +97,8 @@ const translations = {
         'only_russian': '⛔ Только российские ресурсы!',
         'yandex': 'Яндекс',
         'yandex_desc': 'Поисковая система №1 в России',
+        'browser_settings': 'Настройки браузера',
+        'browser_extensions': 'Магазин расширений',
         
         // RuStore
         'rustore_title': 'RuStore',
@@ -250,6 +252,8 @@ const translations = {
         'only_russian': '⛔ Толькі расійскія рэсурсы!',
         'yandex': 'Яндэкс',
         'yandex_desc': 'Пошукавая сістэма №1 у Расіі',
+        'browser_settings': 'Налады браўзэра',
+        'browser_extensions': 'Крама пашырэнняў',
         
         // RuStore
         'rustore_title': 'RuStore',
@@ -368,7 +372,9 @@ document.addEventListener('touchmove', (e) => {
 document.addEventListener('touchstart', (e) => {
     if (e.target.closest('.icon') || e.target.closest('.win-btn') || e.target.closest('.calc-btn') || 
         e.target.closest('.files-btn') || e.target.closest('.browser-nav-btn') || e.target.closest('.datetime-panel') || 
-        e.target.closest('.start-button') || e.target.closest('.start-app-item') || e.target.closest('.start-footer-item')) {
+        e.target.closest('.start-button') || e.target.closest('.start-app-item') || e.target.closest('.start-footer-item') ||
+        e.target.closest('.browser-card') || e.target.closest('.playlist-card') || e.target.closest('.yt-category') ||
+        e.target.closest('.yt-video-card')) {
         e.preventDefault();
     }
 }, { passive: false });
@@ -404,22 +410,19 @@ loginBtn.addEventListener('touchstart', (e) => {
 function updateDateTime() {
     const now = new Date();
     
-    // Время
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     document.getElementById('current-time').innerText = `${hours}:${minutes}`;
     document.getElementById('time-display').innerText = `${hours}:${minutes}`;
     
-    // Дата
     const months = [
-        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+        __('january_gen'), __('february_gen'), __('march_gen'), __('april_gen'), __('may_gen'), __('june_gen'),
+        __('july_gen'), __('august_gen'), __('september_gen'), __('october_gen'), __('november_gen'), __('december_gen')
     ];
     const day = now.getDate();
     const month = months[now.getMonth()];
     document.getElementById('current-date').innerText = `${day} ${month}`;
     
-    // Проверка на праздник
     const holiday = checkHoliday(now);
     const indicator = document.getElementById('holiday-indicator');
     if (holiday) {
@@ -427,11 +430,10 @@ function updateDateTime() {
         indicator.title = holiday;
     } else {
         indicator.innerText = '📅';
-        indicator.title = 'Нет праздника';
+        indicator.title = __('no_holiday');
     }
 }
 
-// Список праздников
 const holidays = [
     { month: 0, day: 1, name: 'Новый год' },
     { month: 0, day: 2, name: 'Новогодние каникулы' },
@@ -462,6 +464,10 @@ updateDateTime();
 
 // ========== ЗВУКИ ==========
 let gimnAudio = null, uvedAudio = null, vhodAudio = null;
+let currentPlayerAudio = null;
+let currentPlayBtn = null;
+let currentPlaylist = [];
+let currentTrackIndex = 0;
 
 function playGimn() {
     try {
@@ -524,7 +530,6 @@ document.querySelectorAll('.win-btn.close').forEach(btn => {
     }, { passive: false });
 });
 
-// Открытие окон по клику на иконку в доке
 document.querySelectorAll('.icon[data-window]').forEach(icon => {
     icon.addEventListener('click', (e) => {
         e.preventDefault();
@@ -537,7 +542,6 @@ document.querySelectorAll('.icon[data-window]').forEach(icon => {
     }, { passive: false });
 });
 
-// Открытие окон из меню «Пуск»
 document.querySelectorAll('.start-app-item, .start-footer-item[data-window]').forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
@@ -574,7 +578,6 @@ startButton.addEventListener('touchstart', (e) => {
     toggleStartMenu();
 }, { passive: false });
 
-// Закрытие меню при клике вне его
 document.addEventListener('click', (e) => {
     if (!startModal.classList.contains('hidden') && 
         !startModal.contains(e.target) && 
@@ -583,14 +586,14 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Заполнение меню приложениями
 function renderStartMenu() {
     const apps = [
         { name: 'Магазин приложений', icon: '📦', windowId: 'rustore-window' },
         { name: 'Настройки', icon: '⚙️', windowId: 'settings-window' },
         { name: 'Документы', icon: '📁', windowId: 'files-window' },
         { name: 'Румузыка', icon: '🎵', windowId: 'rusmusic-window' },
-        { name: 'Рувидео', icon: '📺', windowId: 'ruvideo-window' }
+        { name: 'Рувидео', icon: '📺', windowId: 'ruvideo-window' },
+        { name: 'Календарь', icon: '📅', windowId: 'calendar-window' }
     ];
 
     let html = '';
@@ -604,7 +607,6 @@ function renderStartMenu() {
     });
     startApps.innerHTML = html;
 
-    // Добавляем обработчики для новых элементов
     document.querySelectorAll('.start-app-item').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
@@ -621,7 +623,6 @@ function renderStartMenu() {
         }, { passive: false });
     });
 
-    // Поиск
     startSearch.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
         const items = document.querySelectorAll('.start-app-item');
@@ -664,8 +665,8 @@ function renderCalendar(date) {
     const month = date.getMonth();
     
     const monthNames = [
-        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+        __('january'), __('february'), __('march'), __('april'), __('may'), __('june'),
+        __('july'), __('august'), __('september'), __('october'), __('november'), __('december')
     ];
     calendarMonth.innerText = monthNames[month];
     calendarYear.innerText = year;
@@ -704,7 +705,7 @@ function renderCalendar(date) {
     });
     
     if (monthHolidaysList.length === 0) {
-        holidaysHtml = '<li>Нет праздников в этом месяце</li>';
+        holidaysHtml = `<li>${__('no_holidays')}</li>`;
     }
     
     monthHolidays.innerHTML = holidaysHtml;
@@ -712,7 +713,7 @@ function renderCalendar(date) {
     document.querySelectorAll('.calendar-day[data-date]').forEach(day => {
         day.addEventListener('click', () => {
             const date = day.dataset.date;
-            alert(`Выбрана дата: ${date}`);
+            alert(`${__('selected_date')}: ${date}`);
         });
     });
 }
@@ -788,10 +789,19 @@ const browserGo = document.getElementById('browser-go');
 const browserBack = document.getElementById('browser-back');
 const browserForward = document.getElementById('browser-forward');
 const browserRefresh = document.getElementById('browser-refresh');
+const browserSettingsBtn = document.getElementById('browser-settings-btn');
+const browserExtensionsBtn = document.getElementById('browser-extensions-btn');
+const browserSettingsPanel = document.getElementById('browser-settings-panel');
+const browserExtensionsPanel = document.getElementById('browser-extensions-panel');
+const browserSettingsClose = document.getElementById('browser-settings-close');
+const browserExtensionsClose = document.getElementById('browser-extensions-close');
+const browserSearchInput = document.getElementById('browser-search-input');
+const browserSearchBtn = document.getElementById('browser-search-btn');
+const browserOpenRustore = document.getElementById('browser-open-rustore');
 
 let history = [];
 let currentHistoryIndex = -1;
-const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', '.ru', '.рф', '#'];
+const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', 'rkn.gov.ru', 'web.max.ru', '.ru', '.рф', '#'];
 
 function showHome() {
     browserFrame.style.display = 'none';
@@ -880,6 +890,98 @@ browserRefresh.addEventListener('touchstart', (e) => {
     if (browserFrame.style.display !== 'none') browserFrame.src = browserFrame.src;
 }, { passive: false });
 
+// Карточки на главной
+document.querySelectorAll('.browser-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const url = card.dataset.url;
+        if (url) showSite(url);
+    });
+});
+
+// Поиск на главной
+browserSearchBtn?.addEventListener('click', () => {
+    const query = browserSearchInput.value.trim();
+    if (query) {
+        showSite(`yandex.ru/search/?text=${encodeURIComponent(query)}`);
+    }
+});
+
+// Открыть RuStore
+browserOpenRustore?.addEventListener('click', () => {
+    openWin('rustore-window');
+});
+
+// Настройки браузера
+browserSettingsBtn?.addEventListener('click', () => {
+    browserSettingsPanel.style.display = 'block';
+    browserExtensionsPanel.style.display = 'none';
+});
+
+browserSettingsClose?.addEventListener('click', () => {
+    browserSettingsPanel.style.display = 'none';
+});
+
+// Расширения браузера
+browserExtensionsBtn?.addEventListener('click', () => {
+    browserExtensionsPanel.style.display = 'block';
+    browserSettingsPanel.style.display = 'none';
+    renderExtensions();
+});
+
+browserExtensionsClose?.addEventListener('click', () => {
+    browserExtensionsPanel.style.display = 'none';
+});
+
+// Вкладки настроек браузера
+document.querySelectorAll('.browser-settings-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.browser-settings-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        document.querySelectorAll('.browser-settings-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`browser-settings-${tab.dataset.tab}`).classList.add('active');
+    });
+});
+
+// Расширения
+const extensions = [
+    { name: 'АнтиVPN', desc: 'Блокирует VPN и прокси', icon: '🛡️', installed: false },
+    { name: 'Патриотичный фон', desc: 'Триколор на всех сайтах', icon: '🇷🇺', installed: false },
+    { name: 'Защита от иностранщины', desc: 'Блокирует англицизмы', icon: '⚔️', installed: false },
+    { name: 'Госуслуги помощник', desc: 'Быстрый доступ', icon: '📋', installed: false },
+    { name: 'РКН страж', desc: 'Проверка сайтов', icon: '👁️', installed: true }
+];
+
+function renderExtensions() {
+    const grid = document.getElementById('extensions-grid');
+    if (!grid) return;
+    
+    let html = '';
+    extensions.forEach(ext => {
+        html += `
+            <div class="extension-card">
+                <div class="extension-icon">${ext.icon}</div>
+                <div class="extension-name">${ext.name}</div>
+                <div class="extension-desc">${ext.desc}</div>
+                <button class="extension-btn ${ext.installed ? 'installed' : ''}" data-ext="${ext.name}">
+                    ${ext.installed ? '✓ Установлено' : 'Установить'}
+                </button>
+            </div>
+        `;
+    });
+    grid.innerHTML = html;
+    
+    grid.querySelectorAll('.extension-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (!btn.classList.contains('installed')) {
+                btn.classList.add('installed');
+                btn.textContent = '✓ Установлено';
+                playUvedomlenie();
+            }
+        });
+    });
+}
+
 showHome();
 
 // ========== ОБОИ ==========
@@ -911,7 +1013,8 @@ const preinstalledApps = [
     { name: 'Рувидео', url: '#', icon: 'images/rutube.png', isVideo: true },
     { name: 'MAX', url: 'web.max.ru', icon: 'images/max.jpg' },
     { name: 'Госуслуги', url: 'gosuslugi.ru', icon: 'images/gosuslugi.jpg' },
-    { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isPlayer: true }
+    { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isPlayer: true },
+    { name: 'РКН', url: 'rkn.gov.ru', icon: 'images/rkn.png' }
 ];
 
 let installedApps = JSON.parse(localStorage.getItem('patriotApps')) || [];
@@ -1300,7 +1403,6 @@ const settingsSearch = document.getElementById('settings-search');
 const settingsLangSelect = document.getElementById('settings-language');
 const settingsTzSelect = document.getElementById('settings-timezone');
 
-// Переключение вкладок
 settingsSidebarItems.forEach(item => {
     item.addEventListener('click', () => {
         settingsSidebarItems.forEach(i => i.classList.remove('active'));
@@ -1315,7 +1417,6 @@ settingsSidebarItems.forEach(item => {
     });
 });
 
-// Поиск по настройкам
 settingsSearch.addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase();
     const activeTab = document.querySelector('.settings-tab:not(.hidden)');
@@ -1331,9 +1432,7 @@ settingsSearch.addEventListener('input', (e) => {
     });
 });
 
-// Заполнение списков языков и часовых поясов
 function populateSettingsLangTimezone() {
-    // Языки
     const languages = [
         { value: 'ru', text: 'Русский' },
         { value: 'be', text: 'Белорусский' },
@@ -1349,7 +1448,6 @@ function populateSettingsLangTimezone() {
     });
     settingsLangSelect.innerHTML = langHtml;
 
-    // Часовые пояса
     const timezones = [
         { value: 'Europe/Kaliningrad', text: 'Калининград (MSK-1)' },
         { value: 'Europe/Moscow', text: 'Москва (MSK)' },
@@ -1415,71 +1513,178 @@ document.getElementById('clear-data').addEventListener('touchstart', (e) => {
     }
 }, { passive: false });
 
-// ========== ПЛЕЕР РУМУЗЫКА ==========
-let currentPlayerAudio = null;
-let currentPlayBtn = null;
+// ========== ПЛЕЕР РУМУЗЫКА (SPOTIFY-LIKE) ==========
+const playlists = {
+    main: [
+        { title: 'Гимн РФ', artist: 'Государственный гимн', src: 'sounds/gimn.mp3', icon: '🇷🇺' },
+        { title: 'Я русский', artist: 'SHAMAN', src: 'sounds/yarusskiy.mp3', icon: '🎤' }
+    ],
+    patriotic: [
+        { title: 'Священная война', artist: 'Вставай, страна огромная', src: 'sounds/svyaschennaya.mp3', icon: '⚔️' },
+        { title: 'День Победы', artist: 'Лев Лещенко', src: 'sounds/denpobedy.mp3', icon: '🕊️' }
+    ],
+    classic: [
+        { title: 'Калинка', artist: 'Народная', src: 'sounds/kalinka.mp3', icon: '🎻' },
+        { title: 'Подмосковные вечера', artist: 'Соловьёв-Седой', src: 'sounds/podmoskovnie.mp3', icon: '🎼' }
+    ]
+};
 
 function setupMusicPlayer() {
-    document.querySelectorAll('.music-play-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const src = btn.dataset.src;
-            
-            if (currentPlayerAudio && currentPlayerAudio.src.includes(src)) {
-                if (!currentPlayerAudio.paused) {
-                    currentPlayerAudio.pause();
-                    btn.textContent = '▶';
-                } else {
-                    currentPlayerAudio.play();
-                    btn.textContent = '⏸';
-                }
-                return;
-            }
-            
-            if (currentPlayerAudio) {
-                currentPlayerAudio.pause();
-                if (currentPlayBtn) {
-                    currentPlayBtn.textContent = '▶';
-                }
-            }
-            
-            try {
-                currentPlayerAudio = new Audio(src);
-                currentPlayerAudio.volume = 0.5;
-                currentPlayerAudio.play().catch(() => {});
-                
-                btn.textContent = '⏸';
-                if (currentPlayBtn) {
-                    currentPlayBtn.textContent = '▶';
-                }
-                currentPlayBtn = btn;
-                
-                currentPlayerAudio.addEventListener('ended', () => {
-                    btn.textContent = '▶';
-                    currentPlayBtn = null;
-                    currentPlayerAudio = null;
-                });
-            } catch (e) {}
-        });
+    const playlistCards = document.querySelectorAll('.playlist-card');
+    const tracksContainer = document.getElementById('current-playlist-tracks');
+    const nowPlayingBar = document.getElementById('now-playing-bar');
+    const nowPlayingTitle = document.getElementById('now-playing-title');
+    const nowPlayingArtist = document.getElementById('now-playing-artist');
+    const playPauseBtn = document.getElementById('player-play-pause');
+    const prevBtn = document.getElementById('player-prev');
+    const nextBtn = document.getElementById('player-next');
+    
+    let currentPlaylist = [];
+    let currentTrackIndex = 0;
+    
+    function loadPlaylist(playlistId) {
+        currentPlaylist = playlists[playlistId] || [];
+        if (!tracksContainer) return;
         
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            btn.click();
-        }, { passive: false });
+        let html = '<h3 style="margin:20px 0 10px;">Треки</h3>';
+        currentPlaylist.forEach((track, index) => {
+            html += `
+                <div class="music-player-card" style="background: rgba(255,255,255,0.7); border-radius: 20px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer;" data-track="${index}">
+                    <div style="font-size: 32px;">${track.icon}</div>
+                    <div style="flex:1;">
+                        <div style="font-weight: 700;">${track.title}</div>
+                        <div style="font-size: 12px; opacity:0.7;">${track.artist}</div>
+                    </div>
+                    <button class="music-play-btn" data-src="${track.src}" style="background: var(--blue); color: white; border: none; width: 40px; height: 40px; border-radius: 20px; font-size: 20px; cursor: pointer;">▶</button>
+                </div>
+            `;
+        });
+        tracksContainer.innerHTML = html;
+        
+        // Добавляем обработчики для треков
+        tracksContainer.querySelectorAll('.music-player-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('music-play-btn')) {
+                    const btn = card.querySelector('.music-play-btn');
+                    if (btn) btn.click();
+                }
+            });
+        });
+    }
+    
+    playlistCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const playlist = card.dataset.playlist;
+            loadPlaylist(playlist);
+        });
     });
+    
+    // Обработчики для кнопок воспроизведения
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('music-play-btn')) {
+            e.preventDefault();
+            const src = e.target.dataset.src;
+            const card = e.target.closest('.music-player-card');
+            
+            if (card) {
+                const title = card.querySelector('div:nth-child(2) div:first-child')?.textContent;
+                const artist = card.querySelector('div:nth-child(2) div:last-child')?.textContent;
+                
+                if (currentPlayerAudio && currentPlayerAudio.src.includes(src)) {
+                    if (!currentPlayerAudio.paused) {
+                        currentPlayerAudio.pause();
+                        e.target.textContent = '▶';
+                    } else {
+                        currentPlayerAudio.play();
+                        e.target.textContent = '⏸';
+                    }
+                    return;
+                }
+                
+                if (currentPlayerAudio) {
+                    currentPlayerAudio.pause();
+                    if (currentPlayBtn) currentPlayBtn.textContent = '▶';
+                }
+                
+                try {
+                    currentPlayerAudio = new Audio(src);
+                    currentPlayerAudio.volume = 0.5;
+                    currentPlayerAudio.play();
+                    
+                    e.target.textContent = '⏸';
+                    if (currentPlayBtn) currentPlayBtn.textContent = '▶';
+                    currentPlayBtn = e.target;
+                    
+                    nowPlayingBar.style.display = 'flex';
+                    nowPlayingTitle.textContent = title || 'Гимн РФ';
+                    nowPlayingArtist.textContent = artist || 'Государственный гимн';
+                    
+                    currentPlayerAudio.addEventListener('ended', () => {
+                        e.target.textContent = '▶';
+                        currentPlayBtn = null;
+                        currentPlayerAudio = null;
+                        nowPlayingBar.style.display = 'none';
+                    });
+                } catch (err) {}
+            }
+        }
+    });
+    
+    playPauseBtn?.addEventListener('click', () => {
+        if (currentPlayerAudio) {
+            if (currentPlayerAudio.paused) {
+                currentPlayerAudio.play();
+                playPauseBtn.textContent = '⏸';
+                if (currentPlayBtn) currentPlayBtn.textContent = '⏸';
+            } else {
+                currentPlayerAudio.pause();
+                playPauseBtn.textContent = '▶';
+                if (currentPlayBtn) currentPlayBtn.textContent = '▶';
+            }
+        }
+    });
+    
+    // Загружаем главный плейлист по умолчанию
+    loadPlaylist('main');
 }
 
-// ========== ПЛЕЕР РУВИДЕО ==========
-const videoContainer = document.getElementById('video-player-container');
-const videoPlayer = document.getElementById('ruvideo-player');
-const videoCloseBtn = document.getElementById('video-player-close');
+// ========== ПЛЕЕР РУВИДЕО (YOUTUBE-LIKE) ==========
+const videos = [
+    { title: 'Гимн России', channel: 'Государственный канал', views: '1.2M', date: '1 год назад', duration: '3:30', src: 'videos/anthem.mp4', poster: 'videos/anthem_poster.jpg' },
+    { title: 'SHAMAN - Я русский', channel: 'SHAMAN', views: '5.4M', date: '2 года назад', duration: '3:45', src: 'videos/shaman.mp4', poster: 'videos/shaman_poster.jpg' },
+    { title: 'День Победы', channel: 'Лев Лещенко', views: '890K', date: '5 лет назад', duration: '4:15', src: 'videos/denpobedy.mp4', poster: 'videos/denpobedy_poster.jpg' },
+    { title: 'Священная война', channel: 'Хор им. Александрова', views: '2.1M', date: '3 года назад', duration: '3:50', src: 'videos/svyaschennaya.mp4', poster: 'videos/svyaschennaya_poster.jpg' }
+];
 
 function setupVideoPlayer() {
-    document.querySelectorAll('.video-play-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const src = btn.dataset.src;
-            const poster = btn.dataset.poster;
+    const videoGrid = document.getElementById('video-grid');
+    if (!videoGrid) return;
+    
+    let html = '';
+    videos.forEach(video => {
+        html += `
+            <div class="yt-video-card" data-src="${video.src}" data-poster="${video.poster}">
+                <div class="yt-thumbnail" style="background-image: url('${video.poster}');"></div>
+                <div class="yt-info">
+                    <div class="yt-title">${video.title}</div>
+                    <div class="yt-channel">${video.channel}</div>
+                    <div style="font-size: 11px; opacity:0.5;">${video.views} просмотров • ${video.date}</div>
+                </div>
+            </div>
+        `;
+    });
+    videoGrid.innerHTML = html;
+    
+    const videoContainer = document.getElementById('video-player-container');
+    const videoPlayer = document.getElementById('ruvideo-player');
+    const videoCloseBtn = document.getElementById('video-player-close');
+    
+    videoGrid.querySelectorAll('.yt-video-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const src = card.dataset.src;
+            const poster = card.dataset.poster;
+            
+            if (!videoContainer || !videoPlayer) return;
             
             videoContainer.style.display = 'block';
             videoPlayer.poster = poster;
@@ -1487,41 +1692,13 @@ function setupVideoPlayer() {
             videoPlayer.load();
             videoPlayer.play().catch(() => {});
         });
-        
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            btn.click();
-        }, { passive: false });
     });
-
+    
     videoCloseBtn?.addEventListener('click', () => {
         videoPlayer.pause();
         videoContainer.style.display = 'none';
         videoPlayer.querySelector('source').src = '';
         videoPlayer.load();
-    });
-}
-
-// ========== ПЕРЕКЛЮЧЕНИЕ ПЛЕЙЛИСТОВ ==========
-function setupPlaylists() {
-    document.querySelectorAll('.playlist-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.playlist-tab').forEach(t => {
-                t.style.background = 'rgba(0,0,0,0.1)';
-            });
-            tab.style.background = 'var(--blue)';
-            
-            const playlist = tab.dataset.playlist;
-            document.querySelectorAll('.playlist').forEach(p => {
-                p.classList.add('hidden');
-            });
-            document.getElementById(`playlist-${playlist}`).classList.remove('hidden');
-        });
-        
-        tab.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            tab.click();
-        }, { passive: false });
     });
 }
 
@@ -1542,7 +1719,6 @@ window.addEventListener('load', () => {
     renderRustore();
     setupMusicPlayer();
     setupVideoPlayer();
-    setupPlaylists();
     loadDesktopIcons();
     renderCalendar(new Date());
     renderStartMenu();
