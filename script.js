@@ -313,6 +313,18 @@ const translations = {
 
 let currentLang = localStorage.getItem('patriotLang') || 'ru';
 
+// ========== НАСТРОЙКИ БРАУЗЕРА ==========
+let browserSettings = JSON.parse(localStorage.getItem('browserSettings')) || {
+    homepage: 'yandex',
+    customUrl: '',
+    searchEngine: 'yandex',
+    vpnBlock: true,
+    foreignBlock: true,
+    theme: 'light',
+    fontSize: 14
+};
+
+
 function __(key) {
     return translations[currentLang][key] || key;
 }
@@ -805,6 +817,79 @@ function showHome() {
     browserAddress.value = 'yandex.ru';
 }
 
+function loadBrowserSettings() {
+    const homepageSelect = document.getElementById('browser-homepage');
+    const customUrlInput = document.getElementById('browser-custom-url');
+    const searchEngineSelect = document.getElementById('browser-search-engine');
+    const vpnBlockCheck = document.getElementById('browser-vpn-block');
+    const foreignBlockCheck = document.getElementById('browser-foreign-block');
+    
+    if (homepageSelect) homepageSelect.value = browserSettings.homepage;
+    if (customUrlInput) {
+        customUrlInput.value = browserSettings.customUrl || '';
+        customUrlInput.style.display = browserSettings.homepage === 'custom' ? 'block' : 'none';
+    }
+    if (searchEngineSelect) searchEngineSelect.value = browserSettings.searchEngine;
+    if (vpnBlockCheck) vpnBlockCheck.checked = browserSettings.vpnBlock;
+    if (foreignBlockCheck) foreignBlockCheck.checked = browserSettings.foreignBlock;
+    
+    // Применяем тему
+    applyBrowserTheme(browserSettings.theme);
+}
+
+function applyBrowserTheme(theme) {
+    const browserWindow = document.getElementById('browser-window');
+    if (!browserWindow) return;
+    
+    switch(theme) {
+        case 'dark':
+            browserWindow.style.background = '#1a1a1a';
+            browserWindow.style.color = 'white';
+            break;
+        case 'tricolor':
+            browserWindow.style.background = 'linear-gradient(135deg, #ffffff 0%, #0057b7 50%, #d52b1e 100%)';
+            break;
+        default:
+            browserWindow.style.background = '';
+            browserWindow.style.color = '';
+    }
+}
+
+function saveBrowserSettings() {
+    localStorage.setItem('browserSettings', JSON.stringify(browserSettings));
+}
+
+// Слушатели для элементов настроек
+document.getElementById('browser-homepage')?.addEventListener('change', (e) => {
+    browserSettings.homepage = e.target.value;
+    const customUrlInput = document.getElementById('browser-custom-url');
+    if (customUrlInput) {
+        customUrlInput.style.display = e.target.value === 'custom' ? 'block' : 'none';
+    }
+    saveBrowserSettings();
+});
+
+document.getElementById('browser-custom-url')?.addEventListener('input', (e) => {
+    browserSettings.customUrl = e.target.value;
+    saveBrowserSettings();
+});
+
+document.getElementById('browser-search-engine')?.addEventListener('change', (e) => {
+    browserSettings.searchEngine = e.target.value;
+    saveBrowserSettings();
+});
+
+document.getElementById('browser-vpn-block')?.addEventListener('change', (e) => {
+    browserSettings.vpnBlock = e.target.checked;
+    saveBrowserSettings();
+    alert(browserSettings.vpnBlock ? 'VPN блокировка включена' : 'VPN блокировка отключена (небезопасно!)');
+});
+
+document.getElementById('browser-foreign-block')?.addEventListener('change', (e) => {
+    browserSettings.foreignBlock = e.target.checked;
+    saveBrowserSettings();
+});
+
 function showSite(url) {
     let fullUrl = url;
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
@@ -892,14 +977,6 @@ document.querySelectorAll('.browser-card').forEach(card => {
         const url = card.dataset.url;
         if (url) showSite(url);
     });
-});
-
-// Поиск на главной
-browserSearchBtn?.addEventListener('click', () => {
-    const query = browserSearchInput.value.trim();
-    if (query) {
-        showSite(`yandex.ru/search/?text=${encodeURIComponent(query)}`);
-    }
 });
 
 // Открыть RuStore
@@ -1706,6 +1783,21 @@ document.getElementById('apply-language')?.addEventListener('click', () => {
     }
 });
 
+document.getElementById('browser-clear-history')?.addEventListener('click', () => {
+    history = [];
+    currentHistoryIndex = -1;
+    alert('История очищена');
+});
+
+document.getElementById('browser-clear-all')?.addEventListener('click', () => {
+    if (confirm('Очистить все данные браузера?')) {
+        history = [];
+        currentHistoryIndex = -1;
+        localStorage.removeItem('browserHistory');
+        alert('Все данные браузера очищены');
+    }
+});
+
 // ========== ЗАПУСК ==========
 window.addEventListener('load', () => {
     renderFiles('root');
@@ -1713,6 +1805,7 @@ window.addEventListener('load', () => {
     setupMusicPlayer();
     setupVideoPlayer();
     loadDesktopIcons();
+    loadBrowserSettings();
     renderCalendar(new Date());
     renderStartMenu();
     populateSettingsLangTimezone();
