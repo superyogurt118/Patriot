@@ -588,11 +588,8 @@ document.addEventListener('click', (e) => {
 
 function renderStartMenu() {
     const apps = [
-        { name: 'Магазин приложений', icon: '📦', windowId: 'rustore-window' },
         { name: 'Настройки', icon: '⚙️', windowId: 'settings-window' },
         { name: 'Документы', icon: '📁', windowId: 'files-window' },
-        { name: 'Румузыка', icon: '🎵', windowId: 'rusmusic-window' },
-        { name: 'Рувидео', icon: '📺', windowId: 'ruvideo-window' },
         { name: 'Календарь', icon: '📅', windowId: 'calendar-window' }
     ];
 
@@ -1013,8 +1010,7 @@ const preinstalledApps = [
     { name: 'Рувидео', url: '#', icon: 'images/rutube.png', isVideo: true },
     { name: 'MAX', url: 'web.max.ru', icon: 'images/max.jpg' },
     { name: 'Госуслуги', url: 'gosuslugi.ru', icon: 'images/gosuslugi.jpg' },
-    { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isPlayer: true },
-    { name: 'РКН', url: 'rkn.gov.ru', icon: 'images/rkn.png' }
+    { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isPlayer: true }
 ];
 
 let installedApps = JSON.parse(localStorage.getItem('patriotApps')) || [];
