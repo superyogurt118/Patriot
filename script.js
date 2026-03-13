@@ -979,11 +979,6 @@ document.querySelectorAll('.browser-card').forEach(card => {
     });
 });
 
-// Открыть RuStore
-browserOpenRustore?.addEventListener('click', () => {
-    openWin('rustore-window');
-});
-
 // Настройки браузера
 browserSettingsBtn?.addEventListener('click', () => {
     browserSettingsPanel.style.display = 'block';
