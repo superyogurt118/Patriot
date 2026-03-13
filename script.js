@@ -794,7 +794,6 @@ const browserSettingsClose = document.getElementById('browser-settings-close');
 const browserExtensionsClose = document.getElementById('browser-extensions-close');
 const browserSearchInput = document.getElementById('browser-search-input');
 const browserSearchBtn = document.getElementById('browser-search-btn');
-const browserOpenRustore = document.getElementById('browser-open-rustore');
 
 let history = [];
 let currentHistoryIndex = -1;
