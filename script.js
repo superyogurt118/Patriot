@@ -311,6 +311,69 @@ const translations = {
     }
 };
 
+// ========== РЕЖИМ ДИКТОРА ==========
+let dictorEnabled = localStorage.getItem('dictorEnabled') === 'true';
+let dictorMode = localStorage.getItem('dictorMode') || 'hover';
+let speechSynthesis = window.speechSynthesis;
+let currentUtterance = null;
+
+function speak(text) {
+    if (!dictorEnabled || !text) return;
+    
+    // Останавливаем предыдущую речь
+    if (currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = currentLang === 'ru' ? 'ru-RU' : 'be-BY';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    
+    currentUtterance = utterance;
+    speechSynthesis.speak(utterance);
+}
+
+// Обработчики в зависимости от режима
+if (dictorEnabled) {
+    if (dictorMode === 'hover') {
+        document.addEventListener('mouseover', (e) => {
+            const text = e.target.innerText || e.target.getAttribute('aria-label') || e.target.title;
+            if (text && text.length < 100) { // Не озвучивать длинные тексты
+                speak(text);
+            }
+        });
+    } else if (dictorMode === 'click') {
+        document.addEventListener('click', (e) => {
+            const text = e.target.innerText || e.target.getAttribute('aria-label') || e.target.title;
+            if (text) speak(text);
+        });
+    } else if (dictorMode === 'selection') {
+        document.addEventListener('mouseup', () => {
+            const selection = window.getSelection().toString();
+            if (selection) speak(selection);
+        });
+    }
+}
+
+// Сохранение настроек
+document.querySelectorAll('input[name="dictor-mode"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        dictorMode = e.target.value;
+        localStorage.setItem('dictorMode', dictorMode);
+    });
+});
+
+document.getElementById('test-dictor')?.addEventListener('click', () => {
+    speak('Тестовый режим диктора работает');
+});
+
+document.getElementById('disable-dictor')?.addEventListener('click', () => {
+    dictorEnabled = false;
+    localStorage.setItem('dictorEnabled', 'false');
+    alert('Режим диктора отключен');
+});
+
 let currentLang = localStorage.getItem('patriotLang') || 'ru';
 
 // ========== НАСТРОЙКИ БРАУЗЕРА ==========
@@ -1721,7 +1784,22 @@ const videos = [
 
 function setupVideoPlayer() {
     const videoGrid = document.getElementById('video-grid');
+    const videoOverlay = document.getElementById('video-player-overlay');
+    const videoPlayer = document.getElementById('ruvideo-player');
+    const videoCloseBtn = document.getElementById('video-player-overlay-close');
+
     if (!videoGrid) return;
+    
+    // Проверяем, есть ли видеофайлы
+    const videoFiles = videos.filter(video => {
+        // Проверяем существование файла (можно сделать через fetch HEAD)
+        return true; // временно
+    });
+    
+    if (videoFiles.length === 0) {
+        videoGrid.innerHTML = '<p style="text-align: center; padding: 40px;">🎬 Видео временно недоступны</p>';
+        return;
+    }
     
     let html = '';
     videos.forEach(video => {
@@ -1738,18 +1816,12 @@ function setupVideoPlayer() {
     });
     videoGrid.innerHTML = html;
     
-    const videoContainer = document.getElementById('video-player-container');
-    const videoPlayer = document.getElementById('ruvideo-player');
-    const videoCloseBtn = document.getElementById('video-player-close');
-    
     videoGrid.querySelectorAll('.yt-video-card').forEach(card => {
         card.addEventListener('click', () => {
             const src = card.dataset.src;
             const poster = card.dataset.poster;
             
-            if (!videoContainer || !videoPlayer) return;
-            
-            videoContainer.style.display = 'block';
+            videoOverlay.classList.remove('hidden');
             videoPlayer.poster = poster;
             videoPlayer.querySelector('source').src = src;
             videoPlayer.load();
@@ -1759,7 +1831,7 @@ function setupVideoPlayer() {
     
     videoCloseBtn?.addEventListener('click', () => {
         videoPlayer.pause();
-        videoContainer.style.display = 'none';
+        videoOverlay.classList.add('hidden');
         videoPlayer.querySelector('source').src = '';
         videoPlayer.load();
     });
