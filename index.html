@@ -62,7 +62,7 @@
             <!-- Панель с датой и временем -->
             <div class="datetime-panel tricolor-border" id="datetime-panel">
                 <div class="time-panel" id="current-time">12:00</div>
-                <div class="date-panel" id="current-date">10 марта</div>
+                <div class="date-panel" id="current-date">18 марта</div>
                 <div class="holiday-indicator" id="holiday-indicator">⭐</div>
             </div>
         </div>
@@ -98,23 +98,28 @@
             </div>
         </div>
 
-<!-- Выпадающий календарь -->
-<div id="calendar-dropdown" class="calendar-dropdown hidden">
-    <div class="calendar-dropdown-header">
-        <span class="calendar-month" id="dropdown-calendar-month">Март 2026</span>
-        <button id="calendar-dropdown-close">✖</button>
-    </div>
-    <div class="calendar-dropdown-weekdays">
-        <div data-i18n="monday">Пн</div><div data-i18n="tuesday">Вт</div><div data-i18n="wednesday">Ср</div>
-        <div data-i18n="thursday">Чт</div><div data-i18n="friday">Пт</div><div data-i18n="saturday">Сб</div><div data-i18n="sunday">Вс</div>
-    </div>
-    <div class="calendar-dropdown-days" id="dropdown-calendar-days"></div>
-    <div class="calendar-dropdown-footer">
-        <button id="calendar-dropdown-prev">←</button>
-        <button id="calendar-dropdown-today">Сегодня</button>
-        <button id="calendar-dropdown-next">→</button>
-    </div>
-</div>
+        <!-- Выпадающий календарь -->
+        <div id="calendar-dropdown" class="calendar-dropdown hidden">
+            <div class="calendar-dropdown-header">
+                <span class="calendar-month" id="dropdown-calendar-month">Март 2026</span>
+                <button id="calendar-dropdown-close" class="tricolor-btn">✖</button>
+            </div>
+            <div class="calendar-dropdown-weekdays">
+                <div data-i18n="monday" class="tricolor-text">Пн</div>
+                <div data-i18n="tuesday" class="tricolor-text">Вт</div>
+                <div data-i18n="wednesday" class="tricolor-text">Ср</div>
+                <div data-i18n="thursday" class="tricolor-text">Чт</div>
+                <div data-i18n="friday" class="tricolor-text">Пт</div>
+                <div data-i18n="saturday" class="tricolor-text">Сб</div>
+                <div data-i18n="sunday" class="tricolor-text">Вс</div>
+            </div>
+            <div class="calendar-dropdown-days" id="dropdown-calendar-days"></div>
+            <div class="calendar-dropdown-footer">
+                <button id="calendar-dropdown-prev" class="tricolor-btn">←</button>
+                <button id="calendar-dropdown-today" class="tricolor-btn">Сегодня</button>
+                <button id="calendar-dropdown-next" class="tricolor-btn">→</button>
+            </div>
+        </div>
 
         <div class="main-content">
             <!-- Иконки приложений на рабочем столе -->
@@ -202,13 +207,16 @@
                             </div>
                         </div>
                         
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button id="browser-open-rustore" class="btn-blue tricolor-btn">📦 Открыть RuStore</button>
+                        </div>
                     </div>
                     
                     <!-- Панель настроек браузера (скрыта) -->
                     <div id="browser-settings-panel" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 10; overflow-y: auto; padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <h3 data-i18n="browser_settings" class="tricolor-text">Настройки браузера</h3>
-                            <button id="browser-settings-close" style="background: none; border: none; font-size: 24px; cursor: pointer;">✖</button>
+                            <button id="browser-settings-close" class="tricolor-btn" style="background: var(--red); border: none; font-size: 20px; width: 30px; height: 30px; border-radius: 15px;">✖</button>
                         </div>
                         
                         <div class="browser-settings-tabs">
@@ -270,16 +278,16 @@
                         <div class="browser-settings-panel hidden" id="browser-settings-appearance">
                             <div class="settings-card tricolor-border">
                                 <h4 class="tricolor-text">Тема</h4>
-                                <select style="width:100%; padding:10px; border-radius:8px;">
-                                    <option>Светлая</option>
-                                    <option>Тёмная (патриотичная)</option>
-                                    <option>Триколор</option>
+                                <select id="browser-theme" style="width:100%; padding:10px; border-radius:8px;">
+                                    <option value="light">Светлая</option>
+                                    <option value="dark">Тёмная (патриотичная)</option>
+                                    <option value="tricolor">Триколор</option>
                                 </select>
                             </div>
                             
                             <div class="settings-card tricolor-border">
                                 <h4 class="tricolor-text">Размер шрифта</h4>
-                                <input type="range" min="12" max="20" value="14" style="width:100%;">
+                                <input type="range" id="browser-font-size" min="12" max="20" value="14" style="width:100%;">
                             </div>
                         </div>
                     </div>
@@ -288,7 +296,7 @@
                     <div id="browser-extensions-panel" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 10; overflow-y: auto; padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <h3 data-i18n="browser_extensions" class="tricolor-text">Магазин расширений</h3>
-                            <button id="browser-extensions-close" style="background: none; border: none; font-size: 24px; cursor: pointer;">✖</button>
+                            <button id="browser-extensions-close" class="tricolor-btn" style="background: var(--red); border: none; font-size: 20px; width: 30px; height: 30px; border-radius: 15px;">✖</button>
                         </div>
                         
                         <div class="extensions-grid" id="extensions-grid">
@@ -366,9 +374,9 @@
                         <div class="now-playing-artist" id="now-playing-artist">Государственный гимн</div>
                     </div>
                     <div class="now-playing-controls">
-                        <button class="control-btn" id="player-prev">⏮</button>
-                        <button class="control-btn" id="player-play-pause">⏸</button>
-                        <button class="control-btn" id="player-next">⏭</button>
+                        <button class="control-btn tricolor-btn" id="player-prev">⏮</button>
+                        <button class="control-btn tricolor-btn" id="player-play-pause">⏸</button>
+                        <button class="control-btn tricolor-btn" id="player-next">⏭</button>
                     </div>
                 </div>
             </div>
@@ -382,7 +390,7 @@
                     <button class="win-btn close" data-win="ruvideo-window" data-action="close" title="Закрыть"></button>
                 </div>
             </div>
-            <div class="window-content yt-like">
+            <div class="window-content yt-like" style="position: relative;">
                 <div class="yt-header">
                     <div style="font-size: 24px; font-weight: 700;" class="tricolor-text">📺 Рувидео</div>
                     <div style="flex:1;"></div>
@@ -406,16 +414,15 @@
                     <!-- Заполняется JS -->
                 </div>
 
-    <!-- Видеоплеер поверх -->
-    <div id="video-player-overlay" class="video-player-overlay hidden">
-        <div class="video-player-container">
-            <video id="ruvideo-player" controls style="width: 100%; max-height: 70vh; border-radius: 12px;" poster="">
-                <source src="" type="video/mp4">
-            </video>
-            <button id="video-player-overlay-close" style="position: absolute; top: 10px; right: 10px; background: var(--red); color: white; border: none; width: 40px; height: 40px; border-radius: 20px; cursor: pointer;">✖</button>
-        </div>
-    </div>
-
+                <!-- Видеоплеер поверх -->
+                <div id="video-player-overlay" class="video-player-overlay hidden">
+                    <div class="video-player-container">
+                        <video id="ruvideo-player" controls style="width: 100%; max-height: 70vh; border-radius: 12px;" poster="">
+                            <source src="" type="video/mp4">
+                        </video>
+                        <button id="video-player-overlay-close" class="tricolor-btn" style="position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 20px; font-size: 20px;">✖</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -451,8 +458,8 @@
                                 <h3 style="margin: 0 0 10px;" data-i18n="main_params" class="tricolor-text">Основные параметры</h3>
                                 <p data-i18n="main_desc">Здесь можно настроить общие параметры системы.</p>
                                 <label data-i18n="username" class="tricolor-text">Имя пользователя</label>
-                                <input type="text" value="Пользователь" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
-                                <button class="btn-blue tricolor-btn" data-i18n="save">Сохранить</button>
+                                <input type="text" id="username-input" value="Пользователь" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
+                                <button class="btn-blue tricolor-btn" id="save-username" data-i18n="save">Сохранить</button>
                             </div>
                         </div>
 
@@ -511,7 +518,7 @@
                                 <h3 style="margin: 0 0 10px;" data-i18n="sounds" class="tricolor-text">Звуки</h3>
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                     <span data-i18n="anthem" class="tricolor-text">Гимн РФ</span>
-                                    <button class="sound-btn" id="play-gimn" title="Воспроизвести">▶</button>
+                                    <button class="sound-btn tricolor-btn" id="play-gimn" title="Воспроизвести">▶</button>
                                 </div>
                             </div>
                         </div>
@@ -526,31 +533,31 @@
                                 <button class="btn-blue tricolor-btn" id="check-updates" data-i18n="check_updates">Проверить обновления</button>
                                 <button class="btn-blue tricolor-btn" style="background: var(--red); margin-top: 10px;" id="clear-data" data-i18n="clear_data">Очистить все данные</button>
                             </div>
-                        </div>
 
-<!-- Вкладка Система - добавить после информации -->
-<div class="settings-card">
-    <h3 style="margin: 0 0 10px;" data-i18n="dictor_mode">Режим диктора</h3>
-    <p data-i18n="dictor_desc">Озвучивает выделенный текст или элементы при наведении</p>
-    
-    <div style="margin: 15px 0;">
-        <label style="display: flex; align-items: center; gap: 10px;">
-            <input type="radio" name="dictor-mode" value="hover" checked> 
-            <span data-i18n="dictor_hover">При наведении</span>
-        </label>
-        <label style="display: flex; align-items: center; gap: 10px;">
-            <input type="radio" name="dictor-mode" value="click"> 
-            <span data-i18n="dictor_click">При клике</span>
-        </label>
-        <label style="display: flex; align-items: center; gap: 10px;">
-            <input type="radio" name="dictor-mode" value="selection"> 
-            <span data-i18n="dictor_selection">При выделении</span>
-        </label>
-    </div>
-    
-    <button class="btn-blue" id="test-dictor" data-i18n="test_dictor">Протестировать</button>
-    <button class="btn-blue" style="background: var(--red); margin-top: 10px;" id="disable-dictor" data-i18n="disable_dictor">Отключить</button>
-</div>
+                            <!-- Режим диктора -->
+                            <div class="settings-card tricolor-border" style="margin-top: 20px;">
+                                <h3 style="margin: 0 0 10px;" data-i18n="dictor_mode" class="tricolor-text">Режим диктора</h3>
+                                <p data-i18n="dictor_desc">Озвучивает выделенный текст или элементы при наведении</p>
+                                
+                                <div style="margin: 15px 0;">
+                                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                                        <input type="radio" name="dictor-mode" value="hover" checked> 
+                                        <span data-i18n="dictor_hover">При наведении</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                                        <input type="radio" name="dictor-mode" value="click"> 
+                                        <span data-i18n="dictor_click">При клике</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="radio" name="dictor-mode" value="selection"> 
+                                        <span data-i18n="dictor_selection">При выделении</span>
+                                    </label>
+                                </div>
+                                
+                                <button class="btn-blue tricolor-btn" id="test-dictor" data-i18n="test_dictor">Протестировать</button>
+                                <button class="btn-blue tricolor-btn" style="background: var(--red); margin-top: 10px;" id="disable-dictor" data-i18n="disable_dictor">Отключить</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -584,7 +591,7 @@
             </div>
         </div>
 
-        <!-- Окно календаря -->
+        <!-- Окно календаря (оставляем для совместимости) -->
         <div id="calendar-window" class="window hidden">
             <div class="window-header">
                 <span class="window-title tricolor-text" data-i18n="calendar">📅 Календарь праздников РФ</span>
@@ -594,23 +601,23 @@
             </div>
             <div class="window-content">
                 <div class="calendar-header">
-                    <button class="browser-nav-btn tricolor-btn" id="calendar-prev" title="Предыдущий месяц">←</button>
+                    <button class="browser-nav-btn tricolor-btn" id="calendar-prev-old" title="Предыдущий месяц">←</button>
                     <div>
-                        <span class="calendar-month" id="calendar-month">Март</span>
-                        <span class="calendar-year" id="calendar-year">2026</span>
+                        <span class="calendar-month" id="calendar-month-old">Март</span>
+                        <span class="calendar-year" id="calendar-year-old">2026</span>
                     </div>
-                    <button class="browser-nav-btn tricolor-btn" id="calendar-next" title="Следующий месяц">→</button>
+                    <button class="browser-nav-btn tricolor-btn" id="calendar-next-old" title="Следующий месяц">→</button>
                 </div>
                 
                 <div class="calendar-weekdays">
                     <div data-i18n="monday" class="tricolor-text">Пн</div><div data-i18n="tuesday" class="tricolor-text">Вт</div><div data-i18n="wednesday" class="tricolor-text">Ср</div><div data-i18n="thursday" class="tricolor-text">Чт</div><div data-i18n="friday" class="tricolor-text">Пт</div><div data-i18n="saturday" class="tricolor-text">Сб</div><div data-i18n="sunday" class="tricolor-text">Вс</div>
                 </div>
                 
-                <div class="calendar-days" id="calendar-days"></div>
+                <div class="calendar-days" id="calendar-days-old"></div>
                 
-                <div class="holiday-list" id="holiday-list">
+                <div class="holiday-list" id="holiday-list-old">
                     <h4 data-i18n="holidays_this_month" class="tricolor-text">Праздники в этом месяце:</h4>
-                    <ul id="month-holidays">
+                    <ul id="month-holidays-old">
                         <li>8 марта — Международный женский день</li>
                     </ul>
                 </div>

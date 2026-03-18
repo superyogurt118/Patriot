@@ -148,6 +148,15 @@ const translations = {
         'only_patriotic_videos': 'Смотрите только патриотические видео',
         'close_player': 'Закрыть плеер',
         
+        // Режим диктора
+        'dictor_mode': 'Режим диктора',
+        'dictor_desc': 'Озвучивает выделенный текст или элементы при наведении',
+        'dictor_hover': 'При наведении',
+        'dictor_click': 'При клике',
+        'dictor_selection': 'При выделении',
+        'test_dictor': 'Протестировать',
+        'disable_dictor': 'Отключить',
+        
         // Уведомления
         'no_updates': 'Обновлений нет. Вы используете самую патриотичную версию!',
         'clear_confirm': 'Очистить все данные? Это удалит все файлы и приложения.',
@@ -303,12 +312,38 @@ const translations = {
         'only_patriotic_videos': 'Глядзіце толькі патрыятычныя відэа',
         'close_player': 'Зачыніць плэер',
         
+        // Рэжым дыктара
+        'dictor_mode': 'Рэжым дыктара',
+        'dictor_desc': 'Азвучвае вылучаны тэкст або элементы пры навядзенні',
+        'dictor_hover': 'Пры навядзенні',
+        'dictor_click': 'Пры кліку',
+        'dictor_selection': 'Пры вылучэнні',
+        'test_dictor': 'Пратэставаць',
+        'disable_dictor': 'Адключыць',
+        
         // Абвесткі
         'no_updates': 'Абнаўленняў няма. Вы карыстаецеся самай патрыятычнай версіяй!',
         'clear_confirm': 'Ачысціць усе дадзеныя? Гэта выдаліць усе файлы і праграмы.',
         'data_cleared': 'Дадзеныя ачышчаны! Старонка будзе перазагружана.',
         'app_not_support': 'Гэта праграма не падтрымлівае браўзэр'
     }
+};
+
+let currentLang = localStorage.getItem('patriotLang') || 'ru';
+
+function __(key) {
+    return translations[currentLang][key] || key;
+}
+
+// ========== НАСТРОЙКИ БРАУЗЕРА ==========
+let browserSettings = JSON.parse(localStorage.getItem('browserSettings')) || {
+    homepage: 'yandex',
+    customUrl: '',
+    searchEngine: 'yandex',
+    vpnBlock: true,
+    foreignBlock: true,
+    theme: 'light',
+    fontSize: 14
 };
 
 // ========== РЕЖИМ ДИКТОРА ==========
@@ -320,7 +355,6 @@ let currentUtterance = null;
 function speak(text) {
     if (!dictorEnabled || !text) return;
     
-    // Останавливаем предыдущую речь
     if (currentUtterance) {
         speechSynthesis.cancel();
     }
@@ -334,12 +368,40 @@ function speak(text) {
     speechSynthesis.speak(utterance);
 }
 
-// Обработчики в зависимости от режима
+function updateDictorMode() {
+    const radios = document.querySelectorAll('input[name="dictor-mode"]');
+    radios.forEach(radio => {
+        if (radio.value === dictorMode) {
+            radio.checked = true;
+        }
+    });
+}
+
+// Сохранение настроек диктора
+document.querySelectorAll('input[name="dictor-mode"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        dictorMode = e.target.value;
+        localStorage.setItem('dictorMode', dictorMode);
+    });
+});
+
+document.getElementById('test-dictor')?.addEventListener('click', () => {
+    speak('Тестовый режим диктора работает');
+    alert('🔊 Тестовый режим диктора');
+});
+
+document.getElementById('disable-dictor')?.addEventListener('click', () => {
+    dictorEnabled = false;
+    localStorage.setItem('dictorEnabled', 'false');
+    alert('Режим диктора отключен');
+});
+
+// Применяем обработчики диктора при загрузке
 if (dictorEnabled) {
     if (dictorMode === 'hover') {
         document.addEventListener('mouseover', (e) => {
             const text = e.target.innerText || e.target.getAttribute('aria-label') || e.target.title;
-            if (text && text.length < 100) { // Не озвучивать длинные тексты
+            if (text && text.length < 100) {
                 speak(text);
             }
         });
@@ -356,42 +418,7 @@ if (dictorEnabled) {
     }
 }
 
-// Сохранение настроек
-document.querySelectorAll('input[name="dictor-mode"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        dictorMode = e.target.value;
-        localStorage.setItem('dictorMode', dictorMode);
-    });
-});
-
-document.getElementById('test-dictor')?.addEventListener('click', () => {
-    speak('Тестовый режим диктора работает');
-});
-
-document.getElementById('disable-dictor')?.addEventListener('click', () => {
-    dictorEnabled = false;
-    localStorage.setItem('dictorEnabled', 'false');
-    alert('Режим диктора отключен');
-});
-
-let currentLang = localStorage.getItem('patriotLang') || 'ru';
-
-// ========== НАСТРОЙКИ БРАУЗЕРА ==========
-let browserSettings = JSON.parse(localStorage.getItem('browserSettings')) || {
-    homepage: 'yandex',
-    customUrl: '',
-    searchEngine: 'yandex',
-    vpnBlock: true,
-    foreignBlock: true,
-    theme: 'light',
-    fontSize: 14
-};
-
-
-function __(key) {
-    return translations[currentLang][key] || key;
-}
-
+// ========== ОБНОВЛЕНИЕ ЯЗЫКА ==========
 function updateLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
@@ -403,7 +430,6 @@ function updateLanguage() {
         el.placeholder = __(key);
     });
 
-    // Обновляем заголовки окон
     const winTitles = {
         'calc-window': 'calculator',
         'browser-window': 'browser',
@@ -426,12 +452,14 @@ function updateLanguage() {
         }
     }
 
-    // Обновляем дату
     updateDateTime();
     
-    // Обновляем календарь
     if (typeof renderCalendar === 'function') {
         renderCalendar(currentDate);
+    }
+    
+    if (typeof renderDropdownCalendar === 'function') {
+        renderDropdownCalendar(currentDropdownDate || new Date());
     }
 
     localStorage.setItem('patriotLang', currentLang);
@@ -709,28 +737,110 @@ function renderStartMenu() {
     });
 }
 
-// ========== КАЛЕНДАРЬ ==========
+// ========== КАЛЕНДАРЬ (основной) ==========
 const datetimePanel = document.getElementById('datetime-panel');
-const calendarWindow = document.getElementById('calendar-window');
-const calendarDays = document.getElementById('calendar-days');
-const calendarMonth = document.getElementById('calendar-month');
-const calendarYear = document.getElementById('calendar-year');
-const monthHolidays = document.getElementById('month-holidays');
-const calendarPrev = document.getElementById('calendar-prev');
-const calendarNext = document.getElementById('calendar-next');
+const calendarDropdown = document.getElementById('calendar-dropdown');
+const dropdownCalendarDays = document.getElementById('dropdown-calendar-days');
+const dropdownCalendarMonth = document.getElementById('dropdown-calendar-month');
+const calendarDropdownClose = document.getElementById('calendar-dropdown-close');
+const calendarDropdownPrev = document.getElementById('calendar-dropdown-prev');
+const calendarDropdownNext = document.getElementById('calendar-dropdown-next');
+const calendarDropdownToday = document.getElementById('calendar-dropdown-today');
 
-let currentDate = new Date();
+let currentDropdownDate = new Date();
 
 datetimePanel.addEventListener('click', () => {
-    openWin('calendar-window');
-    renderCalendar(currentDate);
+    calendarDropdown.classList.toggle('hidden');
+    renderDropdownCalendar(currentDropdownDate);
 });
 
 datetimePanel.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    openWin('calendar-window');
-    renderCalendar(currentDate);
+    calendarDropdown.classList.toggle('hidden');
+    renderDropdownCalendar(currentDropdownDate);
 }, { passive: false });
+
+calendarDropdownClose?.addEventListener('click', () => {
+    calendarDropdown.classList.add('hidden');
+});
+
+// Закрытие календаря при клике вне его
+document.addEventListener('click', (e) => {
+    if (!calendarDropdown.classList.contains('hidden') && 
+        !calendarDropdown.contains(e.target) && 
+        !datetimePanel.contains(e.target)) {
+        calendarDropdown.classList.add('hidden');
+    }
+});
+
+function renderDropdownCalendar(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    
+    const monthNames = [
+        __('january'), __('february'), __('march'), __('april'), __('may'), __('june'),
+        __('july'), __('august'), __('september'), __('october'), __('november'), __('december')
+    ];
+    dropdownCalendarMonth.innerText = `${monthNames[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1);
+    let startDay = firstDay.getDay();
+    startDay = startDay === 0 ? 6 : startDay - 1;
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    let html = '';
+    for (let i = 0; i < startDay; i++) {
+        html += '<div class="calendar-day"></div>';
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
+        const holiday = holidays.find(h => h.month === month && h.day === d);
+        
+        let classes = 'calendar-day';
+        if (isToday) classes += ' today';
+        if (holiday) classes += ' holiday';
+        
+        html += `<div class="${classes}" data-date="${d}.${month+1}.${year}">${d}</div>`;
+    }
+
+    dropdownCalendarDays.innerHTML = html;
+
+    document.querySelectorAll('#dropdown-calendar-days .calendar-day[data-date]').forEach(day => {
+        day.addEventListener('click', () => {
+            const date = day.dataset.date;
+            alert(`${__('selected_date')}: ${date}`);
+            calendarDropdown.classList.add('hidden');
+        });
+    });
+}
+
+calendarDropdownPrev?.addEventListener('click', () => {
+    currentDropdownDate.setMonth(currentDropdownDate.getMonth() - 1);
+    renderDropdownCalendar(currentDropdownDate);
+});
+
+calendarDropdownNext?.addEventListener('click', () => {
+    currentDropdownDate.setMonth(currentDropdownDate.getMonth() + 1);
+    renderDropdownCalendar(currentDropdownDate);
+});
+
+calendarDropdownToday?.addEventListener('click', () => {
+    currentDropdownDate = new Date();
+    renderDropdownCalendar(currentDropdownDate);
+});
+
+// Старый календарь (для совместимости)
+const calendarDaysOld = document.getElementById('calendar-days-old');
+const calendarMonthOld = document.getElementById('calendar-month-old');
+const calendarYearOld = document.getElementById('calendar-year-old');
+const monthHolidaysOld = document.getElementById('month-holidays-old');
+const calendarPrevOld = document.getElementById('calendar-prev-old');
+const calendarNextOld = document.getElementById('calendar-next-old');
+
+let currentDate = new Date();
 
 function renderCalendar(date) {
     const year = date.getFullYear();
@@ -740,8 +850,8 @@ function renderCalendar(date) {
         __('january'), __('february'), __('march'), __('april'), __('may'), __('june'),
         __('july'), __('august'), __('september'), __('october'), __('november'), __('december')
     ];
-    calendarMonth.innerText = monthNames[month];
-    calendarYear.innerText = year;
+    if (calendarMonthOld) calendarMonthOld.innerText = monthNames[month];
+    if (calendarYearOld) calendarYearOld.innerText = year;
 
     const firstDay = new Date(year, month, 1);
     let startDay = firstDay.getDay();
@@ -767,7 +877,7 @@ function renderCalendar(date) {
         html += `<div class="${classes}" data-date="${dateStr}">${d}</div>`;
     }
 
-    calendarDays.innerHTML = html;
+    if (calendarDaysOld) calendarDaysOld.innerHTML = html;
 
     const monthHolidaysList = holidays.filter(h => h.month === month);
     let holidaysHtml = '';
@@ -780,9 +890,9 @@ function renderCalendar(date) {
         holidaysHtml = `<li>${__('no_holidays')}</li>`;
     }
     
-    monthHolidays.innerHTML = holidaysHtml;
+    if (monthHolidaysOld) monthHolidaysOld.innerHTML = holidaysHtml;
 
-    document.querySelectorAll('.calendar-day[data-date]').forEach(day => {
+    document.querySelectorAll('#calendar-days-old .calendar-day[data-date]').forEach(day => {
         day.addEventListener('click', () => {
             const date = day.dataset.date;
             alert(`${__('selected_date')}: ${date}`);
@@ -790,12 +900,12 @@ function renderCalendar(date) {
     });
 }
 
-calendarPrev.addEventListener('click', () => {
+calendarPrevOld?.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar(currentDate);
 });
 
-calendarNext.addEventListener('click', () => {
+calendarNextOld?.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar(currentDate);
 });
@@ -867,8 +977,7 @@ const browserSettingsPanel = document.getElementById('browser-settings-panel');
 const browserExtensionsPanel = document.getElementById('browser-extensions-panel');
 const browserSettingsClose = document.getElementById('browser-settings-close');
 const browserExtensionsClose = document.getElementById('browser-extensions-close');
-const browserSearchInput = document.getElementById('browser-search-input');
-const browserSearchBtn = document.getElementById('browser-search-btn');
+const browserOpenRustore = document.getElementById('browser-open-rustore');
 
 let history = [];
 let currentHistoryIndex = -1;
@@ -886,6 +995,8 @@ function loadBrowserSettings() {
     const searchEngineSelect = document.getElementById('browser-search-engine');
     const vpnBlockCheck = document.getElementById('browser-vpn-block');
     const foreignBlockCheck = document.getElementById('browser-foreign-block');
+    const themeSelect = document.getElementById('browser-theme');
+    const fontSizeInput = document.getElementById('browser-font-size');
     
     if (homepageSelect) homepageSelect.value = browserSettings.homepage;
     if (customUrlInput) {
@@ -895,9 +1006,11 @@ function loadBrowserSettings() {
     if (searchEngineSelect) searchEngineSelect.value = browserSettings.searchEngine;
     if (vpnBlockCheck) vpnBlockCheck.checked = browserSettings.vpnBlock;
     if (foreignBlockCheck) foreignBlockCheck.checked = browserSettings.foreignBlock;
+    if (themeSelect) themeSelect.value = browserSettings.theme;
+    if (fontSizeInput) fontSizeInput.value = browserSettings.fontSize;
     
-    // Применяем тему
     applyBrowserTheme(browserSettings.theme);
+    applyBrowserFontSize(browserSettings.fontSize);
 }
 
 function applyBrowserTheme(theme) {
@@ -918,11 +1031,17 @@ function applyBrowserTheme(theme) {
     }
 }
 
+function applyBrowserFontSize(size) {
+    const browserWindow = document.getElementById('browser-window');
+    if (browserWindow) {
+        browserWindow.style.fontSize = size + 'px';
+    }
+}
+
 function saveBrowserSettings() {
     localStorage.setItem('browserSettings', JSON.stringify(browserSettings));
 }
 
-// Слушатели для элементов настроек
 document.getElementById('browser-homepage')?.addEventListener('change', (e) => {
     browserSettings.homepage = e.target.value;
     const customUrlInput = document.getElementById('browser-custom-url');
@@ -953,6 +1072,18 @@ document.getElementById('browser-foreign-block')?.addEventListener('change', (e)
     saveBrowserSettings();
 });
 
+document.getElementById('browser-theme')?.addEventListener('change', (e) => {
+    browserSettings.theme = e.target.value;
+    applyBrowserTheme(browserSettings.theme);
+    saveBrowserSettings();
+});
+
+document.getElementById('browser-font-size')?.addEventListener('input', (e) => {
+    browserSettings.fontSize = parseInt(e.target.value);
+    applyBrowserFontSize(browserSettings.fontSize);
+    saveBrowserSettings();
+});
+
 function showSite(url) {
     let fullUrl = url;
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
@@ -961,7 +1092,7 @@ function showSite(url) {
     
     let isAllowed = allowedDomains.some(domain => fullUrl.includes(domain));
 
-    if (!isAllowed) {
+    if (!isAllowed && browserSettings.foreignBlock) {
         alert(__('only_russian'));
         showHome();
         return;
@@ -1034,7 +1165,6 @@ browserRefresh.addEventListener('touchstart', (e) => {
     if (browserFrame.style.display !== 'none') browserFrame.src = browserFrame.src;
 }, { passive: false });
 
-// Карточки на главной
 document.querySelectorAll('.browser-card').forEach(card => {
     card.addEventListener('click', () => {
         const url = card.dataset.url;
@@ -1042,17 +1172,20 @@ document.querySelectorAll('.browser-card').forEach(card => {
     });
 });
 
-// Настройки браузера
+browserOpenRustore?.addEventListener('click', () => {
+    openWin('rustore-window');
+});
+
 browserSettingsBtn?.addEventListener('click', () => {
     browserSettingsPanel.style.display = 'block';
     browserExtensionsPanel.style.display = 'none';
+    loadBrowserSettings();
 });
 
 browserSettingsClose?.addEventListener('click', () => {
     browserSettingsPanel.style.display = 'none';
 });
 
-// Расширения браузера
 browserExtensionsBtn?.addEventListener('click', () => {
     browserExtensionsPanel.style.display = 'block';
     browserSettingsPanel.style.display = 'none';
@@ -1063,7 +1196,6 @@ browserExtensionsClose?.addEventListener('click', () => {
     browserExtensionsPanel.style.display = 'none';
 });
 
-// Вкладки настроек браузера
 document.querySelectorAll('.browser-settings-tab').forEach(tab => {
     tab.addEventListener('click', () => {
         document.querySelectorAll('.browser-settings-tab').forEach(t => t.classList.remove('active'));
@@ -1074,7 +1206,6 @@ document.querySelectorAll('.browser-settings-tab').forEach(tab => {
     });
 });
 
-// Расширения
 const extensions = [
     { name: 'АнтиVPN', desc: 'Блокирует VPN и прокси', icon: '🛡️', installed: false },
     { name: 'Патриотичный фон', desc: 'Триколор на всех сайтах', icon: '🇷🇺', installed: false },
@@ -1524,7 +1655,7 @@ filesGrid.addEventListener('contextmenu', (e) => {
     }
 });
 
-// ========== НАСТРОЙКИ: боковое меню и поиск ==========
+// ========== НАСТРОЙКИ ==========
 const settingsSidebarItems = document.querySelectorAll('.settings-sidebar-item');
 const settingsTabs = document.querySelectorAll('.settings-tab');
 const settingsSearch = document.getElementById('settings-search');
@@ -1608,7 +1739,12 @@ document.getElementById('save-langtime').addEventListener('click', () => {
     alert(__('settings_saved'));
 });
 
-// ========== НАСТРОЙКИ: остальные кнопки ==========
+document.getElementById('save-username')?.addEventListener('click', () => {
+    const username = document.getElementById('username-input').value;
+    localStorage.setItem('username', username);
+    alert('Имя пользователя сохранено');
+});
+
 document.getElementById('play-gimn').addEventListener('click', playGimn);
 document.getElementById('play-gimn').addEventListener('touchstart', (e) => {
     e.preventDefault();
@@ -1641,7 +1777,22 @@ document.getElementById('clear-data').addEventListener('touchstart', (e) => {
     }
 }, { passive: false });
 
-// ========== ПЛЕЕР РУМУЗЫКА (SPOTIFY-LIKE) ==========
+document.getElementById('browser-clear-history')?.addEventListener('click', () => {
+    history = [];
+    currentHistoryIndex = -1;
+    alert('История очищена');
+});
+
+document.getElementById('browser-clear-all')?.addEventListener('click', () => {
+    if (confirm('Очистить все данные браузера?')) {
+        history = [];
+        currentHistoryIndex = -1;
+        localStorage.removeItem('browserHistory');
+        alert('Все данные браузера очищены');
+    }
+});
+
+// ========== ПЛЕЕР РУМУЗЫКА ==========
 const playlists = {
     main: [
         { title: 'Гимн РФ', artist: 'Государственный гимн', src: 'sounds/gimn.mp3', icon: '🇷🇺' },
@@ -1689,7 +1840,6 @@ function setupMusicPlayer() {
         });
         tracksContainer.innerHTML = html;
         
-        // Добавляем обработчики для треков
         tracksContainer.querySelectorAll('.music-player-card').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (!e.target.classList.contains('music-play-btn')) {
@@ -1707,7 +1857,6 @@ function setupMusicPlayer() {
         });
     });
     
-    // Обработчики для кнопок воспроизведения
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('music-play-btn')) {
             e.preventDefault();
@@ -1772,11 +1921,10 @@ function setupMusicPlayer() {
         }
     });
     
-    // Загружаем главный плейлист по умолчанию
     loadPlaylist('main');
 }
 
-// ========== ПЛЕЕР РУВИДЕО (YOUTUBE-LIKE) ==========
+// ========== ПЛЕЕР РУВИДЕО ==========
 const videos = [
     { title: 'Гимн России', channel: 'Государственный канал', views: '1.2M', date: '7 лет назад', duration: '3:30', src: 'videos/anthem.mp4', poster: 'videos/anthem_poster.jpg' },
     { title: 'SHAMAN - Я русский', channel: 'SHAMAN', views: '5.4M', date: '2 года назад', duration: '3:45', src: 'videos/shaman.mp4', poster: 'videos/shaman_poster.jpg' }
@@ -1789,17 +1937,6 @@ function setupVideoPlayer() {
     const videoCloseBtn = document.getElementById('video-player-overlay-close');
 
     if (!videoGrid) return;
-    
-    // Проверяем, есть ли видеофайлы
-    const videoFiles = videos.filter(video => {
-        // Проверяем существование файла (можно сделать через fetch HEAD)
-        return true; // временно
-    });
-    
-    if (videoFiles.length === 0) {
-        videoGrid.innerHTML = '<p style="text-align: center; padding: 40px;">🎬 Видео временно недоступны</p>';
-        return;
-    }
     
     let html = '';
     videos.forEach(video => {
@@ -1843,23 +1980,9 @@ document.getElementById('apply-language')?.addEventListener('click', () => {
     if (selected) {
         currentLang = selected.value;
         updateLanguage();
+        updateDictorMode();
         alert(currentLang === 'ru' ? 'Язык изменен на русский' : 'Мова зменена на беларускую');
         playUvedomlenie();
-    }
-});
-
-document.getElementById('browser-clear-history')?.addEventListener('click', () => {
-    history = [];
-    currentHistoryIndex = -1;
-    alert('История очищена');
-});
-
-document.getElementById('browser-clear-all')?.addEventListener('click', () => {
-    if (confirm('Очистить все данные браузера?')) {
-        history = [];
-        currentHistoryIndex = -1;
-        localStorage.removeItem('browserHistory');
-        alert('Все данные браузера очищены');
     }
 });
 
@@ -1872,7 +1995,16 @@ window.addEventListener('load', () => {
     loadDesktopIcons();
     loadBrowserSettings();
     renderCalendar(new Date());
+    renderDropdownCalendar(new Date());
     renderStartMenu();
     populateSettingsLangTimezone();
+    updateDictorMode();
+    
+    // Загружаем сохранённое имя пользователя
+    const savedUsername = localStorage.getItem('username');
+    if (savedUsername) {
+        document.getElementById('username-input').value = savedUsername;
+    }
+    
     setTimeout(playVhod, 500);
 });
