@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title data-i18n="system_title">PatriotOS — Система нового поколения</title>
+    <title>PatriotOS 1.0 — Время великих свершений</title>
     <link rel="icon" type="image/png" href="images/icon.png">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,615 +13,282 @@
     
     <!-- Экран блокировки -->
     <div id="lock-screen">
-        <div class="clock" id="time-display">
-            12:00
-        </div>
-
-        <button class="login-button tricolor-btn" id="login-btn">
-            <span data-i18n="login">Войти</span>
-            <span style="font-size: 24px;">▶️</span>
+        <div class="clock" id="lock-time">12:00</div>
+        <div class="date" id="lock-date">20 марта 2026</div>
+        <button class="login-btn" id="login-btn">
+            <span>Войти</span>
+            <span>→</span>
         </button>
-
-        <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 12px; font-weight: 600;" data-i18n="tap_to_enter">
-            Нажмите для входа
-        </p>
+        <div class="hint">нажмите для входа</div>
     </div>
 
     <!-- Рабочий стол -->
-    <div id="desktop" style="background-image: url('wallpapers/flag.png');">
-        <!-- Верхняя панель с кнопкой Пуск, доком и датой -->
-        <div class="top-panel">
-                <div class="start-button" id="start-button" data-i18n="start_button" title="Пуск">
-                    🪟
-                </div>
+    <div id="desktop">
+        
+        <!-- Панель задач -->
+        <div class="taskbar">
+            <div class="start-btn" id="start-btn">🪟</div>
 
-            <!-- Док (иконки приложений) без квадратов -->
-            <div class="dock tricolor-border">
-                <div class="icon" data-window="calc-window">
-                    <div class="icon-img" style="background-image: url('images/calculator.png');"></div>
-                    <span data-i18n="calculator">Счётчик</span>
-                </div>
-                <div class="icon" data-window="browser-window">
-                    <div class="icon-img" style="background-image: url('images/yandex.png');"></div>
-                    <span data-i18n="browser">Браузер</span>
-                </div>
-                <div class="icon" data-window="rustore-window">
-                    <div class="icon-img" style="background-image: url('images/rustore.png');"></div>
-                    <span data-i18n="rustore">RuStore</span>
-                </div>
-                <div class="icon" data-window="settings-window">
-                    <div class="icon-img" style="background-image: url('images/settings.png');"></div>
-                    <span data-i18n="settings">Настройки</span>
-                </div>
-                <div class="icon" data-window="files-window">
-                    <div class="icon-img" style="background-image: url('images/files.png');"></div>
-                    <span data-i18n="files">Документы</span>
-                </div>
+            <div class="dock">
+                <div class="dock-icon" data-window="calc-window" style="background-image: url('images/calculator.png');"></div>
+                <div class="dock-icon" data-window="browser-window" style="background-image: url('images/yandex.png');"></div>
+                <div class="dock-icon" data-window="rustore-window" style="background-image: url('images/rustore.png');"></div>
+                <div class="dock-icon" data-window="files-window" style="background-image: url('images/files.png');"></div>
+                <div class="dock-icon" data-window="settings-window" style="background-image: url('images/settings.png');"></div>
             </div>
 
-            <!-- Панель с датой и временем -->
-            <div class="datetime-panel tricolor-border" id="datetime-panel">
-                <div class="time-panel" id="current-time">12:00</div>
-                <div class="date-panel" id="current-date">18 марта</div>
-                <div class="holiday-indicator" id="holiday-indicator">⭐</div>
+            <div class="tray">
+                <div class="datetime" id="datetime-panel">
+                    <span id="current-time">12:00</span>
+                    <span id="current-date">18 марта</span>
+                </div>
+                <div class="holiday-badge" id="holiday-badge">📅</div>
             </div>
         </div>
 
-        <!-- Модальное окно Пуск -->
-        <div id="start-modal" class="start-modal hidden tricolor-border">
-            <div class="start-header">
-                <h2 data-i18n="os_name" class="tricolor-text">PatriotOS 0.8.0</h2>
-                <p data-i18n="slogan">Своих не бросаем. Чужих не пускаем</p>
-            </div>
-            
-            <div class="start-search">
-                <input type="text" data-i18n-placeholder="search_apps" placeholder="Поиск приложений..." id="start-search">
-            </div>
-            
-            <div class="start-apps" id="start-apps">
-                <!-- Приложения будут добавлены через JS -->
-            </div>
-            
-            <div class="start-footer">
-                <div class="start-footer-item" data-window="settings-window">
-                    <span>⚙️</span>
-                    <span data-i18n="settings">Настройки</span>
+        <!-- Меню Пуск -->
+        <div id="start-menu" class="start-menu hidden">
+            <div class="menu-header">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="username-display">Пользователь</div>
+                    <div class="user-status">Патриот Российской Федерации</div>
                 </div>
-                <div class="start-footer-item" data-window="calendar-window">
-                    <span>📅</span>
-                    <span data-i18n="calendar">Календарь</span>
-                </div>
-                <div class="start-footer-item" onclick="localStorage.clear(); alert('Данные очищены!'); location.reload();">
-                    <span>🗑️</span>
-                    <span data-i18n="reset">Сброс</span>
-                </div>
+            </div>
+            <div class="menu-search">
+                <input type="text" id="start-search" placeholder="Поиск приложений...">
+            </div>
+            <div class="menu-apps" id="start-apps"></div>
+            <div class="menu-footer">
+                <button class="menu-item" data-window="settings-window">⚙️ Настройки</button>
+                <button class="power-btn" id="power-off">⏻</button>
             </div>
         </div>
 
-        <!-- Выпадающий календарь -->
+        <!-- Календарь выпадающий -->
         <div id="calendar-dropdown" class="calendar-dropdown hidden">
-            <div class="calendar-dropdown-header">
-                <span class="calendar-month" id="dropdown-calendar-month">Март 2026</span>
-                <button id="calendar-dropdown-close" class="tricolor-btn">✖</button>
+            <div class="cal-header">
+                <span class="cal-month" id="dropdown-month">Март 2026</span>
+                <button class="cal-close" id="calendar-close">✖</button>
             </div>
-            <div class="calendar-dropdown-weekdays">
-                <div data-i18n="monday" class="tricolor-text">Пн</div>
-                <div data-i18n="tuesday" class="tricolor-text">Вт</div>
-                <div data-i18n="wednesday" class="tricolor-text">Ср</div>
-                <div data-i18n="thursday" class="tricolor-text">Чт</div>
-                <div data-i18n="friday" class="tricolor-text">Пт</div>
-                <div data-i18n="saturday" class="tricolor-text">Сб</div>
-                <div data-i18n="sunday" class="tricolor-text">Вс</div>
+            <div class="cal-weekdays">
+                <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
             </div>
-            <div class="calendar-dropdown-days" id="dropdown-calendar-days"></div>
-            <div class="calendar-dropdown-footer">
-                <button id="calendar-dropdown-prev" class="tricolor-btn">←</button>
-                <button id="calendar-dropdown-today" class="tricolor-btn">Сегодня</button>
-                <button id="calendar-dropdown-next" class="tricolor-btn">→</button>
+            <div class="cal-days" id="dropdown-days"></div>
+            <div class="cal-footer">
+                <button id="cal-prev">←</button>
+                <button id="cal-today">Сегодня</button>
+                <button id="cal-next">→</button>
             </div>
         </div>
 
-        <div class="main-content">
-            <!-- Иконки приложений на рабочем столе -->
-            <div class="desktop-icons" id="desktop-icons"></div>
-        </div>
+        <!-- Иконки рабочего стола -->
+        <div class="desktop-icons" id="desktop-icons"></div>
 
-        <!-- Окно калькулятора -->
+        <!-- ОКНА ПРИЛОЖЕНИЙ -->
+
+        <!-- Калькулятор -->
         <div id="calc-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="calculator">🔢 Счётчик</span>
+                <span class="window-title"><img src="images/calculator.png" alt="calc" style="width:24px; height:24px;"> Калькулятор</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="calc-window" data-action="close" title="Закрыть"></button>
+                    <button class="window-btn minimize" data-win="calc-window">−</button>
+                    <button class="window-btn maximize" data-win="calc-window">□</button>
+                    <button class="window-btn close" data-win="calc-window">✖</button>
                 </div>
             </div>
             <div class="window-content">
-                <div class="calc-display" id="calc-res">0</div>
+                <div class="calc-display" id="calc-display">0</div>
                 <div class="calc-grid">
-                    <button class="calc-btn clear tricolor-btn" data-calc="clear">C</button>
-                    <button class="calc-btn op tricolor-btn" data-calc="op">/</button>
-                    <button class="calc-btn op tricolor-btn" data-calc="op">*</button>
-                    <button class="calc-btn op tricolor-btn" data-calc="op">-</button>
+                    <button class="calc-btn" data-calc="clear">C</button>
+                    <button class="calc-btn operator" data-calc="op">/</button>
+                    <button class="calc-btn operator" data-calc="op">*</button>
+                    <button class="calc-btn operator" data-calc="op">-</button>
                     <button class="calc-btn" data-calc="num">7</button>
                     <button class="calc-btn" data-calc="num">8</button>
                     <button class="calc-btn" data-calc="num">9</button>
-                    <button class="calc-btn op tricolor-btn" style="grid-row: span 2; height: 100%;" data-calc="equals">=</button>
+                    <button class="calc-btn operator" data-calc="op">+</button>
                     <button class="calc-btn" data-calc="num">4</button>
                     <button class="calc-btn" data-calc="num">5</button>
                     <button class="calc-btn" data-calc="num">6</button>
+                    <button class="calc-btn equals" data-calc="equals">=</button>
                     <button class="calc-btn" data-calc="num">1</button>
                     <button class="calc-btn" data-calc="num">2</button>
                     <button class="calc-btn" data-calc="num">3</button>
-                    <button class="calc-btn op tricolor-btn" data-calc="op">+</button>
-                    <button class="calc-btn" style="grid-column: span 2;" data-calc="num">0</button>
+                    <button class="calc-btn zero" data-calc="num">0</button>
                     <button class="calc-btn" data-calc="num">.</button>
                 </div>
             </div>
         </div>
 
-        <!-- Окно браузера (обновлённое) -->
+        <!-- Браузер -->
         <div id="browser-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="browser">🌐 Браузер</span>
+                <span class="window-title"><img src="images/yandex.png" alt="browser" style="width:24px; height:24px;"> Браузер</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="browser-window" data-action="close" title="Закрыть"></button>
+                    <button class="window-btn minimize" data-win="browser-window">−</button>
+                    <button class="window-btn maximize" data-win="browser-window">□</button>
+                    <button class="window-btn close" data-win="browser-window">✖</button>
                 </div>
             </div>
-            <div style="flex:1; display: flex; flex-direction: column;">
-                <div class="browser-header">
-                    <div class="browser-nav-row">
-                        <button class="browser-nav-btn tricolor-btn" id="browser-back" title="Назад">←</button>
-                        <button class="browser-nav-btn tricolor-btn" id="browser-forward" title="Вперёд">→</button>
-                        <button class="browser-nav-btn tricolor-btn" id="browser-refresh" title="Обновить">↻</button>
-                        <input type="text" class="browser-address-bar" id="browser-address" data-i18n-placeholder="address_placeholder" placeholder="yandex.ru" value="yandex.ru">
-                        <button class="browser-nav-btn tricolor-btn" id="browser-go" data-i18n="go">▶</button>
-                        <button class="browser-nav-btn tricolor-btn" id="browser-settings-btn" title="Настройки браузера">⚙️</button>
-                        <button class="browser-nav-btn tricolor-btn" id="browser-extensions-btn" title="Расширения">🧩</button>
+            <div class="browser-toolbar">
+                <button class="browser-btn" id="browser-back">←</button>
+                <button class="browser-btn" id="browser-forward">→</button>
+                <button class="browser-btn" id="browser-refresh">↻</button>
+                <input type="text" class="browser-url" id="browser-url" value="yandex.ru">
+                <button class="browser-btn" id="browser-go">▶</button>
+                <button class="browser-btn" id="browser-settings">⚙️</button>
+            </div>
+            <div class="browser-content">
+                <iframe id="browser-frame" src="about:blank"></iframe>
+                <div id="browser-home" class="browser-home">
+                    <div class="yandex-search">
+                        <div class="yandex-logo">Я</div>
                     </div>
-                </div>
-                <div style="flex:1; position: relative;">
-                    <iframe id="browser-frame" src="about:blank"></iframe>
-                    
-                    <!-- Новая главная страница браузера -->
-                    <div class="browser-home" id="browser-home" style="display: flex; flex-direction: column; overflow-y: auto;">
-                        <div style="text-align: center; margin-bottom: 30px;">
-                            <div class="yandex-logo" style="font-size: 48px;">Я</div>
-                            <h2 style="margin: 10px 0 5px;" data-i18n="yandex" class="tricolor-text">Яндекс</h2>
-                            <p style="opacity: 0.7; margin-bottom: 20px;" data-i18n="yandex_desc">Браузерная система №1 в России</p>
-                        </div>
-                        
-                        <div class="browser-cards">
-                            <div class="browser-card tricolor-border" data-url="vk.com">
-                                <div class="card-icon">📱</div>
-                                <div class="card-title tricolor-text">ВКонтакте</div>
-                                <div class="card-url">vk.com</div>
-                            </div>
-                            <div class="browser-card tricolor-border" data-url="rkn.gov.ru">
-                                <div class="card-icon">⚖️</div>
-                                <div class="card-title tricolor-text">РКН</div>
-                                <div class="card-url">rkn.gov.ru</div>
-                            </div>
-                            <div class="browser-card tricolor-border" data-url="max.ru">
-                                <div class="card-icon">📺</div>
-                                <div class="card-title tricolor-text">MAX</div>
-                                <div class="card-url">max.ru</div>
-                            </div>
-                        </div>
-                        
-                        <div style="text-align: center; margin-top: 20px;">
-                            <button id="browser-open-rustore" class="btn-blue tricolor-btn">📦 Открыть RuStore</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Панель настроек браузера (скрыта) -->
-                    <div id="browser-settings-panel" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 10; overflow-y: auto; padding: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3 data-i18n="browser_settings" class="tricolor-text">Настройки браузера</h3>
-                            <button id="browser-settings-close" class="tricolor-btn" style="background: var(--red); border: none; font-size: 20px; width: 30px; height: 30px; border-radius: 15px;">✖</button>
-                        </div>
-                        
-                        <div class="browser-settings-tabs">
-                            <div class="browser-settings-tab active tricolor-btn" data-tab="general">Основные</div>
-                            <div class="browser-settings-tab tricolor-btn" data-tab="privacy">Приватность</div>
-                            <div class="browser-settings-tab tricolor-btn" data-tab="appearance">Внешний вид</div>
-                        </div>
-                        
-                        <div class="browser-settings-panel active" id="browser-settings-general">
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Стартовая страница</h4>
-                                <select id="browser-homepage" style="width:100%; padding:10px; border-radius:8px; margin:10px 0;">
-                                    <option value="yandex">Яндекс</option>
-                                    <option value="vk">ВКонтакте</option>
-                                    <option value="custom">Другая</option>
-                                </select>
-                                <input type="text" id="browser-custom-url" placeholder="https://..." style="width:100%; padding:10px; border-radius:8px; display:none;">
-                            </div>
-                            
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Поисковая система</h4>
-                                <select id="browser-search-engine" style="width:100%; padding:10px; border-radius:8px;">
-                                    <option value="yandex">Яндекс</option>
-                                    <option value="mail">Поиск Mail.ru</option>
-                                    <option value="sputnik">Спутник</option>
-                                </select>
-                            </div>
-                            
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Белый список сайтов</h4>
-                                <p style="font-size:12px; opacity:0.7;">Только российские домены разрешены</p>
-                                <button class="btn-blue tricolor-btn" id="browser-reset-whitelist">Сбросить к стандартному</button>
-                            </div>
-                        </div>
-                        
-                        <div class="browser-settings-panel hidden" id="browser-settings-privacy">
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Блокировка VPN</h4>
-                                <label style="display:flex; align-items:center; gap:10px;">
-                                    <input type="checkbox" id="browser-vpn-block" checked> Активна
-                                </label>
-                                <p style="font-size:12px; opacity:0.7;">Блокирует доступ через VPN и прокси</p>
-                            </div>
-                            
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Защита от иностранных сайтов</h4>
-                                <label style="display:flex; align-items:center; gap:10px;">
-                                    <input type="checkbox" id="browser-foreign-block" checked> Включена
-                                </label>
-                            </div>
-                            
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Очистить данные</h4>
-                                <button class="btn-blue tricolor-btn" id="browser-clear-history">Очистить историю</button>
-                                <button class="btn-blue tricolor-btn" style="margin-top:10px; background:var(--red);" id="browser-clear-all">Очистить всё</button>
-                            </div>
-                        </div>
-                        
-                        <div class="browser-settings-panel hidden" id="browser-settings-appearance">
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Тема</h4>
-                                <select id="browser-theme" style="width:100%; padding:10px; border-radius:8px;">
-                                    <option value="light">Светлая</option>
-                                    <option value="dark">Тёмная (патриотичная)</option>
-                                    <option value="tricolor">Триколор</option>
-                                </select>
-                            </div>
-                            
-                            <div class="settings-card tricolor-border">
-                                <h4 class="tricolor-text">Размер шрифта</h4>
-                                <input type="range" id="browser-font-size" min="12" max="20" value="14" style="width:100%;">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Панель расширений браузера (скрыта) -->
-                    <div id="browser-extensions-panel" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 10; overflow-y: auto; padding: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3 data-i18n="browser_extensions" class="tricolor-text">Магазин расширений</h3>
-                            <button id="browser-extensions-close" class="tricolor-btn" style="background: var(--red); border: none; font-size: 20px; width: 30px; height: 30px; border-radius: 15px;">✖</button>
-                        </div>
-                        
-                        <div class="extensions-grid" id="extensions-grid">
-                            <!-- Заполняется JS -->
-                        </div>
+                    <div class="quick-links">
+                        <div class="quick-link" data-url="vk.com">📱 ВКонтакте</div>
+                        <div class="quick-link" data-url="yandex.ru">🔍 Яндекс</div>
+                        <div class="quick-link" data-url="gosuslugi.ru">📋 Госуслуги</div>
+                        <div class="quick-link" data-url="rkn.gov.ru">⚖️ РКН</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Окно RuStore -->
+        <!-- RuStore -->
         <div id="rustore-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="rustore">📦 RuStore</span>
+                <span class="window-title"><img src="images/rustore.png" alt="rustore" style="width:24px; height:24px;"> RuStore</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="rustore-window" data-action="close" title="Закрыть"></button>
+                    <button class="window-btn minimize" data-win="rustore-window">−</button>
+                    <button class="window-btn maximize" data-win="rustore-window">□</button>
+                    <button class="window-btn close" data-win="rustore-window">✖</button>
                 </div>
             </div>
             <div class="window-content">
-                <div class="rustore-grid" id="rustore-grid">
-                    <!-- Заполняется JS -->
-                </div>
-                <div class="rustore-add tricolor-border">
-                    <h3 style="margin: 0 0 15px;" data-i18n="add_app" class="tricolor-text">➕ Добавить приложение</h3>
-                    <input type="text" id="rustore-name" data-i18n-placeholder="name" placeholder="Название">
-                    <input type="text" id="rustore-url" data-i18n-placeholder="link" placeholder="Ссылка (например, vk.com)">
-                    <button class="btn-blue tricolor-btn" id="rustore-add-btn" data-i18n="add_to_desktop">Добавить на рабочий стол</button>
+                <div class="store-grid" id="store-grid"></div>
+                <div class="store-add">
+                    <h3>➕ Добавить приложение</h3>
+                    <input type="text" id="app-name" placeholder="Название">
+                    <input type="text" id="app-url" placeholder="Ссылка (.ru)">
+                    <button id="add-app-btn">Установить</button>
                 </div>
             </div>
         </div>
 
-        <!-- Окно Румузыка (Spotify-like) -->
+        <!-- Румузыка -->
         <div id="rusmusic-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="rusmusic">🎵 Румузыка</span>
+                <span class="window-title"><img src="images/VKmusica.png" alt="music" style="width:24px; height:24px;"> Румузыка</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="rusmusic-window" data-action="close" title="Закрыть"></button>
+                    <button class="window-btn minimize" data-win="rumusic-window">−</button>
+                    <button class="window-btn maximize" data-win="rumusic-window">□</button>
+                    <button class="window-btn close" data-win="rumusic-window">✖</button>
                 </div>
             </div>
-            <div class="window-content" style="padding-bottom: 100px;">
-                <div class="spotify-header">
-                    <div class="spotify-avatar">🇷🇺</div>
+            <div class="window-content">
+                <div class="music-header">
+                    <div class="music-avatar">🇷🇺</div>
                     <div>
-                        <h2 style="margin:0;" class="tricolor-text">Румузыка</h2>
-                        <p style="opacity:0.7;">Слушайте патриотическую музыку</p>
+                        <div class="now-playing" id="now-playing-title">Гимн РФ</div>
+                        <div class="now-artist" id="now-playing-artist">Государственный гимн</div>
                     </div>
                 </div>
-                
-                <div class="spotify-playlists">
-                    <div class="playlist-card tricolor-border" data-playlist="main">
-                        <div class="playlist-cover" style="background-image: url('images/playlist1.jpg'); background-color: #0057b7;"></div>
-                        <div class="playlist-name tricolor-text" data-i18n="main_playlist">Главное</div>
-                        <div class="playlist-count">2 трека</div>
-                    </div>
-                    <div class="playlist-card tricolor-border" data-playlist="patriotic">
-                        <div class="playlist-cover" style="background-image: url('images/playlist2.jpg'); background-color: #d52b1e;"></div>
-                        <div class="playlist-name tricolor-text" data-i18n="patriotic_playlist">Патриотическое</div>
-                        <div class="playlist-count">2 трека</div>
-                    </div>
-                    <div class="playlist-card tricolor-border" data-playlist="classic">
-                        <div class="playlist-cover" style="background-image: url('images/playlist3.jpg'); background-color: #ffffff;"></div>
-                        <div class="playlist-name tricolor-text" data-i18n="classic_playlist">Классика</div>
-                        <div class="playlist-count">2 трека</div>
-                    </div>
+                <div class="playlists">
+                    <div class="playlist-card active" data-playlist="main">Главное</div>
+                    <div class="playlist-card" data-playlist="patriotic">Патриотическое</div>
+                    <div class="playlist-card" data-playlist="classic">Классика</div>
                 </div>
-                
-                <div id="current-playlist-tracks">
-                    <!-- Треки текущего плейлиста -->
-                </div>
-                
-                <!-- Now playing bar -->
-                <div class="now-playing-bar tricolor-border" id="now-playing-bar" style="display: none;">
-                    <div class="now-playing-info">
-                        <div class="now-playing-title" id="now-playing-title">Гимн РФ</div>
-                        <div class="now-playing-artist" id="now-playing-artist">Государственный гимн</div>
-                    </div>
-                    <div class="now-playing-controls">
-                        <button class="control-btn tricolor-btn" id="player-prev">⏮</button>
-                        <button class="control-btn tricolor-btn" id="player-play-pause">⏸</button>
-                        <button class="control-btn tricolor-btn" id="player-next">⏭</button>
-                    </div>
+                <div class="track-list" id="track-list"></div>
+                <div class="player-controls">
+                    <button id="player-prev">⏮</button>
+                    <button id="player-play">⏸</button>
+                    <button id="player-next">⏭</button>
                 </div>
             </div>
         </div>
 
-        <!-- Окно Рувидео (YouTube-like) -->
+        <!-- Рувидео -->
         <div id="ruvideo-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="ruvideo">📺 Рувидео</span>
+                <span class="window-title"><img src="images/rutube.png" alt="video" style="width:24px; height:24px;"> Рувидео</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="ruvideo-window" data-action="close" title="Закрыть"></button>
-                </div>
-            </div>
-            <div class="window-content yt-like" style="position: relative;">
-                <div class="yt-header">
-                    <div style="font-size: 24px; font-weight: 700;" class="tricolor-text">📺 Рувидео</div>
-                    <div style="flex:1;"></div>
-                    <div style="display:flex; gap:10px;">
-                        <button class="yt-category active tricolor-btn">Главная</button>
-                        <button class="yt-category tricolor-btn">Патриотическое</button>
-                        <button class="yt-category tricolor-btn">Музыка</button>
-                        <button class="yt-category tricolor-btn">Новости</button>
-                    </div>
-                </div>
-                
-                <div class="yt-categories">
-                    <span class="yt-category active tricolor-btn">Все</span>
-                    <span class="yt-category tricolor-btn">Гимны</span>
-                    <span class="yt-category tricolor-btn">SHAMAN</span>
-                    <span class="yt-category tricolor-btn">Военные</span>
-                    <span class="yt-category tricolor-btn">Классика</span>
-                </div>
-                
-                <div class="yt-video-grid" id="video-grid">
-                    <!-- Заполняется JS -->
-                </div>
-
-                <!-- Видеоплеер поверх -->
-                <div id="video-player-overlay" class="video-player-overlay hidden">
-                    <div class="video-player-container">
-                        <video id="ruvideo-player" controls style="width: 100%; max-height: 70vh; border-radius: 12px;" poster="">
-                            <source src="" type="video/mp4">
-                        </video>
-                        <button id="video-player-overlay-close" class="tricolor-btn" style="position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 20px; font-size: 20px;">✖</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Окно настроек -->
-        <div id="settings-window" class="window hidden">
-            <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="settings">⚙️ Настройки</span>
-                <div class="window-controls">
-                    <button class="win-btn close" data-win="settings-window" data-action="close" title="Закрыть"></button>
+                    <button class="window-btn minimize" data-win="ruvideo-window">−</button>
+                    <button class="window-btn maximize" data-win="ruvideo-window">□</button>
+                    <button class="window-btn close" data-win="ruvideo-window">✖</button>
                 </div>
             </div>
             <div class="window-content">
-                <div class="flag-line"></div>
-                <h2 style="margin: 0 0 10px; font-size: 20px; font-weight: 700;" data-i18n="os_name" class="tricolor-text">PatriotOS 0.8.0</h2>
-                
-                <div class="settings-search">
-                    <input type="text" id="settings-search" data-i18n-placeholder="search_settings" placeholder="Поиск в настройках...">
-                </div>
-
-                <div class="settings-layout">
-                    <div class="settings-sidebar" id="settings-sidebar">
-                        <div class="settings-sidebar-item active tricolor-btn" data-tab="main" data-i18n="main">Основные</div>
-                        <div class="settings-sidebar-item tricolor-btn" data-tab="langtime" data-i18n="langtime">Язык и время</div>
-                        <div class="settings-sidebar-item tricolor-btn" data-tab="wallpaper" data-i18n="wallpapers">Обои</div>
-                        <div class="settings-sidebar-item tricolor-btn" data-tab="sounds" data-i18n="sounds">Звуки</div>
-                        <div class="settings-sidebar-item tricolor-btn" data-tab="system" data-i18n="system">Система</div>
-                    </div>
-
-                    <div class="settings-content" id="settings-content">
-                        <!-- Вкладка Основные -->
-                        <div class="settings-tab" id="tab-main">
-                            <div class="settings-card tricolor-border">
-                                <h3 style="margin: 0 0 10px;" data-i18n="main_params" class="tricolor-text">Основные параметры</h3>
-                                <p data-i18n="main_desc">Здесь можно настроить общие параметры системы.</p>
-                                <label data-i18n="username" class="tricolor-text">Имя пользователя</label>
-                                <input type="text" id="username-input" value="Пользователь" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
-                                <button class="btn-blue tricolor-btn" id="save-username" data-i18n="save">Сохранить</button>
-                            </div>
-                        </div>
-
-                        <!-- Вкладка Язык и время -->
-                        <div class="settings-tab hidden" id="tab-langtime">
-                            <div class="settings-card tricolor-border">
-                                <h3 style="margin: 0 0 10px;" data-i18n="interface_lang" class="tricolor-text">Язык интерфейса</h3>
-                                <div style="margin-bottom: 15px;">
-                                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                                        <input type="radio" name="system-language" value="ru" checked> 🇷🇺 <span data-i18n="russian_lang">Русский</span>
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 10px;">
-                                        <input type="radio" name="system-language" value="by"> 🇧🇾 <span data-i18n="belarusian_lang">Беларуская</span>
-                                    </label>
-                                </div>
-                                <select id="settings-language" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px; display: none;">
-                                    <!-- Заполнится JS -->
-                                </select>
-                                <p style="color: var(--red); font-size: 12px;" data-i18n="foreign_warning">Иностранные языки приведут к блокировке!</p>
-                                <h3 style="margin: 0 0 10px;" data-i18n="timezone" class="tricolor-text">Часовой пояс</h3>
-                                <select id="settings-timezone" style="width:100%; padding:10px; border-radius:8px;">
-                                    <!-- Заполнится JS -->
-                                </select>
-                                <button class="btn-blue tricolor-btn" id="apply-language" style="margin-top: 10px;" data-i18n="apply_lang">Применить язык</button>
-                                <button class="btn-blue tricolor-btn" id="save-langtime" style="margin-top: 10px;" data-i18n="save_langtime">Сохранить</button>
-                            </div>
-                        </div>
-
-                        <!-- Вкладка Обои -->
-                        <div class="settings-tab hidden" id="tab-wallpaper">
-                            <div class="settings-card tricolor-border">
-                                <h3 style="margin: 0 0 10px;" data-i18n="desktop_wallpaper" class="tricolor-text">Обои рабочего стола</h3>
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
-                                    <div class="wallpaper-option" data-wallpaper="flag">
-                                        <img src="wallpapers/flag.png" alt="Флаг" style="width: 100%; border-radius: 8px; cursor: pointer;">
-                                    </div>
-                                    <div class="wallpaper-option" data-wallpaper="gerb">
-                                        <img src="wallpapers/gerb.png" alt="Герб" style="width: 100%; border-radius: 8px; cursor: pointer;">
-                                    </div>
-                                    <div class="wallpaper-option" data-wallpaper="bereza">
-                                        <img src="wallpapers/bereza.png" alt="Берёза" style="width: 100%; border-radius: 8px; cursor: pointer;">
-                                    </div>
-                                    <div class="wallpaper-option" data-wallpaper="kreml">
-                                        <img src="wallpapers/kreml.png" alt="Кремль" style="width: 100%; border-radius: 8px; cursor: pointer;">
-                                    </div>
-                                    <div class="wallpaper-option" data-wallpaper="prostory">
-                                        <img src="wallpapers/prostory.png" alt="Просторы России" style="width: 100%; border-radius: 8px; cursor: pointer;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Вкладка Звуки -->
-                        <div class="settings-tab hidden" id="tab-sounds">
-                            <div class="settings-card tricolor-border">
-                                <h3 style="margin: 0 0 10px;" data-i18n="sounds" class="tricolor-text">Звуки</h3>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <span data-i18n="anthem" class="tricolor-text">Гимн РФ</span>
-                                    <button class="sound-btn tricolor-btn" id="play-gimn" title="Воспроизвести">▶</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Вкладка Система -->
-                        <div class="settings-tab hidden" id="tab-system">
-                            <div class="settings-card tricolor-border">
-                                <h3 style="margin: 0 0 10px;" data-i18n="system_info" class="tricolor-text">Информация о системе</h3>
-                                <p><strong data-i18n="version">Версия:</strong> 0.8.0</p>
-                                <p><strong data-i18n="security">Безопасность:</strong> <span data-i18n="active">Активна ✓</span></p>
-                                <p><strong data-i18n="system_lang">Язык:</strong> <span data-i18n="russian">Русский (Системный)</span></p>
-                                <button class="btn-blue tricolor-btn" id="check-updates" data-i18n="check_updates">Проверить обновления</button>
-                                <button class="btn-blue tricolor-btn" style="background: var(--red); margin-top: 10px;" id="clear-data" data-i18n="clear_data">Очистить все данные</button>
-                            </div>
-
-                            <!-- Режим диктора -->
-                            <div class="settings-card tricolor-border" style="margin-top: 20px;">
-                                <h3 style="margin: 0 0 10px;" data-i18n="dictor_mode" class="tricolor-text">Режим диктора</h3>
-                                <p data-i18n="dictor_desc">Озвучивает выделенный текст или элементы при наведении</p>
-                                
-                                <div style="margin: 15px 0;">
-                                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                                        <input type="radio" name="dictor-mode" value="hover" checked> 
-                                        <span data-i18n="dictor_hover">При наведении</span>
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                                        <input type="radio" name="dictor-mode" value="click"> 
-                                        <span data-i18n="dictor_click">При клике</span>
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 10px;">
-                                        <input type="radio" name="dictor-mode" value="selection"> 
-                                        <span data-i18n="dictor_selection">При выделении</span>
-                                    </label>
-                                </div>
-                                
-                                <button class="btn-blue tricolor-btn" id="test-dictor" data-i18n="test_dictor">Протестировать</button>
-                                <button class="btn-blue tricolor-btn" style="background: var(--red); margin-top: 10px;" id="disable-dictor" data-i18n="disable_dictor">Отключить</button>
-                            </div>
-                        </div>
+                <div class="video-grid" id="video-grid"></div>
+                <div id="video-overlay" class="video-overlay hidden">
+                    <div class="video-container">
+                        <video id="video-player" controls></video>
+                        <button class="video-close" id="video-close-btn">✖</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Окно документов -->
+        <!-- Файловый менеджер -->
         <div id="files-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="files">📁 Мои Документы</span>
+                <span class="window-title"><img src="images/files.png" alt="files" style="width:24px; height:24px;"> Файлы</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="files-window" data-action="close" title="Закрыть"></button>
+                    <button class="window-btn minimize" data-win="files-window">−</button>
+                    <button class="window-btn maximize" data-win="files-window">□</button>
+                    <button class="window-btn close" data-win="files-window">✖</button>
                 </div>
             </div>
-            <div class="window-content" style="padding: 0;">
-                <div class="files-content">
-                    <div class="files-sidebar">
-                        <div class="files-sidebar-item active tricolor-btn" data-path="root" data-i18n="my_computer">📁 Мой компьютер</div>
-                        <div class="files-sidebar-item tricolor-btn" data-path="Документы" data-i18n="my_docs">📄 Мои документы</div>
-                        <div class="files-sidebar-item tricolor-btn" data-path="Изображения" data-i18n="images">🖼️ Изображения</div>
-                        <div class="files-sidebar-item tricolor-btn" data-path="Музыка" data-i18n="music">🎵 Моя музыка</div>
+            <div class="window-content files-app">
+                <div class="files-sidebar">
+                    <div class="folder-item active" data-path="root">💻 Мой компьютер</div>
+                    <div class="folder-item" data-path="Документы">📄 Документы</div>
+                    <div class="folder-item" data-path="Изображения">🖼️ Изображения</div>
+                    <div class="folder-item" data-path="Музыка">🎵 Музыка</div>
+                </div>
+                <div class="files-main">
+                    <div class="files-toolbar">
+                        <button id="new-folder">📁 Новая папка</button>
+                        <button id="new-file">📄 Новый файл</button>
+                        <button id="refresh-files">🔄</button>
                     </div>
-                    <div class="files-main">
-                        <div class="files-toolbar">
-                            <button class="files-btn tricolor-btn" id="files-new-folder" data-i18n="new_folder">📁 Новая папка</button>
-                            <button class="files-btn tricolor-btn" id="files-new-file" data-i18n="new_file">📄 Новый файл</button>
-                            <button class="files-btn tricolor-btn" id="files-refresh" data-i18n="refresh">🔄 Обновить</button>
-                        </div>
-                        <div class="files-grid" id="files-grid"></div>
-                    </div>
+                    <div class="files-grid" id="files-grid"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Окно календаря (оставляем для совместимости) -->
+        <!-- Настройки -->
+        <div id="settings-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title"><img src="images/settings.png" alt="settings" style="width:24px; height:24px;"> Настройки</span>
+                <div class="window-controls">
+                    <button class="window-btn minimize" data-win="settings-window">−</button>
+                    <button class="window-btn maximize" data-win="settings-window">□</button>
+                    <button class="window-btn close" data-win="settings-window">✖</button>
+                </div>
+            </div>
+            <div class="window-content settings-app">
+                <div class="settings-sidebar">
+                    <div class="settings-tab active" data-tab="main">Основные</div>
+                    <div class="settings-tab" data-tab="lang">Язык и время</div>
+                    <div class="settings-tab" data-tab="wallpaper">Обои</div>
+                    <div class="settings-tab" data-tab="sound">Звуки</div>
+                    <div class="settings-tab" data-tab="dictor">Диктор</div>
+                    <div class="settings-tab" data-tab="system">Система</div>
+                </div>
+                <div class="settings-content" id="settings-content"></div>
+            </div>
+        </div>
+
+        <!-- Календарь полный -->
         <div id="calendar-window" class="window hidden">
             <div class="window-header">
-                <span class="window-title tricolor-text" data-i18n="calendar">📅 Календарь праздников РФ</span>
+                <span class="window-title">📅 Календарь</span>
                 <div class="window-controls">
-                    <button class="win-btn close" data-win="calendar-window" data-action="close" title="Закрыть"></button>
+                    <button class="window-btn close" data-win="calendar-window">✖</button>
                 </div>
             </div>
-            <div class="window-content">
-                <div class="calendar-header">
-                    <button class="browser-nav-btn tricolor-btn" id="calendar-prev-old" title="Предыдущий месяц">←</button>
-                    <div>
-                        <span class="calendar-month" id="calendar-month-old">Март</span>
-                        <span class="calendar-year" id="calendar-year-old">2026</span>
-                    </div>
-                    <button class="browser-nav-btn tricolor-btn" id="calendar-next-old" title="Следующий месяц">→</button>
-                </div>
-                
-                <div class="calendar-weekdays">
-                    <div data-i18n="monday" class="tricolor-text">Пн</div><div data-i18n="tuesday" class="tricolor-text">Вт</div><div data-i18n="wednesday" class="tricolor-text">Ср</div><div data-i18n="thursday" class="tricolor-text">Чт</div><div data-i18n="friday" class="tricolor-text">Пт</div><div data-i18n="saturday" class="tricolor-text">Сб</div><div data-i18n="sunday" class="tricolor-text">Вс</div>
-                </div>
-                
-                <div class="calendar-days" id="calendar-days-old"></div>
-                
-                <div class="holiday-list" id="holiday-list-old">
-                    <h4 data-i18n="holidays_this_month" class="tricolor-text">Праздники в этом месяце:</h4>
-                    <ul id="month-holidays-old">
-                        <li>8 марта — Международный женский день</li>
-                    </ul>
-                </div>
-            </div>
+            <div class="window-content" id="full-calendar"></div>
         </div>
 
     </div>

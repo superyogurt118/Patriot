@@ -1,2010 +1,1493 @@
-// ========== СИСТЕМА ПЕРЕВОДА (Русский/Белорусский) ==========
-const translations = {
-    ru: {
-        // Экран блокировки
-        'login': 'Войти',
-        'tap_to_enter': 'Нажмите для входа',
-        
-        // Интерфейс
-        'start': 'Пуск',
-        'calculator': 'Калькулятор',
-        'browser': 'Браузер',
-        'rustore': 'RuStore',
-        'settings': 'Настройки',
-        'files': 'Документы',
-        'calendar': 'Календарь',
-        'rusmusic': 'Румузыка',
-        'ruvideo': 'Рувидео',
-        
-        // Календарь
-        'monday': 'Пн',
-        'tuesday': 'Вт',
-        'wednesday': 'Ср',
-        'thursday': 'Чт',
-        'friday': 'Пт',
-        'saturday': 'Сб',
-        'sunday': 'Вс',
-        'january': 'Январь',
-        'february': 'Февраль',
-        'march': 'Март',
-        'april': 'Апрель',
-        'may': 'Май',
-        'june': 'Июнь',
-        'july': 'Июль',
-        'august': 'Август',
-        'september': 'Сентябрь',
-        'october': 'Октябрь',
-        'november': 'Ноябрь',
-        'december': 'Декабрь',
-        'january_gen': 'января',
-        'february_gen': 'февраля',
-        'march_gen': 'марта',
-        'april_gen': 'апреля',
-        'may_gen': 'мая',
-        'june_gen': 'июня',
-        'july_gen': 'июля',
-        'august_gen': 'августа',
-        'september_gen': 'сентября',
-        'october_gen': 'октября',
-        'november_gen': 'ноября',
-        'december_gen': 'декабря',
-        'holidays_this_month': 'Праздники в этом месяце:',
-        'no_holidays': 'Нет праздников в этом месяце',
-        'selected_date': 'Выбрана дата',
-        'no_holiday': 'Нет праздника',
-        
-        // Настройки
-        'settings_title': 'Настройки',
-        'main': 'Основные',
-        'langtime': 'Язык и время',
-        'wallpapers': 'Обои',
-        'sounds': 'Звуки',
-        'system': 'Система',
-        'search_settings': 'Поиск в настройках...',
-        'main_params': 'Основные параметры',
-        'main_desc': 'Здесь можно настроить общие параметры системы.',
-        'username': 'Имя пользователя',
-        'save': 'Сохранить',
-        'interface_lang': 'Язык интерфейса',
-        'foreign_warning': 'Иностранные языки приведут к блокировке!',
-        'timezone': 'Часовой пояс',
-        'save_langtime': 'Сохранить',
-        'settings_saved': 'Настройки сохранены. Перезагрузите страницу для применения.',
-        'desktop_wallpaper': 'Обои рабочего стола',
-        'anthem': 'Гимн РФ',
-        'notification': 'Уведомление',
-        'system_info': 'Информация о системе',
-        'version': 'Версия',
-        'security': 'Безопасность',
-        'active': 'Активна ✓',
-        'system_lang': 'Язык',
-        'russian': 'Русский (Системный)',
-        'check_updates': 'Проверить обновления',
-        'clear_data': 'Очистить все данные',
-        'apply_lang': 'Применить язык',
-        'russian_lang': 'Русский',
-        'belarusian_lang': 'Беларуская',
-        
-        // Меню Пуск
-        'search_apps': 'Поиск приложений...',
-        'app_store': 'Магазин приложений',
-        'reset': 'Сброс',
-        
-        // Браузер
-        'browser_title': 'Браузер',
-        'address_placeholder': 'yandex.ru',
-        'go': '▶',
-        'only_russian': '⛔ Только российские ресурсы!',
-        'yandex': 'Яндекс',
-        'yandex_desc': 'Поисковая система №1 в России',
-        'browser_settings': 'Настройки браузера',
-        'browser_extensions': 'Магазин расширений',
-        
-        // RuStore
-        'rustore_title': 'RuStore',
-        'add_app': '➕ Добавить приложение',
-        'name': 'Название',
-        'link': 'Ссылка (например, vk.com)',
-        'add_to_desktop': 'Добавить на рабочий стол',
-        'installed': 'Установлено',
-        'already_installed': 'уже установлено',
-        'fill_fields': 'Заполните поля!',
-        'only_russian_domains': '⛔ Только российские домены!',
-        'already_exists': 'Уже есть!',
-        'player': '🎵 Плеер',
-        
-        // Документы
-        'my_computer': 'Мой компьютер',
-        'my_docs': 'Мои документы',
-        'images': 'Изображения',
-        'music': 'Моя музыка',
-        'new_folder': '📁 Новая папка',
-        'new_file': '📄 Новый файл',
-        'refresh': '🔄 Обновить',
-        'delete_confirm': 'Удалить',
-        'folder_name': 'Название папки:',
-        'file_name': 'Название файла:',
-        'only_russian_letters': '⛔ Только русские буквы!',
-        
-        // Румузыка
-        'rusmusic_title': 'Румузыка',
-        'listen_patriotic': 'Слушайте патриотическую музыку',
-        'gimn': 'Гимн Российской Федерации',
-        'gimn_desc': 'Государственный гимн',
-        'shaman': 'Я русский',
-        'shaman_desc': 'SHAMAN',
-        'only_patriotic': 'Слушайте только патриотическую музыку',
-        'main_playlist': 'Главное',
-        'patriotic_playlist': 'Патриотическое',
-        'classic_playlist': 'Классика',
-        
-        // Рувидео
-        'ruvideo': '📺 Рувидео',
-        'watch_patriotic': 'Смотрите патриотические видео',
-        'ruvideo_anthem': 'Гимн России',
-        'ruvideo_anthem_desc': 'Видеоклип с гимном',
-        'ruvideo_shaman': 'Я русский',
-        'ruvideo_shaman_desc': 'SHAMAN — официальный клип',
-        'only_patriotic_videos': 'Смотрите только патриотические видео',
-        'close_player': 'Закрыть плеер',
-        
-        // Режим диктора
-        'dictor_mode': 'Режим диктора',
-        'dictor_desc': 'Озвучивает выделенный текст или элементы при наведении',
-        'dictor_hover': 'При наведении',
-        'dictor_click': 'При клике',
-        'dictor_selection': 'При выделении',
-        'test_dictor': 'Протестировать',
-        'disable_dictor': 'Отключить',
-        
-        // Уведомления
-        'no_updates': 'Обновлений нет. Вы используете самую патриотичную версию!',
-        'clear_confirm': 'Очистить все данные? Это удалит все файлы и приложения.',
-        'data_cleared': 'Данные очищены! Страница будет перезагружена.',
-        'app_not_support': 'Это приложение не поддерживает браузер'
-    },
-    
-    by: {
-        // Экран блокировки
-        'login': 'Увайсці',
-        'tap_to_enter': 'Націсніце для ўваходу',
-        
-        // Інтэрфейс
-        'start': 'Старт',
-        'calculator': 'Калькулятар',
-        'browser': 'Браўзэр',
-        'rustore': 'RuStore',
-        'settings': 'Налады',
-        'files': 'Дакументы',
-        'calendar': 'Каляндар',
-        'rusmusic': 'Румузыка',
-        'ruvideo': 'Рувідэа',
-        
-        // Каляндар
-        'monday': 'Пн',
-        'tuesday': 'Аў',
-        'wednesday': 'Ср',
-        'thursday': 'Чц',
-        'friday': 'Пт',
-        'saturday': 'Сб',
-        'sunday': 'Нд',
-        'january': 'Студзень',
-        'february': 'Люты',
-        'march': 'Сакавік',
-        'april': 'Красавік',
-        'may': 'Май',
-        'june': 'Чэрвень',
-        'july': 'Ліпень',
-        'august': 'Жнівень',
-        'september': 'Верасень',
-        'october': 'Кастрычнік',
-        'november': 'Лістапад',
-        'december': 'Снежань',
-        'january_gen': 'студзеня',
-        'february_gen': 'лютага',
-        'march_gen': 'сакавіка',
-        'april_gen': 'красавіка',
-        'may_gen': 'мая',
-        'june_gen': 'чэрвеня',
-        'july_gen': 'ліпеня',
-        'august_gen': 'жніўня',
-        'september_gen': 'верасня',
-        'october_gen': 'кастрычніка',
-        'november_gen': 'лістапада',
-        'december_gen': 'снежня',
-        'holidays_this_month': 'Святы ў гэтым месяцы:',
-        'no_holidays': 'Няма святаў у гэтым месяцы',
-        'selected_date': 'Абраная дата',
-        'no_holiday': 'Няма свята',
-        
-        // Налады
-        'settings_title': 'Налады',
-        'main': 'Асноўныя',
-        'langtime': 'Мова і час',
-        'wallpapers': 'Шпалеры',
-        'sounds': 'Гукі',
-        'system': 'Сістэма',
-        'search_settings': 'Пошук у наладах...',
-        'main_params': 'Асноўныя параметры',
-        'main_desc': 'Тут можна наладзіць агульныя параметры сістэмы.',
-        'username': 'Імя карыстальніка',
-        'save': 'Захаваць',
-        'interface_lang': 'Мова інтэрфейсу',
-        'foreign_warning': 'Замежныя мовы прывядуць да блакіроўкі!',
-        'timezone': 'Часавы пояс',
-        'save_langtime': 'Захаваць',
-        'settings_saved': 'Налады захаваны. Перазагрузіце старонку для прымянення.',
-        'desktop_wallpaper': 'Шпалеры працоўнага стала',
-        'anthem': 'Гімн РФ',
-        'notification': 'Апавяшчэнне',
-        'system_info': 'Інфармацыя пра сістэму',
-        'version': 'Версія',
-        'security': 'Бяспека',
-        'active': 'Актыўная ✓',
-        'system_lang': 'Мова',
-        'russian': 'Руская (Сістэмная)',
-        'check_updates': 'Праверыць абнаўленні',
-        'clear_data': 'Ачысціць усе дадзеныя',
-        'apply_lang': 'Прымяніць мову',
-        'russian_lang': 'Руская',
-        'belarusian_lang': 'Беларуская',
-        
-        // Меню Пуск
-        'search_apps': 'Пошук праграм...',
-        'app_store': 'Крама праграм',
-        'reset': 'Скід',
-        
-        // Браўзэр
-        'browser_title': 'Браўзэр',
-        'address_placeholder': 'yandex.ru',
-        'go': '▶',
-        'only_russian': '⛔ Толькі расійскія рэсурсы!',
-        'yandex': 'Яндэкс',
-        'yandex_desc': 'Пошукавая сістэма №1 у Расіі',
-        'browser_settings': 'Налады браўзэра',
-        'browser_extensions': 'Крама пашырэнняў',
-        
-        // RuStore
-        'rustore_title': 'RuStore',
-        'add_app': '➕ Дадаць праграму',
-        'name': 'Назва',
-        'link': 'Спасылка (напрыклад, vk.com)',
-        'add_to_desktop': 'Дадаць на працоўны стол',
-        'installed': 'Усталявана',
-        'already_installed': 'ужо ўсталявана',
-        'fill_fields': 'Запоўніце палі!',
-        'only_russian_domains': '⛔ Толькі расійскія дамены!',
-        'already_exists': 'Ужо ёсць!',
-        'player': '🎵 Плеер',
-        
-        // Дакументы
-        'my_computer': 'Мой кампутар',
-        'my_docs': 'Мае дакументы',
-        'images': 'Выявы',
-        'music': 'Мая музыка',
-        'new_folder': '📁 Новы тэчак',
-        'new_file': '📄 Новы файл',
-        'refresh': '🔄 Абнавіць',
-        'delete_confirm': 'Выдаліць',
-        'folder_name': 'Назва тэчака:',
-        'file_name': 'Назва файла:',
-        'only_russian_letters': '⛔ Толькі рускія літары!',
-        
-        // Румузыка
-        'rusmusic_title': 'Румузыка',
-        'listen_patriotic': 'Слухайце патрыятычную музыку',
-        'gimn': 'Гімн Расійскай Федэрацыі',
-        'gimn_desc': 'Дзяржаўны гімн',
-        'shaman': 'Я рускі',
-        'shaman_desc': 'SHAMAN',
-        'only_patriotic': 'Слухайце толькі патрыятычную музыку',
-        'main_playlist': 'Галоўнае',
-        'patriotic_playlist': 'Патрыятычнае',
-        'classic_playlist': 'Класіка',
-        
-        // Рувідэа
-        'ruvideo': '📺 Рувідэа',
-        'watch_patriotic': 'Глядзіце патрыятычныя відэа',
-        'ruvideo_anthem': 'Гімн Расіі',
-        'ruvideo_anthem_desc': 'Відэакліп з гімнам',
-        'ruvideo_shaman': 'Я рускі',
-        'ruvideo_shaman_desc': 'SHAMAN — афіцыйны кліп',
-        'only_patriotic_videos': 'Глядзіце толькі патрыятычныя відэа',
-        'close_player': 'Зачыніць плэер',
-        
-        // Рэжым дыктара
-        'dictor_mode': 'Рэжым дыктара',
-        'dictor_desc': 'Азвучвае вылучаны тэкст або элементы пры навядзенні',
-        'dictor_hover': 'Пры навядзенні',
-        'dictor_click': 'Пры кліку',
-        'dictor_selection': 'Пры вылучэнні',
-        'test_dictor': 'Пратэставаць',
-        'disable_dictor': 'Адключыць',
-        
-        // Абвесткі
-        'no_updates': 'Абнаўленняў няма. Вы карыстаецеся самай патрыятычнай версіяй!',
-        'clear_confirm': 'Ачысціць усе дадзеныя? Гэта выдаліць усе файлы і праграмы.',
-        'data_cleared': 'Дадзеныя ачышчаны! Старонка будзе перазагружана.',
-        'app_not_support': 'Гэта праграма не падтрымлівае браўзэр'
-    }
-};
-
-let currentLang = localStorage.getItem('patriotLang') || 'ru';
-
-function __(key) {
-    return translations[currentLang][key] || key;
-}
-
-// ========== НАСТРОЙКИ БРАУЗЕРА ==========
-let browserSettings = JSON.parse(localStorage.getItem('browserSettings')) || {
-    homepage: 'yandex',
-    customUrl: '',
-    searchEngine: 'yandex',
-    vpnBlock: true,
-    foreignBlock: true,
-    theme: 'light',
-    fontSize: 14
-};
-
-// ========== РЕЖИМ ДИКТОРА ==========
-let dictorEnabled = localStorage.getItem('dictorEnabled') === 'true';
-let dictorMode = localStorage.getItem('dictorMode') || 'hover';
-let speechSynthesis = window.speechSynthesis;
-let currentUtterance = null;
-
-function speak(text) {
-    if (!dictorEnabled || !text) return;
-    
-    if (currentUtterance) {
-        speechSynthesis.cancel();
-    }
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = currentLang === 'ru' ? 'ru-RU' : 'be-BY';
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    
-    currentUtterance = utterance;
-    speechSynthesis.speak(utterance);
-}
-
-function updateDictorMode() {
-    const radios = document.querySelectorAll('input[name="dictor-mode"]');
-    radios.forEach(radio => {
-        if (radio.value === dictorMode) {
-            radio.checked = true;
-        }
-    });
-}
-
-// Сохранение настроек диктора
-document.querySelectorAll('input[name="dictor-mode"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        dictorMode = e.target.value;
-        localStorage.setItem('dictorMode', dictorMode);
-    });
-});
-
-document.getElementById('test-dictor')?.addEventListener('click', () => {
-    speak('Тестовый режим диктора работает');
-    alert('🔊 Тестовый режим диктора');
-});
-
-document.getElementById('disable-dictor')?.addEventListener('click', () => {
-    dictorEnabled = false;
-    localStorage.setItem('dictorEnabled', 'false');
-    alert('Режим диктора отключен');
-});
-
-// Применяем обработчики диктора при загрузке
-if (dictorEnabled) {
-    if (dictorMode === 'hover') {
-        document.addEventListener('mouseover', (e) => {
-            const text = e.target.innerText || e.target.getAttribute('aria-label') || e.target.title;
-            if (text && text.length < 100) {
-                speak(text);
-            }
-        });
-    } else if (dictorMode === 'click') {
-        document.addEventListener('click', (e) => {
-            const text = e.target.innerText || e.target.getAttribute('aria-label') || e.target.title;
-            if (text) speak(text);
-        });
-    } else if (dictorMode === 'selection') {
-        document.addEventListener('mouseup', () => {
-            const selection = window.getSelection().toString();
-            if (selection) speak(selection);
-        });
-    }
-}
-
-// ========== ОБНОВЛЕНИЕ ЯЗЫКА ==========
-function updateLanguage() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.dataset.i18n;
-        el.textContent = __(key);
-    });
-
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.dataset.i18nPlaceholder;
-        el.placeholder = __(key);
-    });
-
-    const winTitles = {
-        'calc-window': 'calculator',
-        'browser-window': 'browser',
-        'rustore-window': 'rustore',
-        'settings-window': 'settings',
-        'files-window': 'files',
-        'calendar-window': 'calendar',
-        'rusmusic-window': 'rusmusic',
-        'ruvideo-window': 'ruvideo'
+(function() {
+    const STORAGE = {
+        get lang() { return localStorage.getItem('patriot_lang') || 'ru'; },
+        set lang(v) { localStorage.setItem('patriot_lang', v); },
+        get user() { return localStorage.getItem('patriot_user') || 'Пользователь'; },
+        set user(v) { localStorage.setItem('patriot_user', v); },
+        get dictor() { 
+            const val = localStorage.getItem('patriot_dictor');
+            return val === null ? true : val === 'true';
+        },
+        set dictor(v) { localStorage.setItem('patriot_dictor', v); },
+        get dictorMode() { 
+            const val = localStorage.getItem('patriot_dictor_mode');
+            return val || 'hover';
+        },
+        set dictorMode(v) { localStorage.setItem('patriot_dictor_mode', v); },
+        get wallpaper() { return localStorage.getItem('patriot_wallpaper') || 'flag'; },
+        set wallpaper(v) { localStorage.setItem('patriot_wallpaper', v); },
+        get apps() { return JSON.parse(localStorage.getItem('patriot_apps') || '[]'); },
+        set apps(v) { localStorage.setItem('patriot_apps', JSON.stringify(v)); }
     };
-    
-    for (const [winId, key] of Object.entries(winTitles)) {
-        const win = document.getElementById(winId);
-        if (win) {
-            const title = win.querySelector('.window-title');
-            if (title) {
-                const icon = title.textContent.split(' ')[0];
-                title.textContent = icon + ' ' + __(key);
-            }
+
+    // ==================== ПЕРЕВОДЫ ====================
+    const LANG = {
+        ru: {
+            login: 'Войти',
+            tap: 'нажмите для входа',
+            calc: 'Калькулятор',
+            browser: 'Браузер',
+            store: 'Магазин приложений',
+            music: 'Музыка',
+            video: 'Видео',
+            files: 'Файлы',
+            settings: 'Настройки',
+            calendar: 'Календарь',
+            main: 'Главное',
+            patriotic: 'Патриотическое',
+            classic: 'Классика',
+            mon: 'Пн',
+            tue: 'Вт',
+            wed: 'Ср',
+            thu: 'Чт',
+            fri: 'Пт',
+            sat: 'Сб',
+            sun: 'Вс',
+            jan: 'Январь',
+            feb: 'Февраль',
+            mar: 'Март',
+            apr: 'Апрель',
+            may: 'Май',
+            jun: 'Июнь',
+            jul: 'Июль',
+            aug: 'Август',
+            sep: 'Сентябрь',
+            oct: 'Октябрь',
+            nov: 'Ноябрь',
+            dec: 'Декабрь',
+            jan2: 'января',
+            feb2: 'февраля',
+            mar2: 'марта',
+            apr2: 'апреля',
+            may2: 'мая',
+            jun2: 'июня',
+            jul2: 'июля',
+            aug2: 'августа',
+            sep2: 'сентября',
+            oct2: 'октября',
+            nov2: 'ноября',
+            dec2: 'декабря',
+            holiday: 'Праздник',
+            noHoliday: 'Будний день',
+            save: 'Сохранить',
+            username: 'Имя пользователя',
+            lang: 'Язык',
+            onlyRF: 'Только РФ и РБ',
+            timezone: 'Часовой пояс',
+            saved: 'Настройки сохранены',
+            anthem: 'Гимн РФ',
+            version: 'Версия',
+            security: 'Безопасность',
+            active: 'Активна',
+            updates: 'Проверить обновления',
+            clear: 'Сброс данных',
+            dictorMode: 'Режим диктора',
+            dictorDesc: 'Озвучивание текста',
+            hover: 'При наведении',
+            click: 'При клике',
+            selection: 'При выделении',
+            test: 'Тест',
+            disable: 'Отключить',
+            noUpdates: 'Обновлений нет',
+            clearConfirm: 'Очистить все данные?',
+            cleared: 'Данные очищены',
+            notSupport: 'Не поддерживается',
+            fill: 'Заполните поля!',
+            onlyRU: '⛔ Только русские сайты!',
+            exists: 'Уже есть!',
+            installed: 'Установлено',
+            selected: 'Выбрано',
+            system: 'Система'
+        },
+        by: {
+            login: 'Увайсці',
+            tap: 'націсніце для ўваходу',
+            calc: 'Калькулятар',
+            browser: 'Браўзэр',
+            store: 'Крама прыкладанняў',
+            music: 'Румузыка',
+            video: 'Рувідэа',
+            files: 'Файлы',
+            settings: 'Налады',
+            calendar: 'Каляндар',
+            main: 'Галоўнае',
+            patriotic: 'Патрыятычнае',
+            classic: 'Класіка',
+            mon: 'Пн',
+            tue: 'Аў',
+            wed: 'Ср',
+            thu: 'Чц',
+            fri: 'Пт',
+            sat: 'Сб',
+            sun: 'Нд',
+            jan: 'Студзень',
+            feb: 'Люты',
+            mar: 'Сакавік',
+            apr: 'Красавік',
+            may: 'Май',
+            jun: 'Чэрвень',
+            jul: 'Ліпень',
+            aug: 'Жнівень',
+            sep: 'Верасень',
+            oct: 'Кастрычнік',
+            nov: 'Лістапад',
+            dec: 'Снежань',
+            jan2: 'студзеня',
+            feb2: 'лютага',
+            mar2: 'сакавіка',
+            apr2: 'красавіка',
+            may2: 'мая',
+            jun2: 'чэрвеня',
+            jul2: 'ліпеня',
+            aug2: 'жніўня',
+            sep2: 'верасня',
+            oct2: 'кастрычніка',
+            nov2: 'лістапада',
+            dec2: 'снежня',
+            holiday: 'Свята',
+            noHoliday: 'Будзень',
+            save: 'Захаваць',
+            username: 'Імя',
+            lang: 'Мова',
+            onlyRF: 'Толькі РФ і РБ',
+            timezone: 'Час',
+            saved: 'Захавана',
+            anthem: 'Гімн РФ',
+            version: 'Версія',
+            security: 'Бяспека',
+            active: 'Актыўна',
+            updates: 'Абнаўленні',
+            clear: 'Скід',
+            dictorMode: 'Рэжым дыктара',
+            dictorDesc: 'Азвучванне тэксту',
+            hover: 'Пры навядзенні',
+            click: 'Пры кліку',
+            selection: 'Пры вылучэнні',
+            test: 'Тэст',
+            disable: 'Адключыць',
+            noUpdates: 'Няма абнаўленняў',
+            clearConfirm: 'Ачысціць?',
+            cleared: 'Ачышчана',
+            notSupport: 'Не падтрымліваецца',
+            fill: 'Запоўніце!',
+            onlyRU: '⛔ Толькі рускія сайты!',
+            exists: 'Ужо ёсць!',
+            installed: 'Усталявана',
+            selected: 'Выбрана',
+            system: 'Сістэма'
         }
-    }
+    };
 
-    updateDateTime();
-    
-    if (typeof renderCalendar === 'function') {
-        renderCalendar(currentDate);
-    }
-    
-    if (typeof renderDropdownCalendar === 'function') {
-        renderDropdownCalendar(currentDropdownDate || new Date());
-    }
+    const t = (key) => LANG[STORAGE.lang][key] || key;
 
-    localStorage.setItem('patriotLang', currentLang);
-}
-
-// ========== МОБИЛЬНАЯ ПОДДЕРЖКА ==========
-document.addEventListener('touchmove', (e) => {
-    if (e.target.closest('.window') || e.target.closest('.dock') || e.target.closest('.desktop-icons') || e.target.closest('.datetime-panel') || e.target.closest('.top-panel') || e.target.closest('.start-modal')) {
-        e.preventDefault();
-    }
-}, { passive: false });
-
-document.addEventListener('touchstart', (e) => {
-    if (e.target.closest('.icon') || e.target.closest('.win-btn') || e.target.closest('.calc-btn') || 
-        e.target.closest('.files-btn') || e.target.closest('.browser-nav-btn') || e.target.closest('.datetime-panel') || 
-        e.target.closest('.start-button') || e.target.closest('.start-app-item') || e.target.closest('.start-footer-item') ||
-        e.target.closest('.browser-card') || e.target.closest('.playlist-card') || e.target.closest('.yt-category') ||
-        e.target.closest('.yt-video-card')) {
-        e.preventDefault();
-    }
-}, { passive: false });
-
-document.addEventListener('gesturestart', (e) => e.preventDefault());
-document.addEventListener('gesturechange', (e) => e.preventDefault());
-document.addEventListener('gestureend', (e) => e.preventDefault());
-
-// ========== ВХОД ПО КНОПКЕ ==========
-const loginBtn = document.getElementById('login-btn');
-const lockScreen = document.getElementById('lock-screen');
-
-loginBtn.addEventListener('click', () => {
-    playVhod();
-    lockScreen.classList.add('unlocked');
-});
-
-loginBtn.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        playVhod();
-        lockScreen.classList.add('unlocked');
-    }
-});
-
-loginBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    playVhod();
-    lockScreen.classList.add('unlocked');
-}, { passive: false });
-
-// ========== ВРЕМЯ И ДАТА ==========
-function updateDateTime() {
-    const now = new Date();
-    
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    document.getElementById('current-time').innerText = `${hours}:${minutes}`;
-    document.getElementById('time-display').innerText = `${hours}:${minutes}`;
-    
-    const months = [
-        __('january_gen'), __('february_gen'), __('march_gen'), __('april_gen'), __('may_gen'), __('june_gen'),
-        __('july_gen'), __('august_gen'), __('september_gen'), __('october_gen'), __('november_gen'), __('december_gen')
-    ];
-    const day = now.getDate();
-    const month = months[now.getMonth()];
-    document.getElementById('current-date').innerText = `${day} ${month}`;
-    
-    const holiday = checkHoliday(now);
-    const indicator = document.getElementById('holiday-indicator');
-    if (holiday) {
-        indicator.innerText = '🎉';
-        indicator.title = holiday;
-    } else {
-        indicator.innerText = '📅';
-        indicator.title = __('no_holiday');
-    }
-}
-
-const holidays = [
-    { month: 0, day: 1, name: 'Новый год' },
-    { month: 0, day: 2, name: 'Новогодние каникулы' },
-    { month: 0, day: 3, name: 'Новогодние каникулы' },
-    { month: 0, day: 4, name: 'Новогодние каникулы' },
-    { month: 0, day: 5, name: 'Новогодние каникулы' },
-    { month: 0, day: 6, name: 'Новогодние каникулы' },
-    { month: 0, day: 7, name: 'Рождество Христово' },
-    { month: 0, day: 8, name: 'Новогодние каникулы' },
-    { month: 1, day: 23, name: 'День защитника Отечества' },
-    { month: 2, day: 8, name: 'Международный женский день' },
-    { month: 4, day: 1, name: 'Праздник Весны и Труда' },
-    { month: 4, day: 9, name: 'День Победы' },
-    { month: 5, day: 5, name: 'День Бананов' },
-    { month: 5, day: 12, name: 'День России' },
-    { month: 10, day: 4, name: 'День народного единства' }
-];
-
-function checkHoliday(date) {
-    const month = date.getMonth();
-    const day = date.getDate();
-    const holiday = holidays.find(h => h.month === month && h.day === day);
-    return holiday ? holiday.name : null;
-}
-
-setInterval(updateDateTime, 1000);
-updateDateTime();
-
-// ========== ЗВУКИ ==========
-let gimnAudio = null, uvedAudio = null, vhodAudio = null;
-let currentPlayerAudio = null;
-let currentPlayBtn = null;
-let currentPlaylist = [];
-let currentTrackIndex = 0;
-
-function playGimn() {
-    try {
-        if (gimnAudio) {
-            gimnAudio.pause();
-            gimnAudio.currentTime = 0;
-        }
-        gimnAudio = new Audio('sounds/gimn.mp3');
-        gimnAudio.volume = 0.4;
-        gimnAudio.play().catch(() => {});
-    } catch (e) {}
-}
-
-function playVhod() {
-    try {
-        if (vhodAudio) {
-            vhodAudio.pause();
-            vhodAudio.currentTime = 0;
-        }
-        vhodAudio = new Audio('sounds/vhod.mp3');
-        vhodAudio.volume = 0.4;
-        vhodAudio.play().catch(() => {});
-    } catch (e) {}
-}
-
-function playUvedomlenie() {
-    try {
-        if (uvedAudio) {
-            uvedAudio.pause();
-            uvedAudio.currentTime = 0;
-        }
-        uvedAudio = new Audio('sounds/uvedomlenie.mp3');
-        uvedAudio.volume = 0.3;
-        uvedAudio.play().catch(() => {});
-    } catch (e) {}
-}
-
-// ========== УПРАВЛЕНИЕ ОКНАМИ ==========
-function closeWin(id) {
-    document.getElementById(id).classList.add('hidden');
-    playUvedomlenie();
-}
-
-function openWin(id) {
-    document.getElementById(id).classList.remove('hidden');
-    playUvedomlenie();
-}
-
-document.querySelectorAll('.win-btn.close').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const winId = btn.dataset.win;
-        closeWin(winId);
-    });
-
-    btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        const winId = btn.dataset.win;
-        closeWin(winId);
-    }, { passive: false });
-});
-
-document.querySelectorAll('.icon[data-window]').forEach(icon => {
-    icon.addEventListener('click', (e) => {
-        e.preventDefault();
-        openWin(icon.dataset.window);
-    });
-
-    icon.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        openWin(icon.dataset.window);
-    }, { passive: false });
-});
-
-document.querySelectorAll('.start-app-item, .start-footer-item[data-window]').forEach(item => {
-    item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const winId = item.dataset.window;
-        if (winId) {
-            openWin(winId);
-            toggleStartMenu();
-        }
-    });
-
-    item.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        const winId = item.dataset.window;
-        if (winId) {
-            openWin(winId);
-            toggleStartMenu();
-        }
-    }, { passive: false });
-});
-
-// ========== МЕНЮ ПУСК ==========
-const startButton = document.getElementById('start-button');
-const startModal = document.getElementById('start-modal');
-const startApps = document.getElementById('start-apps');
-const startSearch = document.getElementById('start-search');
-
-function toggleStartMenu() {
-    startModal.classList.toggle('hidden');
-}
-
-startButton.addEventListener('click', toggleStartMenu);
-startButton.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    toggleStartMenu();
-}, { passive: false });
-
-document.addEventListener('click', (e) => {
-    if (!startModal.classList.contains('hidden') && 
-        !startModal.contains(e.target) && 
-        !startButton.contains(e.target)) {
-        startModal.classList.add('hidden');
-    }
-});
-
-function renderStartMenu() {
-    const apps = [
-        { name: 'Настройки', icon: '⚙️', windowId: 'settings-window' },
-        { name: 'Документы', icon: '📁', windowId: 'files-window' },
-        { name: 'Календарь', icon: '📅', windowId: 'calendar-window' }
+    // ==================== ПРАЗДНИКИ ====================
+    const HOLIDAYS = [
+        { month: 0, day: 1, name: 'Новый год' },
+        { month: 0, day: 7, name: 'Рождество' },
+        { month: 1, day: 23, name: 'День защитника Отечества' },
+        { month: 2, day: 8, name: 'Женский день' },
+        { month: 4, day: 1, name: 'Весны и Труда' },
+        { month: 4, day: 9, name: 'День Победы' },
+        { month: 5, day: 12, name: 'День России' },
+        { month: 10, day: 4, name: 'День Народного единства' }
     ];
 
-    let html = '';
-    apps.forEach(app => {
-        html += `
-            <div class="start-app-item" data-window="${app.windowId}">
-                <div class="start-app-icon">${app.icon}</div>
-                <div class="start-app-name">${app.name}</div>
-            </div>
-        `;
-    });
-    startApps.innerHTML = html;
+    // ==================== ПЛЕЙЛИСТЫ ====================
+    const PLAYLISTS = {
+        main: [
+            { title: 'Гимн РФ', artist: 'Государственный гимн', src: 'sounds/gimn.mp3', icon: '🇷🇺' },
+            { title: 'Я русский', artist: 'SHAMAN', src: 'sounds/yarusskiy.mp3', icon: '🎤' }
+        ],
+        patriotic: [
+            { title: 'Священная война', artist: 'Александров', src: 'sounds/svyaschennaya.mp3', icon: '⚔️' },
+            { title: 'День Победы', artist: 'Лещенко', src: 'sounds/denpobedy.mp3', icon: '🕊️' }
+        ],
+        classic: [
+            { title: 'Калинка', artist: 'Народная', src: 'sounds/kalinka.mp3', icon: '🎻' },
+            { title: 'Подмосковные вечера', artist: 'Соловьёв-Седой', src: 'sounds/podmoskovnie.mp3', icon: '🎼' }
+        ]
+    };
 
-    document.querySelectorAll('.start-app-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const winId = item.dataset.window;
-            openWin(winId);
-            toggleStartMenu();
-        });
-
-        item.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const winId = item.dataset.window;
-            openWin(winId);
-            toggleStartMenu();
-        }, { passive: false });
-    });
-
-    startSearch.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const items = document.querySelectorAll('.start-app-item');
-        items.forEach(item => {
-            const name = item.querySelector('.start-app-name').textContent.toLowerCase();
-            if (name.includes(query)) {
-                item.style.display = 'flex';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    });
-}
-
-// ========== КАЛЕНДАРЬ (основной) ==========
-const datetimePanel = document.getElementById('datetime-panel');
-const calendarDropdown = document.getElementById('calendar-dropdown');
-const dropdownCalendarDays = document.getElementById('dropdown-calendar-days');
-const dropdownCalendarMonth = document.getElementById('dropdown-calendar-month');
-const calendarDropdownClose = document.getElementById('calendar-dropdown-close');
-const calendarDropdownPrev = document.getElementById('calendar-dropdown-prev');
-const calendarDropdownNext = document.getElementById('calendar-dropdown-next');
-const calendarDropdownToday = document.getElementById('calendar-dropdown-today');
-
-let currentDropdownDate = new Date();
-
-datetimePanel.addEventListener('click', () => {
-    calendarDropdown.classList.toggle('hidden');
-    renderDropdownCalendar(currentDropdownDate);
-});
-
-datetimePanel.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    calendarDropdown.classList.toggle('hidden');
-    renderDropdownCalendar(currentDropdownDate);
-}, { passive: false });
-
-calendarDropdownClose?.addEventListener('click', () => {
-    calendarDropdown.classList.add('hidden');
-});
-
-// Закрытие календаря при клике вне его
-document.addEventListener('click', (e) => {
-    if (!calendarDropdown.classList.contains('hidden') && 
-        !calendarDropdown.contains(e.target) && 
-        !datetimePanel.contains(e.target)) {
-        calendarDropdown.classList.add('hidden');
-    }
-});
-
-function renderDropdownCalendar(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    
-    const monthNames = [
-        __('january'), __('february'), __('march'), __('april'), __('may'), __('june'),
-        __('july'), __('august'), __('september'), __('october'), __('november'), __('december')
+    // ==================== ВИДЕО ====================
+    const VIDEOS = [
+        { title: 'Гимн России', channel: 'Государственный', views: '1.2M', src: 'videos/anthem.mp4', poster: 'videos/anthem_poster.jpg' },
+        { title: 'SHAMAN - Я русский', channel: 'SHAMAN', views: '5.4M', src: 'videos/shaman.mp4', poster: 'videos/shaman_poster.jpg' }
     ];
-    dropdownCalendarMonth.innerText = `${monthNames[month]} ${year}`;
 
-    const firstDay = new Date(year, month, 1);
-    let startDay = firstDay.getDay();
-    startDay = startDay === 0 ? 6 : startDay - 1;
-
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
-
-    let html = '';
-    for (let i = 0; i < startDay; i++) {
-        html += '<div class="calendar-day"></div>';
-    }
-
-    for (let d = 1; d <= daysInMonth; d++) {
-        const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
-        const holiday = holidays.find(h => h.month === month && h.day === d);
-        
-        let classes = 'calendar-day';
-        if (isToday) classes += ' today';
-        if (holiday) classes += ' holiday';
-        
-        html += `<div class="${classes}" data-date="${d}.${month+1}.${year}">${d}</div>`;
-    }
-
-    dropdownCalendarDays.innerHTML = html;
-
-    document.querySelectorAll('#dropdown-calendar-days .calendar-day[data-date]').forEach(day => {
-        day.addEventListener('click', () => {
-            const date = day.dataset.date;
-            alert(`${__('selected_date')}: ${date}`);
-            calendarDropdown.classList.add('hidden');
-        });
-    });
-}
-
-calendarDropdownPrev?.addEventListener('click', () => {
-    currentDropdownDate.setMonth(currentDropdownDate.getMonth() - 1);
-    renderDropdownCalendar(currentDropdownDate);
-});
-
-calendarDropdownNext?.addEventListener('click', () => {
-    currentDropdownDate.setMonth(currentDropdownDate.getMonth() + 1);
-    renderDropdownCalendar(currentDropdownDate);
-});
-
-calendarDropdownToday?.addEventListener('click', () => {
-    currentDropdownDate = new Date();
-    renderDropdownCalendar(currentDropdownDate);
-});
-
-// Старый календарь (для совместимости)
-const calendarDaysOld = document.getElementById('calendar-days-old');
-const calendarMonthOld = document.getElementById('calendar-month-old');
-const calendarYearOld = document.getElementById('calendar-year-old');
-const monthHolidaysOld = document.getElementById('month-holidays-old');
-const calendarPrevOld = document.getElementById('calendar-prev-old');
-const calendarNextOld = document.getElementById('calendar-next-old');
-
-let currentDate = new Date();
-
-function renderCalendar(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    
-    const monthNames = [
-        __('january'), __('february'), __('march'), __('april'), __('may'), __('june'),
-        __('july'), __('august'), __('september'), __('october'), __('november'), __('december')
+    // ==================== ПРИЛОЖЕНИЯ ====================
+    const PREINSTALLED = [
+        { name: 'ВКонтакте', url: 'vk.com', icon: 'images/vkontakte.png', color: '#0077ff' },
+        { name: 'Рувидео', url: '#', icon: 'images/rutube.png', isVideo: true },
+        { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isMusic: true },
     ];
-    if (calendarMonthOld) calendarMonthOld.innerText = monthNames[month];
-    if (calendarYearOld) calendarYearOld.innerText = year;
 
-    const firstDay = new Date(year, month, 1);
-    let startDay = firstDay.getDay();
-    startDay = startDay === 0 ? 6 : startDay - 1;
-
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
-
-    let html = '';
-    for (let i = 0; i < startDay; i++) {
-        html += '<div class="calendar-day"></div>';
-    }
-
-    for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = `${year}-${month + 1}-${d}`;
-        const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
-        const holiday = holidays.find(h => h.month === month && h.day === d);
-        
-        let classes = 'calendar-day';
-        if (isToday) classes += ' today';
-        if (holiday) classes += ' holiday';
-        
-        html += `<div class="${classes}" data-date="${dateStr}">${d}</div>`;
-    }
-
-    if (calendarDaysOld) calendarDaysOld.innerHTML = html;
-
-    const monthHolidaysList = holidays.filter(h => h.month === month);
-    let holidaysHtml = '';
-    monthHolidaysList.forEach(h => {
-        const isToday = today.getDate() === h.day && today.getMonth() === month;
-        holidaysHtml += `<li${isToday ? ' class="today-holiday"' : ''}>${h.day} ${monthNames[month].toLowerCase()} — ${h.name}</li>`;
-    });
-    
-    if (monthHolidaysList.length === 0) {
-        holidaysHtml = `<li>${__('no_holidays')}</li>`;
-    }
-    
-    if (monthHolidaysOld) monthHolidaysOld.innerHTML = holidaysHtml;
-
-    document.querySelectorAll('#calendar-days-old .calendar-day[data-date]').forEach(day => {
-        day.addEventListener('click', () => {
-            const date = day.dataset.date;
-            alert(`${__('selected_date')}: ${date}`);
-        });
-    });
-}
-
-calendarPrevOld?.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar(currentDate);
-});
-
-calendarNextOld?.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar(currentDate);
-});
-
-// ========== КАЛЬКУЛЯТОР ==========
-let cExp = "";
-const calcDisplay = document.getElementById('calc-res');
-
-function cNum(n) { 
-    cExp += n; 
-    calcDisplay.innerText = cExp; 
-}
-
-function cClear() { 
-    cExp = ""; 
-    calcDisplay.innerText = "0"; 
-}
-
-function cOp(op) { 
-    cExp += op; 
-    calcDisplay.innerText = cExp; 
-}
-
-function cRes() { 
-    try { 
-        cExp = eval(cExp).toString(); 
-        calcDisplay.innerText = cExp; 
-    } catch { 
-        calcDisplay.innerText = "Ошибка"; 
-        cExp = ""; 
-    }
-}
-
-document.querySelectorAll('[data-calc]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const type = btn.dataset.calc;
-        const value = btn.innerText;
-        
-        if (type === 'num') cNum(value);
-        else if (type === 'op') cOp(value);
-        else if (type === 'clear') cClear();
-        else if (type === 'equals') cRes();
-    });
-
-    btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        const type = btn.dataset.calc;
-        const value = btn.innerText;
-        
-        if (type === 'num') cNum(value);
-        else if (type === 'op') cOp(value);
-        else if (type === 'clear') cClear();
-        else if (type === 'equals') cRes();
-    }, { passive: false });
-});
-
-// ========== БРАУЗЕР ==========
-const browserFrame = document.getElementById('browser-frame');
-const browserHome = document.getElementById('browser-home');
-const browserAddress = document.getElementById('browser-address');
-const browserGo = document.getElementById('browser-go');
-const browserBack = document.getElementById('browser-back');
-const browserForward = document.getElementById('browser-forward');
-const browserRefresh = document.getElementById('browser-refresh');
-const browserSettingsBtn = document.getElementById('browser-settings-btn');
-const browserExtensionsBtn = document.getElementById('browser-extensions-btn');
-const browserSettingsPanel = document.getElementById('browser-settings-panel');
-const browserExtensionsPanel = document.getElementById('browser-extensions-panel');
-const browserSettingsClose = document.getElementById('browser-settings-close');
-const browserExtensionsClose = document.getElementById('browser-extensions-close');
-const browserOpenRustore = document.getElementById('browser-open-rustore');
-
-let history = [];
-let currentHistoryIndex = -1;
-const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'rutube.ru', 'gosuslugi.ru', 'sberbank.ru', '2gis.ru', 'mail.ru', 'ok.ru', 'rkn.gov.ru', 'web.max.ru', '.ru', '.рф', '#'];
-
-function showHome() {
-    browserFrame.style.display = 'none';
-    browserHome.style.display = 'flex';
-    browserAddress.value = 'yandex.ru';
-}
-
-function loadBrowserSettings() {
-    const homepageSelect = document.getElementById('browser-homepage');
-    const customUrlInput = document.getElementById('browser-custom-url');
-    const searchEngineSelect = document.getElementById('browser-search-engine');
-    const vpnBlockCheck = document.getElementById('browser-vpn-block');
-    const foreignBlockCheck = document.getElementById('browser-foreign-block');
-    const themeSelect = document.getElementById('browser-theme');
-    const fontSizeInput = document.getElementById('browser-font-size');
-    
-    if (homepageSelect) homepageSelect.value = browserSettings.homepage;
-    if (customUrlInput) {
-        customUrlInput.value = browserSettings.customUrl || '';
-        customUrlInput.style.display = browserSettings.homepage === 'custom' ? 'block' : 'none';
-    }
-    if (searchEngineSelect) searchEngineSelect.value = browserSettings.searchEngine;
-    if (vpnBlockCheck) vpnBlockCheck.checked = browserSettings.vpnBlock;
-    if (foreignBlockCheck) foreignBlockCheck.checked = browserSettings.foreignBlock;
-    if (themeSelect) themeSelect.value = browserSettings.theme;
-    if (fontSizeInput) fontSizeInput.value = browserSettings.fontSize;
-    
-    applyBrowserTheme(browserSettings.theme);
-    applyBrowserFontSize(browserSettings.fontSize);
-}
-
-function applyBrowserTheme(theme) {
-    const browserWindow = document.getElementById('browser-window');
-    if (!browserWindow) return;
-    
-    switch(theme) {
-        case 'dark':
-            browserWindow.style.background = '#1a1a1a';
-            browserWindow.style.color = 'white';
-            break;
-        case 'tricolor':
-            browserWindow.style.background = 'linear-gradient(135deg, #ffffff 0%, #0057b7 50%, #d52b1e 100%)';
-            break;
-        default:
-            browserWindow.style.background = '';
-            browserWindow.style.color = '';
-    }
-}
-
-function applyBrowserFontSize(size) {
-    const browserWindow = document.getElementById('browser-window');
-    if (browserWindow) {
-        browserWindow.style.fontSize = size + 'px';
-    }
-}
-
-function saveBrowserSettings() {
-    localStorage.setItem('browserSettings', JSON.stringify(browserSettings));
-}
-
-document.getElementById('browser-homepage')?.addEventListener('change', (e) => {
-    browserSettings.homepage = e.target.value;
-    const customUrlInput = document.getElementById('browser-custom-url');
-    if (customUrlInput) {
-        customUrlInput.style.display = e.target.value === 'custom' ? 'block' : 'none';
-    }
-    saveBrowserSettings();
-});
-
-document.getElementById('browser-custom-url')?.addEventListener('input', (e) => {
-    browserSettings.customUrl = e.target.value;
-    saveBrowserSettings();
-});
-
-document.getElementById('browser-search-engine')?.addEventListener('change', (e) => {
-    browserSettings.searchEngine = e.target.value;
-    saveBrowserSettings();
-});
-
-document.getElementById('browser-vpn-block')?.addEventListener('change', (e) => {
-    browserSettings.vpnBlock = e.target.checked;
-    saveBrowserSettings();
-    alert(browserSettings.vpnBlock ? 'VPN блокировка включена' : 'VPN блокировка отключена (небезопасно!)');
-});
-
-document.getElementById('browser-foreign-block')?.addEventListener('change', (e) => {
-    browserSettings.foreignBlock = e.target.checked;
-    saveBrowserSettings();
-});
-
-document.getElementById('browser-theme')?.addEventListener('change', (e) => {
-    browserSettings.theme = e.target.value;
-    applyBrowserTheme(browserSettings.theme);
-    saveBrowserSettings();
-});
-
-document.getElementById('browser-font-size')?.addEventListener('input', (e) => {
-    browserSettings.fontSize = parseInt(e.target.value);
-    applyBrowserFontSize(browserSettings.fontSize);
-    saveBrowserSettings();
-});
-
-function showSite(url) {
-    let fullUrl = url;
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        fullUrl = 'https://' + url;
-    }
-    
-    let isAllowed = allowedDomains.some(domain => fullUrl.includes(domain));
-
-    if (!isAllowed && browserSettings.foreignBlock) {
-        alert(__('only_russian'));
-        showHome();
-        return;
-    }
-
-    browserFrame.style.display = 'block';
-    browserHome.style.display = 'none';
-    browserFrame.src = fullUrl;
-    browserAddress.value = url;
-
-    history = history.slice(0, currentHistoryIndex + 1);
-    history.push(url);
-    currentHistoryIndex = history.length - 1;
-}
-
-browserGo.addEventListener('click', () => {
-    const url = browserAddress.value.trim();
-    if (url) showSite(url);
-});
-
-browserGo.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    const url = browserAddress.value.trim();
-    if (url) showSite(url);
-}, { passive: false });
-
-browserAddress.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        const url = browserAddress.value.trim();
-        if (url) showSite(url);
-    }
-});
-
-browserBack.addEventListener('click', () => {
-    if (currentHistoryIndex > 0) {
-        currentHistoryIndex--;
-        showSite(history[currentHistoryIndex]);
-    }
-});
-
-browserBack.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    if (currentHistoryIndex > 0) {
-        currentHistoryIndex--;
-        showSite(history[currentHistoryIndex]);
-    }
-}, { passive: false });
-
-browserForward.addEventListener('click', () => {
-    if (currentHistoryIndex < history.length - 1) {
-        currentHistoryIndex++;
-        showSite(history[currentHistoryIndex]);
-    }
-});
-
-browserForward.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    if (currentHistoryIndex < history.length - 1) {
-        currentHistoryIndex++;
-        showSite(history[currentHistoryIndex]);
-    }
-}, { passive: false });
-
-browserRefresh.addEventListener('click', () => {
-    if (browserFrame.style.display !== 'none') browserFrame.src = browserFrame.src;
-});
-
-browserRefresh.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    if (browserFrame.style.display !== 'none') browserFrame.src = browserFrame.src;
-}, { passive: false });
-
-document.querySelectorAll('.browser-card').forEach(card => {
-    card.addEventListener('click', () => {
-        const url = card.dataset.url;
-        if (url) showSite(url);
-    });
-});
-
-browserOpenRustore?.addEventListener('click', () => {
-    openWin('rustore-window');
-});
-
-browserSettingsBtn?.addEventListener('click', () => {
-    browserSettingsPanel.style.display = 'block';
-    browserExtensionsPanel.style.display = 'none';
-    loadBrowserSettings();
-});
-
-browserSettingsClose?.addEventListener('click', () => {
-    browserSettingsPanel.style.display = 'none';
-});
-
-browserExtensionsBtn?.addEventListener('click', () => {
-    browserExtensionsPanel.style.display = 'block';
-    browserSettingsPanel.style.display = 'none';
-    renderExtensions();
-});
-
-browserExtensionsClose?.addEventListener('click', () => {
-    browserExtensionsPanel.style.display = 'none';
-});
-
-document.querySelectorAll('.browser-settings-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.browser-settings-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        document.querySelectorAll('.browser-settings-panel').forEach(p => p.classList.remove('active'));
-        document.getElementById(`browser-settings-${tab.dataset.tab}`).classList.add('active');
-    });
-});
-
-const extensions = [
-    { name: 'АнтиVPN', desc: 'Блокирует VPN и прокси', icon: '🛡️', installed: false },
-    { name: 'Патриотичный фон', desc: 'Триколор на всех сайтах', icon: '🇷🇺', installed: false },
-    { name: 'Защита от деструктивного контента', desc: 'Блокирует англицизмы', icon: '⚔️', installed: false },
-    { name: 'Госуслуги помощник', desc: 'Быстрый доступ', icon: '📋', installed: false },
-    { name: 'Роскомнадзор помощник', desc: 'Проверка сайтов', icon: '👁️', installed: true }
-];
-
-function renderExtensions() {
-    const grid = document.getElementById('extensions-grid');
-    if (!grid) return;
-    
-    let html = '';
-    extensions.forEach(ext => {
-        html += `
-            <div class="extension-card">
-                <div class="extension-icon">${ext.icon}</div>
-                <div class="extension-name">${ext.name}</div>
-                <div class="extension-desc">${ext.desc}</div>
-                <button class="extension-btn ${ext.installed ? 'installed' : ''}" data-ext="${ext.name}">
-                    ${ext.installed ? '✓ Установлено' : 'Установить'}
-                </button>
-            </div>
-        `;
-    });
-    grid.innerHTML = html;
-    
-    grid.querySelectorAll('.extension-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (!btn.classList.contains('installed')) {
-                btn.classList.add('installed');
-                btn.textContent = '✓ Установлено';
-                playUvedomlenie();
-            }
-        });
-    });
-}
-
-showHome();
-
-// ========== ОБОИ ==========
-const desktop = document.getElementById('desktop');
-const wallpaperOptions = document.querySelectorAll('.wallpaper-option');
-
-function setWallpaper(wallpaperName) {
-    desktop.style.backgroundImage = `url('wallpapers/${wallpaperName}.png')`;
-    playUvedomlenie();
-}
-
-wallpaperOptions.forEach(opt => {
-    opt.addEventListener('click', () => setWallpaper(opt.dataset.wallpaper));
-    opt.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        setWallpaper(opt.dataset.wallpaper);
-    }, { passive: false });
-});
-
-// ========== RuStore ==========
-const rustoreGrid = document.getElementById('rustore-grid');
-const rustoreName = document.getElementById('rustore-name');
-const rustoreUrl = document.getElementById('rustore-url');
-const rustoreAddBtn = document.getElementById('rustore-add-btn');
-const desktopIcons = document.getElementById('desktop-icons');
-
-const preinstalledApps = [
-    { name: 'ВКонтакте', url: 'vk.com', icon: 'images/vkontakte.png' },
-    { name: 'Рувидео', url: '#', icon: 'images/rutube.png', isVideo: true },
-    { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isPlayer: true }
-];
-
-let installedApps = JSON.parse(localStorage.getItem('patriotApps')) || [];
-
-function renderRustore() {
-    let html = '';
-    preinstalledApps.forEach(app => {
-        const isInstalled = true;
-        let typeIcon = '';
-        if (app.isPlayer) typeIcon = '🎵';
-        else if (app.isVideo) typeIcon = '📺';
-        
-        html += `
-            <div class="rustore-item ${isInstalled ? 'installed' : ''}" data-app='${JSON.stringify(app)}'>
-                <div class="rustore-item-icon" style="background-image: url('${app.icon}');"></div>
-                <div class="rustore-item-name">${app.name}</div>
-                <div class="rustore-item-url">${typeIcon} ${app.isPlayer ? 'Плеер' : app.isVideo ? 'Видео' : app.url}</div>
-                <div class="installed-badge">✓ ${__('installed')}</div>
-            </div>
-        `;
-    });
-    rustoreGrid.innerHTML = html;
-
-    document.querySelectorAll('.rustore-item').forEach(item => {
-        const app = JSON.parse(item.dataset.app);
-        
-        item.addEventListener('click', () => {
-            if (!installedApps.some(a => a.url === app.url)) {
-                installApp(app.name, app.url, app.icon, app.isPlayer || false, app.isVideo || false);
-            } else {
-                alert(`✅ ${app.name} ${__('already_installed')}`);
-            }
-        });
-        
-        item.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!installedApps.some(a => a.url === app.url)) {
-                installApp(app.name, app.url, app.icon, app.isPlayer || false, app.isVideo || false);
-            } else {
-                alert(`✅ ${app.name} ${__('already_installed')}`);
-            }
-        }, { passive: false });
-    });
-}
-
-window.installApp = function(name, url, icon, isPlayer = false, isVideo = false) {
-    if (installedApps.some(a => a.url === url)) {
-        alert(__('already_installed'));
-        return;
-    }
-    installedApps.push({ name, url, icon, isPlayer, isVideo });
-    localStorage.setItem('patriotApps', JSON.stringify(installedApps));
-    addDesktopIcon(name, url, icon, isPlayer, isVideo);
-    playUvedomlenie();
-    renderRustore();
-};
-
-function addDesktopIcon(name, url, icon, isPlayer = false, isVideo = false) {
-    const el = document.createElement('div');
-    el.className = 'desktop-icon';
-    el.setAttribute('data-url', url);
-    
-    if (isPlayer) {
-        el.addEventListener('click', (e) => {
-            e.preventDefault();
-            openWin('rusmusic-window');
-        });
-        
-        el.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            openWin('rusmusic-window');
-        }, { passive: false });
-    } else if (isVideo) {
-        el.addEventListener('click', (e) => {
-            e.preventDefault();
-            openWin('ruvideo-window');
-        });
-        
-        el.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            openWin('ruvideo-window');
-        }, { passive: false });
-    } else {
-        el.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (url === '#' || url === '') {
-                alert(__('app_not_support'));
-                return;
-            }
-            openWin('browser-window');
-            showSite(url);
-        });
-        
-        el.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (url === '#' || url === '') {
-                alert(__('app_not_support'));
-                return;
-            }
-            openWin('browser-window');
-            showSite(url);
-        }, { passive: false });
-    }
-    
-    el.innerHTML = `
-        <div class="desktop-icon-img" style="background-image: url('${icon}');"></div>
-        <div class="desktop-icon-name">${name}</div>
-    `;
-    desktopIcons.appendChild(el);
-}
-
-function loadDesktopIcons() {
-    desktopIcons.innerHTML = '';
-    preinstalledApps.forEach(app => addDesktopIcon(app.name, app.url, app.icon, app.isPlayer || false, app.isVideo || false));
-    installedApps.forEach(app => {
-        if (!preinstalledApps.some(p => p.url === app.url)) {
-            addDesktopIcon(app.name, app.url, app.icon, app.isPlayer || false, app.isVideo || false);
+    // ==================== ОБОИ ====================
+    const WALLPAPERS = {
+        flag: 'wallpapers/flag.png',
+        gerb: 'wallpapers/gerb.png',
+        kreml: 'wallpapers/kreml.png',
+        prostory: 'wallpapers/prostory.png',
+        bereza: 'wallpapers/bereza.png'
+    };
+
+    // ==================== ФАЙЛОВАЯ СИСТЕМА ====================
+    class FileSystem {
+        constructor() {
+            this.root = this.load();
+            this.current = 'root';
         }
-    });
-}
-
-rustoreAddBtn.addEventListener('click', () => {
-    const name = rustoreName.value.trim();
-    let url = rustoreUrl.value.trim();
-    if (!name || !url) return alert(__('fill_fields'));
-    
-    if (!allowedDomains.some(d => url.includes(d)) && !url.includes('.ru') && !url.includes('.рф')) {
-        return alert(__('only_russian_domains'));
-    }
-    
-    if (!url.startsWith('http')) url = 'https://' + url;
-    
-    const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='%238b6b4d'/%3E%3Ctext x='30' y='40' font-size='24' text-anchor='middle' fill='white'%3E${name.charAt(0).toUpperCase()}%3C/text%3E%3C/svg%3E`;
-    
-    if (installedApps.some(a => a.url === url)) return alert(__('already_exists'));
-    
-    installedApps.push({ name, url, icon });
-    localStorage.setItem('patriotApps', JSON.stringify(installedApps));
-    addDesktopIcon(name, url, icon);
-    rustoreName.value = rustoreUrl.value = '';
-    playUvedomlenie();
-    renderRustore();
-});
-
-rustoreAddBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    rustoreAddBtn.click();
-}, { passive: false });
-
-// ========== ПРОВОДНИК ==========
-class PatriotFileSystem {
-    constructor() {
-        this.root = this.loadFS();
-        this.currentPath = 'root';
-    }
-    
-    loadFS() {
-        const saved = localStorage.getItem('patriotFS');
-        if (saved) return JSON.parse(saved);
-        return {
-            name: 'root', 
-            type: 'folder', 
-            children: {
-                'Документы': { 
-                    name: 'Документы', 
-                    type: 'folder', 
-                    children: {
-                        'Важный документ.txt': { 
-                            name: 'Важный документ.txt', 
-                            type: 'file', 
-                            content: 'Слава Российской Федерации! 🇷🇺' 
+        
+        load() {
+            const saved = localStorage.getItem('patriot_fs');
+            if (saved) return JSON.parse(saved);
+            return {
+                name: 'root',
+                type: 'folder',
+                children: {
+                    'Документы': {
+                        name: 'Документы',
+                        type: 'folder',
+                        children: {
+                            'Приказ.txt': { name: 'Приказ.txt', type: 'file', content: 'Служить России!' }
                         }
-                    } 
-                },
-                'Изображения': { 
-                    name: 'Изображения', 
-                    type: 'folder', 
-                    children: {
-                        'Флаг РФ.png': { 
-                            name: 'Флаг РФ.png', 
-                            type: 'file', 
-                            content: 'wallpapers/flag.png' 
-                        },
-                        'Герб РФ.png': { 
-                            name: 'Герб РФ.png', 
-                            type: 'file', 
-                            content: 'wallpapers/gerb.png' 
+                    },
+                    'Изображения': {
+                        name: 'Изображения',
+                        type: 'folder',
+                        children: {
+                            'Флаг.png': { name: 'Флаг.png', type: 'file', content: 'flag' },
+                            'Герб.png': { name: 'Герб.png', type: 'file', content: 'gerb' },
+                            'Кремль.png': { name: 'Кремль.png', type: 'file', content: 'kreml' },
+                            'Просторы.png': { name: 'Просторы.png', type: 'file', content: 'prostory' },
+                            'Берёзка.png': { name: 'Берёзка.png', type: 'file', content: 'bereza' }
                         }
-                    } 
-                },
-                'Музыка': { 
-                    name: 'Музыка', 
-                    type: 'folder', 
-                    children: {
-                        'Гимн РФ.mp3': { 
-                            name: 'Гимн РФ.mp3', 
-                            type: 'file', 
-                            content: 'sounds/gimn.mp3' 
-                        },
-                        'Я Русский — Шаман.mp3': { 
-                            name: 'Я Русский — Шаман.mp3', 
-                            type: 'file', 
-                            content: 'sounds/yarusskiy.mp3' 
+                    },
+                    'Музыка': {
+                        name: 'Музыка',
+                        type: 'folder',
+                        children: {
+                            'Гимн.mp3': { name: 'Гимн.mp3', type: 'file', content: 'sounds/gimn.mp3' },
+                            'Я русский.mp3': { name: 'Я русский.mp3', type: 'file', content: 'sounds/yarusskiy.mp3' },
+                            'Священная война.mp3': { name: 'Священная война.mp3', type: 'file', content: 'sounds/svyaschennaya.mp3' },
+                            'День Победы.mp3': { name: 'День Победы.mp3', type: 'file', content: 'sounds/denpobedy.mp3' },
+                            'Калинка.mp3': { name: 'Калинка.mp3', type: 'file', content: 'sounds/kalinka.mp3' },
+                            'Подмосковные вечера.mp3': { name: 'Подмосковные вечера.mp3', type: 'file', content: 'sounds/podmoskovnie.mp3' }
                         }
-                    } 
+                    },
+                    'Видео': {
+                        name: 'Видео',
+                        type: 'folder',
+                        children: {
+                            'Гимн.mp4': { name: 'Гимн.mp4', type: 'file', content: 'videos/anthem.mp4' },
+                            'Я русский.mp4': { name: 'Я русский.mp4', type: 'file', content: 'videos/shaman.mp4' }
+                        }
+                    }
+                }
+            };
+        }
+        
+        save() {
+            localStorage.setItem('patriot_fs', JSON.stringify(this.root));
+        }
+        
+        getFolder(path) {
+            if (path === 'root') return this.root;
+            if (path === 'Документы') return this.root.children['Документы'];
+            if (path === 'Изображения') return this.root.children['Изображения'];
+            if (path === 'Музыка') return this.root.children['Музыка'];
+            if (path === 'Видео') return this.root.children['Видео'];
+            
+            const parts = path.split('/');
+            let current = this.root;
+            for (const part of parts) {
+                if (current.children && current.children[part]) {
+                    current = current.children[part];
+                } else {
+                    return null;
                 }
             }
-        };
-    }
-    
-    saveFS() { 
-        localStorage.setItem('patriotFS', JSON.stringify(this.root)); 
-    }
-    
-    getFolder(path) {
-        if (path === 'root') return this.root;
-        if (path === 'Документы') return this.root.children['Документы'];
-        if (path === 'Изображения') return this.root.children['Изображения'];
-        if (path === 'Музыка') return this.root.children['Музыка'];
-        return null;
-    }
-    
-    createItem(path, name, type) {
-        if (!/^[а-яА-ЯёЁ0-9\s\.\-]+$/.test(name)) {
-            alert(__('only_russian_letters'));
-            return false;
+            return current;
         }
-        const folder = this.getFolder(path);
-        if (!folder || folder.type !== 'folder' || folder.children[name]) return false;
-        folder.children[name] = { 
-            name, 
-            type, 
-            children: type === 'folder' ? {} : undefined, 
-            content: '' 
-        };
-        this.saveFS();
-        return true;
-    }
-    
-    deleteItem(path, name) {
-        const folder = this.getFolder(path);
-        if (!folder || !folder.children[name]) return false;
-        delete folder.children[name];
-        this.saveFS();
-        return true;
-    }
-}
-
-const patriotFS = new PatriotFileSystem();
-const filesGrid = document.getElementById('files-grid');
-const filesSidebarItems = document.querySelectorAll('.files-sidebar-item');
-const newFolderBtn = document.getElementById('files-new-folder');
-const newFileBtn = document.getElementById('files-new-file');
-const refreshBtn = document.getElementById('files-refresh');
-
-function renderFiles(path) {
-    const folder = patriotFS.getFolder(path);
-    if (!folder) return;
-    patriotFS.currentPath = path;
-    
-    let html = '';
-    if (path !== 'root') {
-        html += `<div class="files-item folder" data-folder="up"><div class="files-item-icon">📂</div><div class="files-item-name">...</div></div>`;
-    }
-    
-    Object.values(folder.children || {}).forEach(item => {
-        const icon = item.type === 'folder' ? '📁' : '📄';
-        html += `<div class="files-item ${item.type}" data-path="${path}" data-name="${item.name}" data-type="${item.type}">
-            <div class="files-item-icon">${icon}</div>
-            <div class="files-item-name">${item.name}</div>
-        </div>`;
-    });
-    
-    filesGrid.innerHTML = html;
-
-    document.querySelectorAll('.files-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (item.dataset.folder === 'up') {
-                navigateUp();
-            } else {
-                openFileItem(item.dataset.path, item.dataset.name);
+        
+        create(path, name, type) {
+            if (!/^[а-яА-ЯёЁ0-9\s\.\-]+$/.test(name)) {
+                this.notify('Только русские буквы');
+                return false;
             }
-        });
-
-        item.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (item.dataset.folder === 'up') {
-                navigateUp();
-            } else {
-                openFileItem(item.dataset.path, item.dataset.name);
-            }
-        }, { passive: false });
-    });
-}
-
-window.openFileItem = function(path, name) {
-    const folder = patriotFS.getFolder(path);
-    const item = folder.children[name];
-    if (item.type === 'folder') {
-        renderFiles(path === 'root' ? name : path + '/' + name);
-    } else {
-        if (name.endsWith('.mp3')) {
-            new Audio(item.content).play();
-            alert(`🎵 ${name}`);
-        } else {
-            alert(`📄 ${name}\n\n${item.content || ''}`);
+            const folder = this.getFolder(path);
+            if (!folder || folder.children[name]) return false;
+            
+            folder.children[name] = {
+                name,
+                type,
+                children: type === 'folder' ? {} : undefined,
+                content: ''
+            };
+            this.save();
+            return true;
+        }
+        
+        delete(path, name) {
+            const folder = this.getFolder(path);
+            if (!folder || !folder.children[name]) return false;
+            delete folder.children[name];
+            this.save();
+            return true;
+        }
+        
+        notify(msg) {
+            showToast(msg);
         }
     }
-};
-
-window.navigateUp = function() {
-    const current = patriotFS.currentPath;
-    if (current === 'root') return;
-    renderFiles('root');
-};
-
-newFolderBtn.addEventListener('click', () => {
-    const name = prompt(__('folder_name'));
-    if (name && patriotFS.createItem(patriotFS.currentPath, name, 'folder')) {
-        renderFiles(patriotFS.currentPath);
-        playUvedomlenie();
-    }
-});
-
-newFolderBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    newFolderBtn.click();
-}, { passive: false });
-
-newFileBtn.addEventListener('click', () => {
-    const name = prompt(__('file_name'));
-    if (name && patriotFS.createItem(patriotFS.currentPath, name, 'file')) {
-        renderFiles(patriotFS.currentPath);
-        playUvedomlenie();
-    }
-});
-
-newFileBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    newFileBtn.click();
-}, { passive: false });
-
-refreshBtn.addEventListener('click', () => {
-    renderFiles(patriotFS.currentPath);
-    playUvedomlenie();
-});
-
-refreshBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    refreshBtn.click();
-}, { passive: false });
-
-filesSidebarItems.forEach(item => {
-    item.addEventListener('click', () => {
-        filesSidebarItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        renderFiles(item.dataset.path);
-    });
-
-    item.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        filesSidebarItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        renderFiles(item.dataset.path);
-    }, { passive: false });
-});
-
-filesGrid.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    const item = e.target.closest('.files-item');
-    if (!item || item.dataset.folder === 'up') return;
-    const name = item.dataset.name;
-    if (confirm(`${__('delete_confirm')} "${name}"?`)) {
-        if (patriotFS.deleteItem(patriotFS.currentPath, name)) {
-            renderFiles(patriotFS.currentPath);
-            playUvedomlenie();
-        }
-    }
-});
-
-// ========== НАСТРОЙКИ ==========
-const settingsSidebarItems = document.querySelectorAll('.settings-sidebar-item');
-const settingsTabs = document.querySelectorAll('.settings-tab');
-const settingsSearch = document.getElementById('settings-search');
-const settingsLangSelect = document.getElementById('settings-language');
-const settingsTzSelect = document.getElementById('settings-timezone');
-
-settingsSidebarItems.forEach(item => {
-    item.addEventListener('click', () => {
-        settingsSidebarItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        const tabId = item.dataset.tab;
-        settingsTabs.forEach(tab => {
-            tab.classList.add('hidden');
-            if (tab.id === 'tab-' + tabId) {
-                tab.classList.remove('hidden');
-            }
-        });
-    });
-});
-
-settingsSearch.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    const activeTab = document.querySelector('.settings-tab:not(.hidden)');
-    if (!activeTab) return;
-    const cards = activeTab.querySelectorAll('.settings-card');
-    cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        if (text.includes(query)) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-});
-
-function populateSettingsLangTimezone() {
-    const languages = [
-        { value: 'ru', text: 'Русский' },
-        { value: 'be', text: 'Белорусский' },
-        { value: 'ba', text: 'Башкирский' },
-        { value: 'sah', text: 'Якутский' },
-        { value: 'tt', text: 'Татарский' },
-        { value: 'kpy', text: 'Корякский' }
-    ];
     
-    let langHtml = '';
-    languages.forEach(lang => {
-        langHtml += `<option value="${lang.value}">${lang.text}</option>`;
-    });
-    settingsLangSelect.innerHTML = langHtml;
+    const fs = new FileSystem();
 
-    const timezones = [
-        { value: 'Europe/Kaliningrad', text: 'Калининград (MSK-1)' },
-        { value: 'Europe/Moscow', text: 'Москва (MSK)' },
-        { value: 'Europe/Samara', text: 'Самара (MSK+1)' },
-        { value: 'Asia/Yekaterinburg', text: 'Екатеринбург (MSK+2)' },
-        { value: 'Asia/Omsk', text: 'Омск (MSK+3)' },
-        { value: 'Asia/Krasnoyarsk', text: 'Красноярск (MSK+4)' },
-        { value: 'Asia/Irkutsk', text: 'Иркутск (MSK+5)' },
-        { value: 'Asia/Yakutsk', text: 'Якутск (MSK+6)' },
-        { value: 'Asia/Vladivostok', text: 'Владивосток (MSK+7)' },
-        { value: 'Asia/Magadan', text: 'Магадан (MSK+8)' },
-        { value: 'Asia/Kamchatka', text: 'Камчатка (MSK+9)' }
-    ];
-    
-    let tzHtml = '';
-    timezones.forEach(tz => {
-        tzHtml += `<option value="${tz.value}">${tz.text}</option>`;
-    });
-    settingsTzSelect.innerHTML = tzHtml;
-
-    const saved = JSON.parse(localStorage.getItem('patriotSetup') || '{}');
-    if (saved.language) settingsLangSelect.value = saved.language;
-    if (saved.timezone) settingsTzSelect.value = saved.timezone;
-}
-
-document.getElementById('save-langtime').addEventListener('click', () => {
-    const language = settingsLangSelect.value;
-    const timezone = settingsTzSelect.value;
-    localStorage.setItem('patriotSetup', JSON.stringify({ language, timezone }));
-    alert(__('settings_saved'));
-});
-
-document.getElementById('save-username')?.addEventListener('click', () => {
-    const username = document.getElementById('username-input').value;
-    localStorage.setItem('username', username);
-    alert('Имя пользователя сохранено');
-});
-
-document.getElementById('play-gimn').addEventListener('click', playGimn);
-document.getElementById('play-gimn').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    playGimn();
-}, { passive: false });
-
-document.getElementById('check-updates').addEventListener('click', () => {
-    alert(__('no_updates'));
-});
-
-document.getElementById('check-updates').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    alert(__('no_updates'));
-}, { passive: false });
-
-document.getElementById('clear-data').addEventListener('click', () => {
-    if (confirm(__('clear_confirm'))) {
-        localStorage.clear();
-        alert(__('data_cleared'));
-        location.reload();
-    }
-});
-
-document.getElementById('clear-data').addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    if (confirm(__('clear_confirm'))) {
-        localStorage.clear();
-        alert(__('data_cleared'));
-        location.reload();
-    }
-}, { passive: false });
-
-document.getElementById('browser-clear-history')?.addEventListener('click', () => {
-    history = [];
-    currentHistoryIndex = -1;
-    alert('История очищена');
-});
-
-document.getElementById('browser-clear-all')?.addEventListener('click', () => {
-    if (confirm('Очистить все данные браузера?')) {
-        history = [];
-        currentHistoryIndex = -1;
-        localStorage.removeItem('browserHistory');
-        alert('Все данные браузера очищены');
-    }
-});
-
-// ========== ПЛЕЕР РУМУЗЫКА ==========
-const playlists = {
-    main: [
-        { title: 'Гимн РФ', artist: 'Государственный гимн', src: 'sounds/gimn.mp3', icon: '🇷🇺' },
-        { title: 'Я русский', artist: 'SHAMAN', src: 'sounds/yarusskiy.mp3', icon: '🎤' }
-    ],
-    patriotic: [
-        { title: 'Священная война', artist: 'Вставай, страна огромная', src: 'sounds/svyaschennaya.mp3', icon: '⚔️' },
-        { title: 'День Победы', artist: 'Лев Лещенко', src: 'sounds/denpobedy.mp3', icon: '🕊️' }
-    ],
-    classic: [
-        { title: 'Калинка', artist: 'Народная', src: 'sounds/kalinka.mp3', icon: '🎻' },
-        { title: 'Подмосковные вечера', artist: 'Соловьёв-Седой', src: 'sounds/podmoskovnie.mp3', icon: '🎼' }
-    ]
-};
-
-function setupMusicPlayer() {
-    const playlistCards = document.querySelectorAll('.playlist-card');
-    const tracksContainer = document.getElementById('current-playlist-tracks');
-    const nowPlayingBar = document.getElementById('now-playing-bar');
-    const nowPlayingTitle = document.getElementById('now-playing-title');
-    const nowPlayingArtist = document.getElementById('now-playing-artist');
-    const playPauseBtn = document.getElementById('player-play-pause');
-    const prevBtn = document.getElementById('player-prev');
-    const nextBtn = document.getElementById('player-next');
-    
-    let currentPlaylist = [];
+    // ==================== СОСТОЯНИЕ ====================
+    let currentAudio = null;
+    let currentPlaylist = PLAYLISTS.main;
     let currentTrackIndex = 0;
+    let currentLang = STORAGE.lang;
+    let dictorEnabled = STORAGE.dictor;
+    let dictorMode = STORAGE.dictorMode;
+    let currentWallpaper = STORAGE.wallpaper;
+    let installedApps = STORAGE.apps;
+    let calcExpression = '';
+    let calendarDate = new Date();
+    let dropdownDate = new Date();
+
+    // ==================== УТИЛИТЫ ====================
+    function showToast(msg, duration = 2000) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), duration);
+    }
+
+    function playSound(src, vol = 0.3) {
+        try {
+            const audio = new Audio(src);
+            audio.volume = vol;
+            audio.play().catch(e => console.log('Audio play failed:', e));
+        } catch (e) {
+            console.log('Audio error:', e);
+        }
+    }
+
+    function speak(text) {
+        if (!dictorEnabled || !text || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = currentLang === 'ru' ? 'ru-RU' : 'be-BY';
+        utter.rate = 0.9;
+        window.speechSynthesis.speak(utter);
+    }
+
+    // Инициализация диктора
+    function initDictor() {
+        document.removeEventListener('mouseover', dictorHoverHandler);
+        document.removeEventListener('click', dictorClickHandler);
+        document.removeEventListener('mouseup', dictorSelectionHandler);
+        
+        if (!dictorEnabled) return;
+        
+        if (dictorMode === 'hover') {
+            document.addEventListener('mouseover', dictorHoverHandler);
+        } else if (dictorMode === 'click') {
+            document.addEventListener('click', dictorClickHandler);
+        } else if (dictorMode === 'selection') {
+            document.addEventListener('mouseup', dictorSelectionHandler);
+        }
+    }
+
+    let hoverTimeout;
+    function dictorHoverHandler(e) {
+        clearTimeout(hoverTimeout);
+        if (e.target.tagName === 'IFRAME') return;
+        const text = e.target.innerText || e.target.title || e.target.placeholder;
+        if (text && text.trim().length > 0 && text.length < 150) {
+            hoverTimeout = setTimeout(() => speak(text), 500);
+        }
+    }
+
+    function dictorClickHandler(e) {
+        if (e.target.tagName === 'IFRAME') return;
+        const text = e.target.innerText || e.target.title || e.target.placeholder || e.target.value;
+        if (text && text.trim().length > 0 && text.length < 150) {
+            speak(text);
+        }
+    }
+
+    function dictorSelectionHandler() {
+        const sel = window.getSelection().toString();
+        if (sel && sel.trim().length > 0 && sel.length < 200) {
+            speak(sel);
+        }
+    }
+
+    function updateDictorState(enabled, mode) {
+        dictorEnabled = enabled;
+        dictorMode = mode;
+        STORAGE.dictor = enabled;
+        STORAGE.dictorMode = mode;
+        initDictor();
+    }
+
+    function setWallpaper(type) {
+        const desktop = document.getElementById('desktop');
+        if (WALLPAPERS[type]) {
+            desktop.style.backgroundImage = `url('${WALLPAPERS[type]}')`;
+        } else {
+            desktop.style.backgroundImage = `url('${WALLPAPERS.flag}')`;
+        }
+        STORAGE.wallpaper = type;
+    }
+
+    // ==================== ВРЕМЯ ====================
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const months = [t('jan2'), t('feb2'), t('mar2'), t('apr2'), t('may2'), t('jun2'), t('jul2'), t('aug2'), t('sep2'), t('oct2'), t('nov2'), t('dec2')];
+        
+        document.getElementById('current-time').textContent = `${hours}:${mins}`;
+        document.getElementById('lock-time').textContent = `${hours}:${mins}`;
+        document.getElementById('current-date').textContent = `${now.getDate()} ${months[now.getMonth()]}`;
+        document.getElementById('lock-date').textContent = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        
+        const holiday = HOLIDAYS.find(h => h.month === now.getMonth() && h.day === now.getDate());
+        const badge = document.getElementById('holiday-badge');
+        if (badge) {
+            badge.textContent = holiday ? '🎉' : '📅';
+            badge.title = holiday ? holiday.name : t('noHoliday');
+        }
+    }
     
-    function loadPlaylist(playlistId) {
-        currentPlaylist = playlists[playlistId] || [];
-        if (!tracksContainer) return;
-        
-        let html = '<h3 style="margin:20px 0 10px;">Треки</h3>';
-        currentPlaylist.forEach((track, index) => {
-            html += `
-                <div class="music-player-card" style="background: rgba(255,255,255,0.7); border-radius: 20px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer;" data-track="${index}">
-                    <div style="font-size: 32px;">${track.icon}</div>
-                    <div style="flex:1;">
-                        <div style="font-weight: 700;">${track.title}</div>
-                        <div style="font-size: 12px; opacity:0.7;">${track.artist}</div>
-                    </div>
-                    <button class="music-play-btn" data-src="${track.src}" style="background: var(--blue); color: white; border: none; width: 40px; height: 40px; border-radius: 20px; font-size: 20px; cursor: pointer;">▶</button>
-                </div>
-            `;
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // ==================== ОКНА ====================
+    function openWindow(id) {
+        const win = document.getElementById(id);
+        if (win) {
+            win.classList.remove('hidden');
+            win.classList.remove('minimized');
+            playSound('sounds/uvedomlenie.mp3');
+        }
+    }
+    
+    function closeWindow(id) {
+        const win = document.getElementById(id);
+        if (win) win.classList.add('hidden');
+        playSound('sounds/uvedomlenie.mp3');
+    }
+
+    function minimizeWindow(id) {
+        const win = document.getElementById(id);
+        if (win) win.classList.add('minimized');
+        playSound('sounds/uvedomlenie.mp3');
+    }
+
+    function maximizeWindow(id) {
+        const win = document.getElementById(id);
+        if (win) {
+            win.classList.toggle('maximized');
+            playSound('sounds/uvedomlenie.mp3');
+            if (win.classList.contains('maximized')) {
+                win.style.left = '';
+                win.style.top = '';
+                win.style.transform = '';
+            }
+        }
+    }
+
+    document.querySelectorAll('.window-btn.minimize').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (btn.dataset.win) minimizeWindow(btn.dataset.win);
         });
-        tracksContainer.innerHTML = html;
+    });
+
+    document.querySelectorAll('.window-btn.maximize').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (btn.dataset.win) maximizeWindow(btn.dataset.win);
+        });
+    });
+
+    document.querySelectorAll('[data-window]').forEach(el => {
+        el.addEventListener('click', () => {
+            const win = el.dataset.window;
+            if (win) openWindow(win);
+        });
+    });
+
+    document.querySelectorAll('.window-btn.close').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const win = btn.closest('.window');
+            if (win) win.classList.add('hidden');
+        });
+    });
+
+    if (window.innerWidth > 768) {
+        document.querySelectorAll('.window-header').forEach(header => {
+            let isDragging = false;
+            let offsetX, offsetY;
+            let currentWindow;
+
+            header.addEventListener('mousedown', (e) => {
+                currentWindow = header.closest('.window');
+                if (!currentWindow || currentWindow.classList.contains('maximized')) return;
+                
+                isDragging = true;
+                const rect = currentWindow.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                currentWindow.style.zIndex = '3000';
+                currentWindow.style.transform = 'none';
+                currentWindow.style.transition = 'none';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging || !currentWindow) return;
+                e.preventDefault();
+                
+                let newX = e.clientX - offsetX;
+                let newY = e.clientY - offsetY;
+                
+                newX = Math.max(0, Math.min(newX, window.innerWidth - currentWindow.offsetWidth));
+                newY = Math.max(0, Math.min(newY, window.innerHeight - currentWindow.offsetHeight));
+                
+                currentWindow.style.left = newX + 'px';
+                currentWindow.style.top = newY + 'px';
+                currentWindow.style.right = 'auto';
+                currentWindow.style.bottom = 'auto';
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (currentWindow) {
+                    currentWindow.style.transition = '';
+                }
+                isDragging = false;
+            });
+        });
+    }
+
+    // ==================== МЕНЮ ПУСК ====================
+    function renderStartMenu() {
+        const apps = [
+            { name: t('settings'), icon: '⚙️', win: 'settings-window' },
+            { name: t('files'), icon: '📁', win: 'files-window' },
+            { name: t('calc'), icon: '🔢', win: 'calc-window' },
+            { name: t('browser'), icon: '🌐', win: 'browser-window' },
+        ];
         
-        tracksContainer.querySelectorAll('.music-player-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('music-play-btn')) {
-                    const btn = card.querySelector('.music-play-btn');
-                    if (btn) btn.click();
+        const container = document.getElementById('start-apps');
+        if (container) {
+            container.innerHTML = apps.map(app => 
+                `<button class="menu-item" data-window="${app.win}">${app.icon} ${app.name}</button>`
+            ).join('');
+            
+            container.querySelectorAll('.menu-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    openWindow(btn.dataset.window);
+                    const startMenu = document.getElementById('start-menu');
+                    if (startMenu) startMenu.classList.add('hidden');
+                });
+            });
+        }
+    }
+
+    const powerBtn = document.getElementById('power-off');
+    if (powerBtn) {
+        powerBtn.addEventListener('click', () => {
+            if (confirm(t('clearConfirm'))) {
+                localStorage.clear();
+                showToast(t('cleared'));
+                setTimeout(() => location.reload(), 1000);
+            }
+        });
+    }
+
+    const usernameDisplay = document.getElementById('username-display');
+    if (usernameDisplay) usernameDisplay.textContent = STORAGE.user;
+
+    renderStartMenu();
+
+    // ==================== КАЛЕНДАРЬ ====================
+    function renderDropdownCalendar() {
+        const year = dropdownDate.getFullYear();
+        const month = dropdownDate.getMonth();
+        const months = [t('jan'), t('feb'), t('mar'), t('apr'), t('may'), t('jun'), t('jul'), t('aug'), t('sep'), t('oct'), t('nov'), t('dec')];
+        const monthEl = document.getElementById('dropdown-month');
+        if (monthEl) monthEl.textContent = `${months[month]} ${year}`;
+        
+        const firstDay = new Date(year, month, 1).getDay();
+        let start = firstDay === 0 ? 6 : firstDay - 1;
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const today = new Date();
+        
+        let html = '';
+        for (let i = 0; i < start; i++) html += '<div class="cal-day"></div>';
+        for (let d = 1; d <= daysInMonth; d++) {
+            const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
+            const isHoliday = HOLIDAYS.some(h => h.month === month && h.day === d);
+            let classes = 'cal-day';
+            if (isToday) classes += ' today';
+            if (isHoliday) classes += ' holiday';
+            html += `<div class="${classes}" data-date="${d}.${month+1}.${year}">${d}</div>`;
+        }
+        const daysEl = document.getElementById('dropdown-days');
+        if (daysEl) daysEl.innerHTML = html;
+        
+        document.querySelectorAll('#dropdown-days .cal-day[data-date]').forEach(day => {
+            day.addEventListener('click', () => {
+                showToast(`${t('selected')}: ${day.dataset.date}`);
+                const calendarDropdown = document.getElementById('calendar-dropdown');
+                if (calendarDropdown) calendarDropdown.classList.add('hidden');
+            });
+        });
+    }
+
+    const calPrev = document.getElementById('cal-prev');
+    if (calPrev) {
+        calPrev.addEventListener('click', () => {
+            dropdownDate.setMonth(dropdownDate.getMonth() - 1);
+            renderDropdownCalendar();
+        });
+    }
+    
+    const calNext = document.getElementById('cal-next');
+    if (calNext) {
+        calNext.addEventListener('click', () => {
+            dropdownDate.setMonth(dropdownDate.getMonth() + 1);
+            renderDropdownCalendar();
+        });
+    }
+    
+    const calToday = document.getElementById('cal-today');
+    if (calToday) {
+        calToday.addEventListener('click', () => {
+            dropdownDate = new Date();
+            renderDropdownCalendar();
+        });
+    }
+
+    const calendarClose = document.getElementById('calendar-close');
+    if (calendarClose) {
+        calendarClose.addEventListener('click', () => {
+            const calendarDropdown = document.getElementById('calendar-dropdown');
+            if (calendarDropdown) calendarDropdown.classList.add('hidden');
+        });
+    }
+
+    // ==================== КАЛЬКУЛЯТОР ====================
+    const calcDisplay = document.getElementById('calc-display');
+    if (calcDisplay) {
+        document.querySelectorAll('[data-calc]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const type = btn.dataset.calc;
+                const val = btn.textContent;
+                
+                if (type === 'num') {
+                    if (calcExpression === '0') {
+                        calcExpression = val;
+                    } else {
+                        calcExpression += val;
+                    }
+                    calcDisplay.textContent = calcExpression;
+                } else if (type === 'op') {
+                    calcExpression += val;
+                    calcDisplay.textContent = calcExpression;
+                } else if (type === 'clear') {
+                    calcExpression = '';
+                    calcDisplay.textContent = '0';
+                } else if (type === 'equals') {
+                    try {
+                        calcExpression = eval(calcExpression).toString();
+                        calcDisplay.textContent = calcExpression;
+                    } catch {
+                        calcDisplay.textContent = 'Ошибка';
+                        calcExpression = '';
+                    }
                 }
             });
         });
     }
+
+    // ==================== БРАУЗЕР ====================
+    const browserFrame = document.getElementById('browser-frame');
+    const browserHome = document.getElementById('browser-home');
+    const browserUrl = document.getElementById('browser-url');
+    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'gosuslugi.ru', 'rkn.gov.ru', '.ru', '.рф'];
     
-    playlistCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const playlist = card.dataset.playlist;
-            loadPlaylist(playlist);
+    function showSite(url) {
+        let full = url;
+        if (!full.startsWith('http')) full = 'https://' + full;
+        if (!allowedDomains.some(d => full.includes(d))) {
+            showToast(t('onlyRU'));
+            return;
+        }
+        if (browserFrame) browserFrame.style.display = 'block';
+        if (browserHome) browserHome.style.display = 'none';
+        if (browserFrame) browserFrame.src = full;
+        if (browserUrl) browserUrl.value = url;
+    }
+
+    function showHome() {
+        if (browserFrame) browserFrame.style.display = 'none';
+        if (browserHome) browserHome.style.display = 'flex';
+        if (browserUrl) browserUrl.value = 'yandex.ru';
+    }
+
+    const browserGo = document.getElementById('browser-go');
+    if (browserGo) {
+        browserGo.addEventListener('click', () => {
+            const url = browserUrl ? browserUrl.value.trim() : '';
+            if (url) showSite(url);
+        });
+    }
+    
+    if (browserUrl) {
+        browserUrl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const url = browserUrl.value.trim();
+                if (url) showSite(url);
+            }
+        });
+    }
+    
+    const browserBack = document.getElementById('browser-back');
+    if (browserBack) {
+        browserBack.addEventListener('click', () => {
+            try {
+                if (browserFrame) browserFrame.contentWindow.history.back();
+            } catch (e) {}
+        });
+    }
+    
+    const browserForward = document.getElementById('browser-forward');
+    if (browserForward) {
+        browserForward.addEventListener('click', () => {
+            try {
+                if (browserFrame) browserFrame.contentWindow.history.forward();
+            } catch (e) {}
+        });
+    }
+    
+    const browserRefresh = document.getElementById('browser-refresh');
+    if (browserRefresh) {
+        browserRefresh.addEventListener('click', () => {
+            if (browserFrame) browserFrame.src = browserFrame.src;
+        });
+    }
+    
+    document.querySelectorAll('.quick-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (link.dataset.url) showSite(link.dataset.url);
         });
     });
-    
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('music-play-btn')) {
-            e.preventDefault();
-            const src = e.target.dataset.src;
-            const card = e.target.closest('.music-player-card');
+
+    // ==================== RuStore ====================
+    function renderStore() {
+        const allApps = [...PREINSTALLED, ...installedApps.filter(a => !PREINSTALLED.some(p => p.url === a.url))];
+        const grid = document.getElementById('store-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = allApps.map(app => {
+            const iconStyle = app.icon && app.icon.startsWith('images/') 
+                ? `background-image: url('${app.icon}');` 
+                : `background-color: ${app.color || '#8b6b4d'}; display: flex; align-items: center; justify-content: center; font-size: 2rem; content: '${app.icon || '📦'}';`;
             
-            if (card) {
-                const title = card.querySelector('div:nth-child(2) div:first-child')?.textContent;
-                const artist = card.querySelector('div:nth-child(2) div:last-child')?.textContent;
-                
-                if (currentPlayerAudio && currentPlayerAudio.src.includes(src)) {
-                    if (!currentPlayerAudio.paused) {
-                        currentPlayerAudio.pause();
-                        e.target.textContent = '▶';
-                    } else {
-                        currentPlayerAudio.play();
-                        e.target.textContent = '⏸';
-                    }
-                    return;
+            return `
+                <div class="store-item ${PREINSTALLED.some(p => p.url === app.url) ? 'installed' : ''}" data-app='${JSON.stringify(app).replace(/'/g, "&#39;")}'>
+                    <div class="store-icon" style="${iconStyle}"></div>
+                    <div class="store-name">${app.name}</div>
+                    <div class="store-url">${app.url}</div>
+                    ${PREINSTALLED.some(p => p.url === app.url) ? `<div class="installed-badge">✓ ${t('installed')}</div>` : ''}
+                </div>
+            `;
+        }).join('');
+        
+        grid.querySelectorAll('.store-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const app = JSON.parse(item.dataset.app);
+                if (PREINSTALLED.some(p => p.url === app.url)) {
+                    showToast(`✅ ${app.name} ${t('installed')}`);
+                } else {
+                    installApp(app);
                 }
-                
-                if (currentPlayerAudio) {
-                    currentPlayerAudio.pause();
-                    if (currentPlayBtn) currentPlayBtn.textContent = '▶';
-                }
-                
-                try {
-                    currentPlayerAudio = new Audio(src);
-                    currentPlayerAudio.volume = 0.5;
-                    currentPlayerAudio.play();
-                    
-                    e.target.textContent = '⏸';
-                    if (currentPlayBtn) currentPlayBtn.textContent = '▶';
-                    currentPlayBtn = e.target;
-                    
-                    nowPlayingBar.style.display = 'flex';
-                    nowPlayingTitle.textContent = title || 'Гимн РФ';
-                    nowPlayingArtist.textContent = artist || 'Государственный гимн';
-                    
-                    currentPlayerAudio.addEventListener('ended', () => {
-                        e.target.textContent = '▶';
-                        currentPlayBtn = null;
-                        currentPlayerAudio = null;
-                        nowPlayingBar.style.display = 'none';
-                    });
-                } catch (err) {}
-            }
+            });
+        });
+    }
+
+    function installApp(app) {
+        if (installedApps.some(a => a.url === app.url)) {
+            showToast(t('exists'));
+            return;
         }
-    });
-    
-    playPauseBtn?.addEventListener('click', () => {
-        if (currentPlayerAudio) {
-            if (currentPlayerAudio.paused) {
-                currentPlayerAudio.play();
-                playPauseBtn.textContent = '⏸';
-                if (currentPlayBtn) currentPlayBtn.textContent = '⏸';
+        installedApps.push(app);
+        STORAGE.apps = installedApps;
+        addDesktopIcon(app);
+        renderStore();
+        showToast(`📦 ${app.name} ${t('installed')}`);
+    }
+
+    function addDesktopIcon(app) {
+        const container = document.getElementById('desktop-icons');
+        if (!container) return;
+        
+        const icon = document.createElement('div');
+        icon.className = 'desktop-icon';
+        
+        const iconStyle = app.icon && app.icon.startsWith('images/')
+            ? `background-image: url('${app.icon}');`
+            : `background-color: ${app.color || '#8b6b4d'}; display: flex; align-items: center; justify-content: center; font-size: 2rem; content: '${app.icon || '📦'}';`;
+        
+        icon.innerHTML = `
+            <div class="desktop-icon-img" style="${iconStyle}"></div>
+            <div class="desktop-icon-name">${app.name}</div>
+        `;
+        
+        icon.addEventListener('click', () => {
+            if (app.isVideo) {
+                openWindow('ruvideo-window');
+            } else if (app.isMusic) {
+                openWindow('rusmusic-window');
+            } else if (app.url && app.url !== '#') {
+                openWindow('browser-window');
+                setTimeout(() => showSite(app.url), 100);
             } else {
-                currentPlayerAudio.pause();
-                playPauseBtn.textContent = '▶';
-                if (currentPlayBtn) currentPlayBtn.textContent = '▶';
+                showToast(t('notSupport'));
             }
+        });
+        
+        container.appendChild(icon);
+    }
+
+    const addAppBtn = document.getElementById('add-app-btn');
+    if (addAppBtn) {
+        addAppBtn.addEventListener('click', () => {
+            const nameInput = document.getElementById('app-name');
+            const urlInput = document.getElementById('app-url');
+            const name = nameInput ? nameInput.value.trim() : '';
+            let url = urlInput ? urlInput.value.trim() : '';
+            
+            if (!name || !url) {
+                showToast(t('fill'));
+                return;
+            }
+            
+            if (!url.includes('.ru') && !url.includes('.рф')) {
+                showToast(t('onlyRU'));
+                return;
+            }
+            
+            if (!url.startsWith('http')) url = 'https://' + url;
+            
+            const app = {
+                name,
+                url,
+                icon: 'images/rustore.png',
+                color: '#8b6b4d'
+            };
+            
+            if (installedApps.some(a => a.url === url)) {
+                showToast(t('exists'));
+                return;
+            }
+            
+            installedApps.push(app);
+            STORAGE.apps = installedApps;
+            addDesktopIcon(app);
+            renderStore();
+            
+            if (nameInput) nameInput.value = '';
+            if (urlInput) urlInput.value = '';
+        });
+    }
+
+    function loadDesktopIcons() {
+        const container = document.getElementById('desktop-icons');
+        if (container) {
+            container.innerHTML = '';
+            [...PREINSTALLED, ...installedApps].forEach(app => addDesktopIcon(app));
         }
+    }
+    
+    loadDesktopIcons();
+    renderStore();
+
+    // ==================== МУЗЫКА ====================
+    const trackList = document.getElementById('track-list');
+    const nowTitle = document.getElementById('now-playing-title');
+    const nowArtist = document.getElementById('now-playing-artist');
+
+    function loadPlaylist(id) {
+        currentPlaylist = PLAYLISTS[id] || PLAYLISTS.main;
+        if (trackList) {
+            trackList.innerHTML = currentPlaylist.map((track, i) => `
+                <div class="track-item" data-index="${i}">
+                    <div class="track-icon">${track.icon}</div>
+                    <div class="track-info">
+                        <div class="track-title">${track.title}</div>
+                        <div class="track-artist">${track.artist}</div>
+                    </div>
+                    <button class="track-play" data-src="${track.src}">▶</button>
+                </div>
+            `).join('');
+            
+            trackList.querySelectorAll('.track-play').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const src = btn.dataset.src;
+                    const track = currentPlaylist.find(t => t.src === src);
+                    
+                    if (currentAudio) {
+                        currentAudio.pause();
+                    }
+                    
+                    currentAudio = new Audio(src);
+                    currentAudio.volume = 0.5;
+                    currentAudio.play();
+                    
+                    btn.textContent = '⏸';
+                    if (nowTitle) nowTitle.textContent = track.title;
+                    if (nowArtist) nowArtist.textContent = track.artist;
+                    
+                    currentAudio.onended = () => {
+                        btn.textContent = '▶';
+                    };
+                });
+            });
+        }
+    }
+
+    document.querySelectorAll('.playlist-card').forEach(card => {
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.playlist-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            if (card.dataset.playlist) loadPlaylist(card.dataset.playlist);
+        });
     });
     
     loadPlaylist('main');
-}
 
-// ========== ПЛЕЕР РУВИДЕО ==========
-const videos = [
-    { title: 'Гимн России', channel: 'Государственный канал', views: '1.2M', date: '7 лет назад', duration: '3:30', src: 'videos/anthem.mp4', poster: 'videos/anthem_poster.jpg' },
-    { title: 'SHAMAN - Я русский', channel: 'SHAMAN', views: '5.4M', date: '2 года назад', duration: '3:45', src: 'videos/shaman.mp4', poster: 'videos/shaman_poster.jpg' }
-];
+    const playerPlay = document.getElementById('player-play');
+    if (playerPlay) {
+        playerPlay.addEventListener('click', () => {
+            if (currentAudio) {
+                if (currentAudio.paused) {
+                    currentAudio.play();
+                    playerPlay.textContent = '⏸';
+                } else {
+                    currentAudio.pause();
+                    playerPlay.textContent = '▶';
+                }
+            }
+        });
+    }
 
-function setupVideoPlayer() {
+    // ==================== ВИДЕО ====================
     const videoGrid = document.getElementById('video-grid');
-    const videoOverlay = document.getElementById('video-player-overlay');
-    const videoPlayer = document.getElementById('ruvideo-player');
-    const videoCloseBtn = document.getElementById('video-player-overlay-close');
+    const videoOverlay = document.getElementById('video-overlay');
+    const videoPlayer = document.getElementById('video-player');
 
-    if (!videoGrid) return;
-    
-    let html = '';
-    videos.forEach(video => {
-        html += `
-            <div class="yt-video-card" data-src="${video.src}" data-poster="${video.poster}">
-                <div class="yt-thumbnail" style="background-image: url('${video.poster}');"></div>
-                <div class="yt-info">
-                    <div class="yt-title">${video.title}</div>
-                    <div class="yt-channel">${video.channel}</div>
-                    <div style="font-size: 11px; opacity:0.5;">${video.views} просмотров • ${video.date}</div>
+    function renderVideos() {
+        if (!videoGrid) return;
+        videoGrid.innerHTML = VIDEOS.map(v => `
+            <div class="video-card" data-src="${v.src}" data-poster="${v.poster}">
+                <div class="video-thumb" style="background-image: url('${v.poster}');"></div>
+                <div class="video-info">
+                    <div class="video-title">${v.title}</div>
+                    <div class="video-channel">${v.channel}</div>
                 </div>
             </div>
-        `;
-    });
-    videoGrid.innerHTML = html;
+        `).join('');
+        
+        videoGrid.querySelectorAll('.video-card').forEach(card => {
+            card.addEventListener('click', () => {
+                if (videoOverlay) videoOverlay.classList.remove('hidden');
+                if (videoPlayer) videoPlayer.src = card.dataset.src;
+                if (videoPlayer) videoPlayer.play();
+            });
+        });
+    }
     
-    videoGrid.querySelectorAll('.yt-video-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const src = card.dataset.src;
-            const poster = card.dataset.poster;
-            
-            videoOverlay.classList.remove('hidden');
-            videoPlayer.poster = poster;
-            videoPlayer.querySelector('source').src = src;
-            videoPlayer.load();
-            videoPlayer.play().catch(() => {});
+    renderVideos();
+
+    const videoCloseBtn = document.getElementById('video-close-btn');
+    if (videoCloseBtn) {
+        videoCloseBtn.addEventListener('click', () => {
+            if (videoPlayer) videoPlayer.pause();
+            if (videoOverlay) videoOverlay.classList.add('hidden');
+            if (videoPlayer) videoPlayer.src = '';
+        });
+    }
+
+    // ==================== ФАЙЛЫ ====================
+    function renderFiles(path) {
+        const folder = fs.getFolder(path);
+        if (!folder) return;
+        
+        fs.current = path;
+        
+        let html = '';
+        if (path !== 'root') {
+            html += `<div class="file-item" data-up="true"><div class="file-icon">📂</div><div class="file-name">...</div></div>`;
+        }
+        
+        Object.values(folder.children || {}).forEach(item => {
+            html += `<div class="file-item" data-path="${path}" data-name="${item.name}" data-type="${item.type}">
+                <div class="file-icon">${item.type === 'folder' ? '📁' : '📄'}</div>
+                <div class="file-name">${item.name}</div>
+            </div>`;
+        });
+        
+        const filesGrid = document.getElementById('files-grid');
+        if (filesGrid) filesGrid.innerHTML = html;
+        
+        document.querySelectorAll('.file-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (item.dataset.up) {
+                    fs.current = 'root';
+                    renderFiles('root');
+                    
+                    document.querySelectorAll('.folder-item').forEach(f => f.classList.remove('active'));
+                    const rootFolder = document.querySelector('.folder-item[data-path="root"]');
+                    if (rootFolder) rootFolder.classList.add('active');
+                } else {
+                    const path = item.dataset.path;
+                    const name = item.dataset.name;
+                    const folder = fs.getFolder(path);
+                    const file = folder?.children[name];
+                    
+                    if (file?.type === 'folder') {
+                        renderFiles(name);
+                        
+                        document.querySelectorAll('.folder-item').forEach(f => f.classList.remove('active'));
+                        const targetFolder = document.querySelector(`.folder-item[data-path="${name}"]`);
+                        if (targetFolder) targetFolder.classList.add('active');
+                    } else {
+                        let content = file.content || '';
+                        if (content.startsWith('sounds/') || content.startsWith('videos/')) {
+                            showToast(`📄 ${file.name}`);
+                        } else {
+                            showToast(`📄 ${file.name}\n${content}`);
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    document.querySelectorAll('.folder-item').forEach(f => {
+        f.addEventListener('click', () => {
+            document.querySelectorAll('.folder-item').forEach(fld => fld.classList.remove('active'));
+            f.classList.add('active');
+            if (f.dataset.path) renderFiles(f.dataset.path);
         });
     });
-    
-    videoCloseBtn?.addEventListener('click', () => {
-        videoPlayer.pause();
-        videoOverlay.classList.add('hidden');
-        videoPlayer.querySelector('source').src = '';
-        videoPlayer.load();
-    });
-}
 
-// ========== ПРИМЕНЕНИЕ ЯЗЫКА ==========
-document.getElementById('apply-language')?.addEventListener('click', () => {
-    const selected = document.querySelector('input[name="system-language"]:checked');
-    if (selected) {
-        currentLang = selected.value;
-        updateLanguage();
-        updateDictorMode();
-        alert(currentLang === 'ru' ? 'Язык изменен на русский' : 'Мова зменена на беларускую');
-        playUvedomlenie();
+    const newFolderBtn = document.getElementById('new-folder');
+    if (newFolderBtn) {
+        newFolderBtn.addEventListener('click', () => {
+            const name = prompt('Имя папки:');
+            if (name && fs.create(fs.current, name, 'folder')) {
+                renderFiles(fs.current);
+            }
+        });
     }
-});
-
-// ========== ЗАПУСК ==========
-window.addEventListener('load', () => {
+    
+    const newFileBtn = document.getElementById('new-file');
+    if (newFileBtn) {
+        newFileBtn.addEventListener('click', () => {
+            const name = prompt('Имя файла:');
+            if (name && fs.create(fs.current, name, 'file')) {
+                renderFiles(fs.current);
+            }
+        });
+    }
+    
+    const refreshFiles = document.getElementById('refresh-files');
+    if (refreshFiles) {
+        refreshFiles.addEventListener('click', () => {
+            renderFiles(fs.current);
+        });
+    }
+    
     renderFiles('root');
-    renderRustore();
-    setupMusicPlayer();
-    setupVideoPlayer();
-    loadDesktopIcons();
-    loadBrowserSettings();
-    renderCalendar(new Date());
-    renderDropdownCalendar(new Date());
-    renderStartMenu();
-    populateSettingsLangTimezone();
-    updateDictorMode();
-    
-    // Загружаем сохранённое имя пользователя
-    const savedUsername = localStorage.getItem('username');
-    if (savedUsername) {
-        document.getElementById('username-input').value = savedUsername;
+
+    // ==================== НАСТРОЙКИ ====================
+    const settingsTabs = document.querySelectorAll('.settings-tab');
+    const settingsContent = document.getElementById('settings-content');
+
+    function renderSettings(tab) {
+        let html = '';
+        
+        if (tab === 'main') {
+            html = `
+                <div class="settings-card">
+                    <h3>Основные параметры</h3>
+                    <label>${t('username')}</label>
+                    <input type="text" id="settings-user" value="${STORAGE.user}">
+                    <button id="save-user">${t('save')}</button>
+                </div>
+            `;
+        } else if (tab === 'lang') {
+            html = `
+                <div class="settings-card">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 2rem;">🌐</span> 
+                        <span>${t('lang')}</span>
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Выберите язык интерфейса</p>
+                    
+                    <div class="language-selector">
+                        <label class="lang-option ${currentLang === 'ru' ? 'selected' : ''}">
+                            <input type="radio" name="lang" value="ru" ${currentLang === 'ru' ? 'checked' : ''}>
+                            <span class="lang-flag">🇷🇺</span>
+                            <span class="lang-name">
+                                Русский
+                                <small>Российская Федерация</small>
+                            </span>
+                            <span class="lang-check">${currentLang === 'ru' ? '✓' : ''}</span>
+                        </label>
+                        
+                        <label class="lang-option ${currentLang === 'by' ? 'selected' : ''}">
+                            <input type="radio" name="lang" value="by" ${currentLang === 'by' ? 'checked' : ''}>
+                            <span class="lang-flag">🇧🇾</span>
+                            <span class="lang-name">
+                                Беларуская
+                                <small>Рэспубліка Беларусь</small>
+                            </span>
+                            <span class="lang-check">${currentLang === 'by' ? '✓' : ''}</span>
+                        </label>
+                    </div>
+                    
+                    <div style="background: rgba(255,87,34,0.1); border-left: 4px solid #ff8a8a; padding: 1rem; margin: 1.5rem 0; border-radius: 12px;">
+                        <p style="color: #ff8a8a; font-weight: 600; margin-bottom: 0.3rem;">⚠️ ${t('onlyRF')}</p>
+                        <p style="font-size: 0.9rem; opacity: 0.7;">Другие языки временно недоступны по техническим причинам</p>
+                    </div>
+                    
+                    <button id="save-lang" class="settings-save-btn" style="
+                        width: 100%;
+                        padding: 1rem;
+                        background: var(--gradient-flag);
+                        border: none;
+                        border-radius: 16px;
+                        color: white;
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        box-shadow: 0 10px 20px rgba(0,87,183,0.3);
+                    ">${t('save')}</button>
+                </div>
+            `;
+        } else if (tab === 'wallpaper') {
+            html = `
+                <div class="settings-card">
+                    <h3>Обои</h3>
+                    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+                        <img src="wallpapers/flag.png" class="wallpaper-opt" data-wall="flag" style="width:100%; border-radius:12px; cursor:pointer;">
+                        <img src="wallpapers/gerb.png" class="wallpaper-opt" data-wall="gerb" style="width:100%; border-radius:12px; cursor:pointer;">
+                        <img src="wallpapers/kreml.png" class="wallpaper-opt" data-wall="kreml" style="width:100%; border-radius:12px; cursor:pointer;">
+                        <img src="wallpapers/prostory.png" class="wallpaper-opt" data-wall="prostory" style="width:100%; border-radius:12px; cursor:pointer;">
+                        <img src="wallpapers/bereza.png" class="wallpaper-opt" data-wall="bereza" style="width:100%; border-radius:12px; cursor:pointer;">
+                    </div>
+                </div>
+            `;
+        } else if (tab === 'sound') {
+            html = `
+                <div class="settings-card">
+                    <h3>${t('anthem')}</h3>
+                    <button id="play-anthem">▶ ${t('anthem')}</button>
+                </div>
+                <div class="settings-card">
+                    <h3>Звуки уведомлений</h3>
+                    <button id="play-notification">🔔 Тест уведомления</button>
+                </div>
+            `;
+        } else if (tab === 'dictor') {
+            html = `
+                <div class="settings-card">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 2rem;">🗣️</span> 
+                        <span>${t('dictorMode')}</span>
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">${t('dictorDesc')}</p>
+                    
+                    <div class="dictor-selector">
+                        <label class="dictor-option ${dictorMode === 'hover' ? 'selected' : ''}">
+                            <input type="radio" name="dictor" value="hover" ${dictorMode === 'hover' ? 'checked' : ''}>
+                            <span class="dictor-icon">🖱️</span>
+                            <span class="dictor-name">
+                                ${t('hover')}
+                                <small>Наведите курсор на любой элемент</small>
+                            </span>
+                            <span class="dictor-check">${dictorMode === 'hover' ? '✓' : ''}</span>
+                        </label>
+                        
+                        <label class="dictor-option ${dictorMode === 'click' ? 'selected' : ''}">
+                            <input type="radio" name="dictor" value="click" ${dictorMode === 'click' ? 'checked' : ''}>
+                            <span class="dictor-icon">👆</span>
+                            <span class="dictor-name">
+                                ${t('click')}
+                                <small>Кликните по элементу для озвучки</small>
+                            </span>
+                            <span class="dictor-check">${dictorMode === 'click' ? '✓' : ''}</span>
+                        </label>
+                        
+                        <label class="dictor-option ${dictorMode === 'selection' ? 'selected' : ''}">
+                            <input type="radio" name="dictor" value="selection" ${dictorMode === 'selection' ? 'checked' : ''}>
+                            <span class="dictor-icon">📝</span>
+                            <span class="dictor-name">
+                                ${t('selection')}
+                                <small>Выделите текст для озвучки</small>
+                            </span>
+                            <span class="dictor-check">${dictorMode === 'selection' ? '✓' : ''}</span>
+                        </label>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin: 1.5rem 0;">
+                        <button id="enable-dictor" class="dictor-btn test" style="
+                            flex: 1;
+                            padding: 0.8rem;
+                            background: var(--gradient-flag);
+                            border: none;
+                            border-radius: 16px;
+                            color: white;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">🔊 ${dictorEnabled ? 'Включен' : 'Включить'}</button>
+                        
+                        <button id="disable-dictor" class="dictor-btn disable" style="
+                            flex: 1;
+                            padding: 0.8rem;
+                            background: ${dictorEnabled ? 'rgba(213,43,30,0.3)' : 'rgba(100,100,100,0.3)'};
+                            border: 1px solid ${dictorEnabled ? 'var(--accent-red)' : '#666'};
+                            border-radius: 16px;
+                            color: white;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">⏻ ${dictorEnabled ? 'Отключить' : 'Отключен'}</button>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button id="test-dictor" class="dictor-btn test" style="
+                            flex: 1;
+                            padding: 0.8rem;
+                            background: rgba(0,87,183,0.5);
+                            border: none;
+                            border-radius: 16px;
+                            color: white;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">🔊 ${t('test')}</button>
+                    </div>
+                    
+                    <div id="dictor-status" style="
+                        background: ${dictorEnabled ? 'rgba(0,87,183,0.1)' : 'rgba(213,43,30,0.1)'}; 
+                        border-left: 4px solid ${dictorEnabled ? 'var(--accent-blue)' : 'var(--accent-red)'}; 
+                        padding: 0.8rem; 
+                        margin-top: 1rem; 
+                        border-radius: 12px;
+                    ">
+                        <p style="color: ${dictorEnabled ? 'var(--accent-blue)' : 'var(--accent-red)'}; font-size: 0.9rem;">
+                            ${dictorEnabled ? '🔊 Диктор активен. Режим: ' + (dictorMode === 'hover' ? 'при наведении' : dictorMode === 'click' ? 'при клике' : 'при выделении') : '🔇 Диктор отключен'}
+                        </p>
+                    </div>
+                </div>
+            `;
+        } else if (tab === 'system') {
+            html = `
+                <div class="settings-card">
+                    <h3>${t('system')}</h3>
+                    <p><strong>${t('version')}:</strong> 1.0.0</p>
+                    <p><strong>${t('security')}:</strong> ${t('active')} ✓</p>
+                    <button id="check-updates">${t('updates')}</button>
+                    <button id="clear-all">${t('clear')}</button>
+                </div>
+            `;
+        }
+        
+        if (settingsContent) settingsContent.innerHTML = html;
+
+        // Обработчики диктора
+        const testBtn = document.getElementById('test-dictor');
+        const enableBtn = document.getElementById('enable-dictor');
+        const disableBtn = document.getElementById('disable-dictor');
+
+        if (testBtn) {
+            testBtn.addEventListener('click', () => {
+                speak('Тест голосового помощника');
+                showToast('🔊 Тест диктора');
+            });
+        }
+
+        if (enableBtn) {
+            enableBtn.addEventListener('click', () => {
+                updateDictorState(true, dictorMode);
+                showToast('🔊 Диктор включен');
+                renderSettings('dictor');
+            });
+        }
+
+        if (disableBtn) {
+            disableBtn.addEventListener('click', () => {
+                updateDictorState(false, dictorMode);
+                showToast('🔇 Диктор отключен');
+                renderSettings('dictor');
+            });
+        }
+
+        document.querySelectorAll('input[name="dictor"]').forEach(r => {
+            r.addEventListener('change', (e) => {
+                const newMode = e.target.value;
+                if (dictorEnabled) {
+                    updateDictorState(true, newMode);
+                } else {
+                    dictorMode = newMode;
+                    STORAGE.dictorMode = newMode;
+                }
+                renderSettings('dictor');
+            });
+        });
+
+        document.querySelectorAll('input[name="lang"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                playSound('sounds/uvedomlenie.mp3', 0.1);
+            });
+        });
+
+        document.querySelectorAll('.wallpaper-opt').forEach(img => {
+            img.addEventListener('click', () => {
+                if (img.dataset.wall) setWallpaper(img.dataset.wall);
+                showToast('Обои изменены');
+            });
+        });
+        
+        const playAnthem = document.getElementById('play-anthem');
+        if (playAnthem) {
+            playAnthem.addEventListener('click', () => {
+                playSound('sounds/gimn.mp3');
+            });
+        }
+        
+        const playNotification = document.getElementById('play-notification');
+        if (playNotification) {
+            playNotification.addEventListener('click', () => {
+                playSound('sounds/uvedomlenie.mp3');
+            });
+        }
+        
+        const checkUpdates = document.getElementById('check-updates');
+        if (checkUpdates) {
+            checkUpdates.addEventListener('click', () => {
+                showToast(t('noUpdates'));
+            });
+        }
+        
+        const clearAll = document.getElementById('clear-all');
+        if (clearAll) {
+            clearAll.addEventListener('click', () => {
+                if (confirm(t('clearConfirm'))) {
+                    localStorage.clear();
+                    showToast(t('cleared'));
+                    setTimeout(() => location.reload(), 1000);
+                }
+            });
+        }
+        
+        const saveUser = document.getElementById('save-user');
+        if (saveUser) {
+            saveUser.addEventListener('click', () => {
+                const userInput = document.getElementById('settings-user');
+                if (userInput) {
+                    const name = userInput.value;
+                    STORAGE.user = name;
+                    const usernameDisplay = document.getElementById('username-display');
+                    if (usernameDisplay) usernameDisplay.textContent = name;
+                    showToast(t('saved'));
+                }
+            });
+        }
+        
+        const saveLang = document.getElementById('save-lang');
+        if (saveLang) {
+            saveLang.addEventListener('click', () => {
+                const selectedLang = document.querySelector('input[name="lang"]:checked')?.value;
+                if (selectedLang) {
+                    currentLang = selectedLang;
+                    STORAGE.lang = selectedLang;
+                    showToast(`Язык изменен на ${selectedLang === 'ru' ? 'русский' : 'беларусский'}`);
+                    setTimeout(() => location.reload(), 500);
+                }
+            });
+        }
     }
-    
-    setTimeout(playVhod, 500);
-});
+
+    if (settingsTabs.length && settingsContent) {
+        settingsTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                settingsTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                if (tab.dataset.tab) renderSettings(tab.dataset.tab);
+            });
+        });
+        renderSettings('main');
+    }
+
+    // ==================== ВХОД ====================
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            const lockScreen = document.getElementById('lock-screen');
+            if (lockScreen) lockScreen.classList.add('unlocked');
+            playSound('sounds/vhod.mp3');
+        });
+    }
+
+    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+    window.addEventListener('load', () => {
+        setWallpaper(STORAGE.wallpaper);
+        initDictor();
+        playSound('sounds/vhod.mp3', 0.2);
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        const startBtn = document.getElementById('start-btn');
+        const startMenu = document.getElementById('start-menu');
+        const datetimePanel = document.getElementById('datetime-panel');
+        const calendarDropdown = document.getElementById('calendar-dropdown');
+        
+        if (startBtn && startMenu) {
+            startBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startMenu.classList.toggle('hidden');
+            });
+        }
+        
+        if (datetimePanel && calendarDropdown) {
+            datetimePanel.addEventListener('click', (e) => {
+                e.stopPropagation();
+                calendarDropdown.classList.toggle('hidden');
+                renderDropdownCalendar();
+            });
+        }
+        
+        document.addEventListener('click', (e) => {
+            if (startMenu && startBtn && !startMenu.contains(e.target) && !startBtn.contains(e.target)) {
+                startMenu.classList.add('hidden');
+            }
+            if (calendarDropdown && datetimePanel && !calendarDropdown.contains(e.target) && !datetimePanel.contains(e.target)) {
+                calendarDropdown.classList.add('hidden');
+            }
+        });
+    });
+})();

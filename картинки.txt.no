@@ -1,0 +1,38 @@
+структура:
+
+Patriot-AI/
+    └── Patriot-AI/
+        ├── images/
+        │   ├── calculator.png Иконка счётчика
+        │   ├── files.png Иконка документов
+        │   ├── icon.png Иконка OS
+        │   ├── rustore.png Иконка магазина приложений
+        │   ├── rutube.png Иконка РУвидео
+        │   ├── settings.png Иконка настроек
+        │   ├── VKmusica.png Иконка РУмузыки
+        │   ├── vkontakte.png Икоека Вконтакте
+        │   └── yandex.png Иконка браузера
+        ├── sounds/
+        │   ├── denpobedy.mp3 День победы
+        │   ├── gimn.mp3 Гимн
+        │   ├── kalinka.mp3 калинка
+        │   ├── podmoskovnie.mp3 подмосковные вечера
+        │   ├── svyaschennaya.mp3 священная война
+        │   ├── uvedomlenie.mp3 уведомление
+        │   ├── vhod.mp3 вход
+        │   └── yarusskiy.mp3 я русский
+        ├── videos/
+        │   ├── anthem_poster.jpg обложка гимна для видео в рувидео
+        │   ├── anthem_poster.png обложка гимна для видео в рувидео
+        │   ├── anthem.mp4 гимн для видео в рувидео
+        │   ├── shaman_poster.jpg обложка я русский для видео в рувидео
+        │   └── shaman.mp4 я русский для видео в рувидео
+        ├── wallpapers/
+        │   ├── bereza.png обои Русская деревня Берёзовка 
+        │   ├── flag.png обои Флаг России
+        │   ├── gerb.png обои Герб РФ
+        │   ├── kreml.png обои Кремль Москвы
+        │   └── prostory.png обои Просторы России
+        ├── index.html
+        ├── script.js
+        └── style.css
