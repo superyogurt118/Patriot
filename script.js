@@ -16,6 +16,8 @@
         set dictorMode(v) { localStorage.setItem('patriot_dictor_mode', v); },
         get wallpaper() { return localStorage.getItem('patriot_wallpaper') || 'flag'; },
         set wallpaper(v) { localStorage.setItem('patriot_wallpaper', v); },
+        get theme() { return localStorage.getItem('patriot_theme') || 'dark'; },
+        set theme(v) { localStorage.setItem('patriot_theme', v); },
         get apps() { return JSON.parse(localStorage.getItem('patriot_apps') || '[]'); },
         set apps(v) { localStorage.setItem('patriot_apps', JSON.stringify(v)); }
     };
@@ -27,6 +29,7 @@
             tap: 'нажмите для входа',
             calc: 'Калькулятор',
             browser: 'Браузер',
+            messenger: 'Мессенджер',
             store: 'Магазин приложений',
             music: 'Музыка',
             video: 'Видео',
@@ -97,13 +100,28 @@
             exists: 'Уже есть!',
             installed: 'Установлено',
             selected: 'Выбрано',
-            system: 'Система'
+            system: 'Система',
+            theme: 'Тема',
+            light: 'Светлая',
+            dark: 'Тёмная',
+            oled: 'OLED-чёрная',
+            systemTheme: 'Системная',
+            whatsnew: 'Что нового',
+            patriotTest: 'Тест на патриота',
+            mom: 'Мама',
+            school: 'Школьный чат',
+            friend: 'Подруга',
+            fsb: 'Агент ФСБ',
+            messagePlaceholder: 'Введите сообщение...',
+            welcomeMessenger: 'Добро пожаловать в Ручат',
+            selectChat: 'Выберите чат'
         },
         by: {
             login: 'Увайсці',
             tap: 'націсніце для ўваходу',
             calc: 'Калькулятар',
             browser: 'Браўзэр',
+            messenger: 'Месэнджар',
             store: 'Крама прыкладанняў',
             music: 'Румузыка',
             video: 'Рувідэа',
@@ -174,7 +192,21 @@
             exists: 'Ужо ёсць!',
             installed: 'Усталявана',
             selected: 'Выбрана',
-            system: 'Сістэма'
+            system: 'Сістэма',
+            theme: 'Тэма',
+            light: 'Светлая',
+            dark: 'Цёмная',
+            oled: 'OLED-чорная',
+            systemTheme: 'Сістэмная',
+            whatsnew: 'Што новага',
+            patriotTest: 'Тэст на патрыёта',
+            mom: 'Мама',
+            school: 'Школьны чат',
+            friend: 'Сяброўка',
+            fsb: 'Агент ФСБ',
+            messagePlaceholder: 'Увядзіце паведамленне...',
+            welcomeMessenger: 'Сардэчна запрашаем у Ручат',
+            selectChat: 'Абярыце чат'
         }
     };
 
@@ -214,9 +246,9 @@
         { title: 'SHAMAN - Я русский', channel: 'SHAMAN', views: '5.4M', src: 'videos/shaman.mp4', poster: 'videos/shaman_poster.jpg' }
     ];
 
-    // ==================== ПРИЛОЖЕНИЯ ====================
+    // ==================== ПРИЛОЖЕНИЯ (ВКонтакте заменён на Мессенджер) ====================
     const PREINSTALLED = [
-        { name: 'ВКонтакте', url: 'vk.com', icon: 'images/vkontakte.png', color: '#0077ff' },
+        { name: 'Ручат', url: '#', icon: 'images/messenger.png', isMessenger: true, color: '#0057b7' },
         { name: 'Рувидео', url: '#', icon: 'images/rutube.png', isVideo: true },
         { name: 'Румузыка', url: '#', icon: 'images/VKmusica.png', isMusic: true },
     ];
@@ -248,7 +280,8 @@
                         name: 'Документы',
                         type: 'folder',
                         children: {
-                            'Приказ.txt': { name: 'Приказ.txt', type: 'file', content: 'Служить России!' }
+                            'Приказ.txt': { name: 'Приказ.txt', type: 'file', content: 'Служить России!' },
+                            'Обновление.zanashix': { name: 'Обновление.zanashix', type: 'file', content: 'PatriotOS 1.1 - Новый мессенджер, темы, тест на патриота!' }
                         }
                     },
                     'Изображения': {
@@ -256,10 +289,7 @@
                         type: 'folder',
                         children: {
                             'Флаг.png': { name: 'Флаг.png', type: 'file', content: 'flag' },
-                            'Герб.png': { name: 'Герб.png', type: 'file', content: 'gerb' },
-                            'Кремль.png': { name: 'Кремль.png', type: 'file', content: 'kreml' },
-                            'Просторы.png': { name: 'Просторы.png', type: 'file', content: 'prostory' },
-                            'Берёзка.png': { name: 'Берёзка.png', type: 'file', content: 'bereza' }
+                            'Герб.png': { name: 'Герб.png', type: 'file', content: 'gerb' }
                         }
                     },
                     'Музыка': {
@@ -267,19 +297,14 @@
                         type: 'folder',
                         children: {
                             'Гимн.mp3': { name: 'Гимн.mp3', type: 'file', content: 'sounds/gimn.mp3' },
-                            'Я русский.mp3': { name: 'Я русский.mp3', type: 'file', content: 'sounds/yarusskiy.mp3' },
-                            'Священная война.mp3': { name: 'Священная война.mp3', type: 'file', content: 'sounds/svyaschennaya.mp3' },
-                            'День Победы.mp3': { name: 'День Победы.mp3', type: 'file', content: 'sounds/denpobedy.mp3' },
-                            'Калинка.mp3': { name: 'Калинка.mp3', type: 'file', content: 'sounds/kalinka.mp3' },
-                            'Подмосковные вечера.mp3': { name: 'Подмосковные вечера.mp3', type: 'file', content: 'sounds/podmoskovnie.mp3' }
+                            'Я русский.mp3': { name: 'Я русский.mp3', type: 'file', content: 'sounds/yarusskiy.mp3' }
                         }
                     },
                     'Видео': {
                         name: 'Видео',
                         type: 'folder',
                         children: {
-                            'Гимн.mp4': { name: 'Гимн.mp4', type: 'file', content: 'videos/anthem.mp4' },
-                            'Я русский.mp4': { name: 'Я русский.mp4', type: 'file', content: 'videos/shaman.mp4' }
+                            'Гимн.mp4': { name: 'Гимн.mp4', type: 'file', content: 'videos/anthem.mp4' }
                         }
                     }
                 }
@@ -338,6 +363,14 @@
         notify(msg) {
             showToast(msg);
         }
+        
+        openZanashix(content) {
+            const win = document.getElementById('whatsnew-window');
+            if (win) {
+                openWindow('whatsnew-window');
+                showToast(`📄 Открыт файл .Zanashix: ${content.substring(0, 100)}...`);
+            }
+        }
     }
     
     const fs = new FileSystem();
@@ -350,10 +383,41 @@
     let dictorEnabled = STORAGE.dictor;
     let dictorMode = STORAGE.dictorMode;
     let currentWallpaper = STORAGE.wallpaper;
+    let currentTheme = STORAGE.theme;
     let installedApps = STORAGE.apps;
     let calcExpression = '';
     let calendarDate = new Date();
     let dropdownDate = new Date();
+
+    // ==================== ТЕМЫ ====================
+    function applyTheme(theme) {
+        currentTheme = theme;
+        STORAGE.theme = theme;
+        
+        if (theme === 'system') {
+            const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+        } else {
+            document.body.setAttribute('data-theme', theme);
+        }
+        
+        // Обновляем индикатор темы в настройках если они открыты
+        const settingsContent = document.getElementById('settings-content');
+        if (settingsContent && settingsContent.innerHTML.includes('theme')) {
+            renderSettings('theme');
+        }
+    }
+    
+    function initTheme() {
+        applyTheme(currentTheme);
+        // Следим за системными изменениями
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (currentTheme === 'system') {
+                const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+            }
+        });
+    }
 
     // ==================== УТИЛИТЫ ====================
     function showToast(msg, duration = 2000) {
@@ -578,6 +642,7 @@
     // ==================== МЕНЮ ПУСК ====================
     function renderStartMenu() {
         const apps = [
+            { name: t('messenger'), icon: '💬', win: 'messenger-window' },
             { name: t('settings'), icon: '⚙️', win: 'settings-window' },
             { name: t('files'), icon: '📁', win: 'files-window' },
             { name: t('calc'), icon: '🔢', win: 'calc-window' },
@@ -721,7 +786,7 @@
     const browserFrame = document.getElementById('browser-frame');
     const browserHome = document.getElementById('browser-home');
     const browserUrl = document.getElementById('browser-url');
-    const allowedDomains = ['yandex.ru', 'ya.ru', 'vk.com', 'gosuslugi.ru', 'rkn.gov.ru', '.ru', '.рф'];
+    const allowedDomains = ['yandex.ru', 'ya.ru', 'gosuslugi.ru', 'rkn.gov.ru', '.ru', '.рф'];
     
     function showSite(url) {
         let full = url;
@@ -739,7 +804,7 @@
     function showHome() {
         if (browserFrame) browserFrame.style.display = 'none';
         if (browserHome) browserHome.style.display = 'flex';
-        if (browserUrl) browserUrl.value = 'yandex.ru';
+        if (browserUrl) browserUrl.value = 'ya.ru';
     }
 
     const browserGo = document.getElementById('browser-go');
@@ -790,6 +855,225 @@
         });
     });
 
+    // ==================== МЕССЕНДЖЕР ====================
+    const chatMessages = {
+        mom: [
+            { text: 'Сынок, как дела?', time: '10:30', incoming: true },
+            { text: 'Всё хорошо, мам!', time: '10:31', incoming: false },
+            { text: 'Не забывай про обеды!', time: '10:32', incoming: true }
+        ],
+        school: [
+            { text: 'Завтра урок истории в 9:00', time: '09:15', incoming: true },
+            { text: 'Хорошо, понял', time: '09:16', incoming: false }
+        ],
+        friend: [
+            { text: 'Привет! Как настроение?', time: '14:20', incoming: true },
+            { text: 'Отлично! А у тебя?', time: '14:21', incoming: false },
+            { text: 'Тоже супер ✨', time: '14:22', incoming: true }
+        ],
+        fsb: [
+            { text: 'Внимание! Проверка патриотического сознания.', time: '08:00', incoming: true },
+            { text: 'Готов к проверке', time: '08:01', incoming: false },
+            { text: 'Отлично. Продолжайте в том же духе.', time: '08:02', incoming: true }
+        ]
+    };
+    
+    let currentChat = null;
+    
+    function renderChat(chatId) {
+        currentChat = chatId;
+        const messages = chatMessages[chatId] || [];
+        const messagesContainer = document.getElementById('chat-messages');
+        const chatHeader = document.getElementById('chat-header');
+        const chatInputArea = document.getElementById('chat-input-area');
+        
+        let chatName = '';
+        if (chatId === 'mom') chatName = t('mom');
+        else if (chatId === 'school') chatName = t('school');
+        else if (chatId === 'friend') chatName = t('friend');
+        else if (chatId === 'fsb') chatName = t('fsb');
+        
+        if (chatHeader) chatHeader.textContent = chatName;
+        if (chatInputArea) chatInputArea.style.display = 'flex';
+        
+        if (messagesContainer) {
+            if (messages.length === 0) {
+                messagesContainer.innerHTML = '<div class="welcome-message">✨ Нет сообщений. Напишите первое!</div>';
+            } else {
+                messagesContainer.innerHTML = messages.map(msg => `
+                    <div class="message ${msg.incoming ? 'incoming' : 'outgoing'}">
+                        <div>${msg.text}</div>
+                        <div class="message-info">${msg.time}</div>
+                    </div>
+                `).join('');
+            }
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.dataset.chat === chatId) item.classList.add('active');
+        });
+    }
+    
+    function sendMessage() {
+        if (!currentChat) return;
+        const input = document.getElementById('message-input');
+        const text = input.value.trim();
+        if (!text) return;
+        
+        const now = new Date();
+        const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        
+        chatMessages[currentChat].push({
+            text: text,
+            time: time,
+            incoming: false
+        });
+        
+        renderChat(currentChat);
+        input.value = '';
+        
+        // Имитация ответа через 1-2 секунды (только не для ФСБ, он строгий)
+        if (currentChat !== 'fsb') {
+            setTimeout(() => {
+                const replies = {
+                    mom: ['Хорошо, сынок!', 'Береги себя!', 'Я люблю тебя ❤️'],
+                    school: ['Спасибо за ответ!', 'Молодец!', 'Отлично!'],
+                    friend: ['Круто! 😊', 'Давай встретимся?', 'Супер!']
+                };
+                const replyList = replies[currentChat] || ['Понял!'];
+                const randomReply = replyList[Math.floor(Math.random() * replyList.length)];
+                chatMessages[currentChat].push({
+                    text: randomReply,
+                    time: new Date().toLocaleTimeString().slice(0,5),
+                    incoming: true
+                });
+                renderChat(currentChat);
+            }, 1500);
+        }
+    }
+    
+    // Инициализация мессенджера
+    function initMessenger() {
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.addEventListener('click', () => {
+                renderChat(item.dataset.chat);
+            });
+        });
+        
+        const sendBtn = document.getElementById('send-message');
+        if (sendBtn) {
+            sendBtn.addEventListener('click', sendMessage);
+        }
+        const messageInput = document.getElementById('message-input');
+        if (messageInput) {
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+        
+        // Приветственное сообщение
+        const welcomeDiv = document.querySelector('#chat-messages .welcome-message');
+        if (welcomeDiv) {
+            welcomeDiv.innerHTML = `📱 ${t('welcomeMessenger')}<br>${t('selectChat')}`;
+        }
+    }
+    
+    // ==================== ТЕСТ НА ПАТРИОТА ====================
+    const patriotQuestions = [
+        { question: 'Когда отмечается День России?', options: ['12 июня', '9 мая', '4 ноября', '23 февраля'], correct: 0 },
+        { question: 'Что изображено на гербе России?', options: ['Медведь', 'Двуглавый орёл', 'Трёхглавый дракон', 'Лев'], correct: 1 },
+        { question: 'Кто написал гимн России?', options: ['Чайковский', 'Михалков и Александров', 'Пушкин', 'Лермонтов'], correct: 1 },
+        { question: 'Какой город является столицей России?', options: ['Санкт-Петербург', 'Новосибирск', 'Москва', 'Казань'], correct: 2 },
+        { question: 'Какие цвета на флаге России?', options: ['Бело-сине-красный', 'Красно-бело-синий', 'Сине-бело-красный', 'Красно-сине-белый'], correct: 0 }
+    ];
+    
+    let currentQuestionIndex = 0;
+    let testScore = 0;
+    let testAnswers = [];
+    
+    function renderTest() {
+        const questionDiv = document.getElementById('test-question');
+        const optionsDiv = document.getElementById('test-options');
+        const nextBtn = document.getElementById('test-next');
+        const restartBtn = document.getElementById('test-restart');
+        const resultDiv = document.getElementById('test-result');
+        
+        if (currentQuestionIndex < patriotQuestions.length) {
+            const q = patriotQuestions[currentQuestionIndex];
+            if (questionDiv) questionDiv.textContent = `${currentQuestionIndex + 1}. ${q.question}`;
+            if (optionsDiv) {
+                optionsDiv.innerHTML = q.options.map((opt, idx) => `
+                    <div class="test-option" data-opt-index="${idx}">
+                        ${String.fromCharCode(65+idx)}. ${opt}
+                    </div>
+                `).join('');
+                
+                optionsDiv.querySelectorAll('.test-option').forEach(opt => {
+                    opt.addEventListener('click', () => {
+                        const selected = parseInt(opt.dataset.optIndex);
+                        const isCorrect = selected === q.correct;
+                        
+                        optionsDiv.querySelectorAll('.test-option').forEach(o => {
+                            o.classList.remove('selected', 'correct', 'wrong');
+                        });
+                        opt.classList.add('selected');
+                        
+                        testAnswers[currentQuestionIndex] = selected;
+                        
+                        if (isCorrect) {
+                            testScore++;
+                        }
+                        
+                        if (nextBtn) nextBtn.style.display = 'block';
+                    });
+                });
+            }
+            if (nextBtn) {
+                nextBtn.style.display = 'block';
+                nextBtn.onclick = () => {
+                    if (testAnswers[currentQuestionIndex] === undefined) {
+                        showToast('Выберите ответ!');
+                        return;
+                    }
+                    currentQuestionIndex++;
+                    renderTest();
+                };
+            }
+            if (restartBtn) restartBtn.style.display = 'none';
+            if (resultDiv) resultDiv.innerHTML = '';
+        } else {
+            // Результаты
+            const percent = Math.round((testScore / patriotQuestions.length) * 100);
+            let verdict = '';
+            if (percent === 100) verdict = '🏆 Истинный патриот! 🏆';
+            else if (percent >= 80) verdict = '🌟 Отличный результат! 🌟';
+            else if (percent >= 60) verdict = '👍 Хорошо, но есть куда расти';
+            else verdict = '📚 Почитайте историю России!';
+            
+            if (questionDiv) questionDiv.textContent = 'Результаты теста';
+            if (optionsDiv) optionsDiv.innerHTML = '';
+            if (resultDiv) resultDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">${percent}%</div>
+                    <div style="font-size: 1.2rem; margin-bottom: 1rem;">${verdict}</div>
+                    <div>Правильных ответов: ${testScore} из ${patriotQuestions.length}</div>
+                </div>
+            `;
+            if (nextBtn) nextBtn.style.display = 'none';
+            if (restartBtn) {
+                restartBtn.style.display = 'block';
+                restartBtn.onclick = () => {
+                    currentQuestionIndex = 0;
+                    testScore = 0;
+                    testAnswers = [];
+                    renderTest();
+                };
+            }
+        }
+    }
+
     // ==================== RuStore ====================
     function renderStore() {
         const allApps = [...PREINSTALLED, ...installedApps.filter(a => !PREINSTALLED.some(p => p.url === a.url))];
@@ -815,7 +1099,10 @@
             item.addEventListener('click', () => {
                 const app = JSON.parse(item.dataset.app);
                 if (PREINSTALLED.some(p => p.url === app.url)) {
-                    showToast(`✅ ${app.name} ${t('installed')}`);
+                    if (app.isMessenger) openWindow('messenger-window');
+                    else if (app.isVideo) openWindow('ruvideo-window');
+                    else if (app.isMusic) openWindow('rusmusic-window');
+                    else showToast(`✅ ${app.name} ${t('installed')}`);
                 } else {
                     installApp(app);
                 }
@@ -852,7 +1139,9 @@
         `;
         
         icon.addEventListener('click', () => {
-            if (app.isVideo) {
+            if (app.isMessenger) {
+                openWindow('messenger-window');
+            } else if (app.isVideo) {
                 openWindow('ruvideo-window');
             } else if (app.isMusic) {
                 openWindow('rusmusic-window');
@@ -1074,6 +1363,8 @@
                         let content = file.content || '';
                         if (content.startsWith('sounds/') || content.startsWith('videos/')) {
                             showToast(`📄 ${file.name}`);
+                        } else if (name.endsWith('.zanashix')) {
+                            fs.openZanashix(content);
                         } else {
                             showToast(`📄 ${file.name}\n${content}`);
                         }
@@ -1184,6 +1475,59 @@
                         cursor: pointer;
                         transition: all 0.3s;
                         box-shadow: 0 10px 20px rgba(0,87,183,0.3);
+                    ">${t('save')}</button>
+                </div>
+            `;
+        } else if (tab === 'theme') {
+            html = `
+                <div class="settings-card">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 2rem;">🎨</span> 
+                        <span>${t('theme')}</span>
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Выберите оформление системы</p>
+                    
+                    <div class="theme-selector">
+                        <label class="theme-option ${currentTheme === 'light' ? 'selected' : ''}">
+                            <input type="radio" name="theme" value="light" ${currentTheme === 'light' ? 'checked' : ''}>
+                            <div class="theme-preview light"></div>
+                            <span class="theme-name">${t('light')}</span>
+                            <span class="theme-check">${currentTheme === 'light' ? '✓' : ''}</span>
+                        </label>
+                        
+                        <label class="theme-option ${currentTheme === 'dark' ? 'selected' : ''}">
+                            <input type="radio" name="theme" value="dark" ${currentTheme === 'dark' ? 'checked' : ''}>
+                            <div class="theme-preview dark"></div>
+                            <span class="theme-name">${t('dark')}</span>
+                            <span class="theme-check">${currentTheme === 'dark' ? '✓' : ''}</span>
+                        </label>
+                        
+                        <label class="theme-option ${currentTheme === 'oled' ? 'selected' : ''}">
+                            <input type="radio" name="theme" value="oled" ${currentTheme === 'oled' ? 'checked' : ''}>
+                            <div class="theme-preview oled"></div>
+                            <span class="theme-name">${t('oled')}</span>
+                            <span class="theme-check">${currentTheme === 'oled' ? '✓' : ''}</span>
+                        </label>
+                        
+                        <label class="theme-option ${currentTheme === 'system' ? 'selected' : ''}">
+                            <input type="radio" name="theme" value="system" ${currentTheme === 'system' ? 'checked' : ''}>
+                            <div class="theme-preview system"></div>
+                            <span class="theme-name">${t('systemTheme')}</span>
+                            <span class="theme-check">${currentTheme === 'system' ? '✓' : ''}</span>
+                        </label>
+                    </div>
+                    
+                    <button id="save-theme" class="settings-save-btn" style="
+                        width: 100%;
+                        padding: 1rem;
+                        background: var(--gradient-flag);
+                        border: none;
+                        border-radius: 16px;
+                        color: white;
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                        cursor: pointer;
+                        margin-top: 1rem;
                     ">${t('save')}</button>
                 </div>
             `;
@@ -1308,7 +1652,7 @@
             html = `
                 <div class="settings-card">
                     <h3>${t('system')}</h3>
-                    <p><strong>${t('version')}:</strong> 1.0.0</p>
+                    <p><strong>${t('version')}:</strong> 1.1.0</p>
                     <p><strong>${t('security')}:</strong> ${t('active')} ✓</p>
                     <button id="check-updates">${t('updates')}</button>
                     <button id="clear-all">${t('clear')}</button>
@@ -1364,6 +1708,25 @@
                 playSound('sounds/uvedomlenie.mp3', 0.1);
             });
         });
+        
+        document.querySelectorAll('input[name="theme"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const newTheme = e.target.value;
+                applyTheme(newTheme);
+                renderSettings('theme');
+            });
+        });
+        
+        const saveTheme = document.getElementById('save-theme');
+        if (saveTheme) {
+            saveTheme.addEventListener('click', () => {
+                const selectedTheme = document.querySelector('input[name="theme"]:checked')?.value;
+                if (selectedTheme) {
+                    applyTheme(selectedTheme);
+                    showToast(t('saved'));
+                }
+            });
+        }
 
         document.querySelectorAll('.wallpaper-opt').forEach(img => {
             img.addEventListener('click', () => {
@@ -1390,6 +1753,7 @@
         if (checkUpdates) {
             checkUpdates.addEventListener('click', () => {
                 showToast(t('noUpdates'));
+                openWindow('whatsnew-window');
             });
         }
         
@@ -1456,7 +1820,9 @@
     // ==================== ИНИЦИАЛИЗАЦИЯ ====================
     window.addEventListener('load', () => {
         setWallpaper(STORAGE.wallpaper);
+        initTheme();
         initDictor();
+        initMessenger();
         playSound('sounds/vhod.mp3', 0.2);
         updateTime();
         setInterval(updateTime, 1000);
@@ -1489,5 +1855,17 @@
                 calendarDropdown.classList.add('hidden');
             }
         });
+        
+        // Инициализация теста (если окно открыто)
+        const testWindow = document.getElementById('patriottest-window');
+        if (testWindow) {
+            const testObserver = new MutationObserver(() => {
+                if (!testWindow.classList.contains('hidden')) {
+                    renderTest();
+                    testObserver.disconnect();
+                }
+            });
+            testObserver.observe(testWindow, { attributes: true });
+        }
     });
 })();

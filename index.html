@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PatriotOS 1.0 — Время великих свершений</title>
+    <title>PatriotOS 1.1 — Время великих свершений</title>
     <link rel="icon" type="image/png" href="images/icon.png">
     <link rel="stylesheet" href="style.css">
 
-    <!-- META -->
     <meta name="title" content="PatriotOS">
     <meta name="description" content="PatriotOS — Время великих свершений. Рабочий стол с окнами, браузер, музыка, видео, RuStore, диктор и полная локализация на русском и белорусском.">
     <meta name="keywords" content="PatriotOS, релиз, timoshamoscow, патриотично, будущее, россия, superyogurt118, российская ОС, операционная система, концепт, RuStore, патриотическая ОС">
     <meta name="author" content="Губкобобоамёбо, Тимофей, superyogurt118, TimoshaMoscow">
 
-    <!-- Для соцсетей (Open Graph) -->
     <meta property="og:title" content="PatriotOS">
     <meta property="og:description" content="PatriotOS — Время великих свершений">
     <meta property="og:type" content="website">
@@ -73,6 +71,8 @@
             </div>
             <div class="menu-apps" id="start-apps"></div>
             <div class="menu-footer">
+                <button class="menu-item" data-window="whatsnew-window">📢 Что нового</button>
+                <button class="menu-item" data-window="patriottest-window">⭐ Тест на патриота</button>
                 <button class="menu-item" data-window="settings-window">⚙️ Настройки</button>
                 <button class="power-btn" id="power-off">⏻</button>
             </div>
@@ -98,7 +98,7 @@
         <!-- Иконки рабочего стола -->
         <div class="desktop-icons" id="desktop-icons"></div>
 
-        <!-- ОКНА ПРИЛОЖЕНИЙ -->
+        <!-- ==================== ОКНА ПРИЛОЖЕНИЙ ==================== -->
 
         <!-- Калькулятор -->
         <div id="calc-window" class="window hidden">
@@ -159,10 +159,39 @@
                         <div class="yandex-logo">Я</div>
                     </div>
                     <div class="quick-links">
-                        <div class="quick-link" data-url="vk.com">📱 ВКонтакте</div>
-                        <div class="quick-link" data-url="yandex.ru">🔍 Яндекс</div>
+                        <div class="quick-link" data-url="ya.ru">🔍 Яндекс</div>
                         <div class="quick-link" data-url="gosuslugi.ru">📋 Госуслуги</div>
                         <div class="quick-link" data-url="rkn.gov.ru">⚖️ РКН</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  (вместо ВК) -->
+        <div id="messenger-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title"><img src="images/messenger.png" alt="messenger" style="width:24px; height:24px;"> Ручат</span>
+                <div class="window-controls">
+                    <button class="window-btn minimize" data-win="messenger-window">−</button>
+                    <button class="window-btn maximize" data-win="messenger-window">□</button>
+                    <button class="window-btn close" data-win="messenger-window">✖</button>
+                </div>
+            </div>
+            <div class="window-content messenger-app" id="messenger-app">
+                <div class="messenger-sidebar" id="messenger-chats">
+                    <div class="chat-item" data-chat="mom">👩 Мама</div>
+                    <div class="chat-item" data-chat="school">🏫 Школьный чат</div>
+                    <div class="chat-item" data-chat="friend">👧 Подруга</div>
+                    <div class="chat-item" data-chat="fsb">🕵️ Агент ФСБ</div>
+                </div>
+                <div class="messenger-main">
+                    <div class="chat-header" id="chat-header">Выберите чат</div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="welcome-message">📱 Добро пожаловать в Ручат<br>Кликните на чат слева</div>
+                    </div>
+                    <div class="chat-input-area" id="chat-input-area" style="display: none;">
+                        <input type="text" id="message-input" placeholder="Введите сообщение...">
+                        <button id="send-message">📤</button>
                     </div>
                 </div>
             </div>
@@ -270,6 +299,50 @@
             </div>
         </div>
 
+        <!-- Что нового -->
+        <div id="whatsnew-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">📢 Что нового</span>
+                <div class="window-controls">
+                    <button class="window-btn minimize" data-win="whatsnew-window">−</button>
+                    <button class="window-btn maximize" data-win="whatsnew-window">□</button>
+                    <button class="window-btn close" data-win="whatsnew-window">✖</button>
+                </div>
+            </div>
+            <div class="window-content whatsnew-content">
+                <div class="version-card">
+                    <h2>PatriotOS 1.1</h2>
+                    <p class="version-date">27 марта 2026</p>
+                    <ul>
+                        <li>📱 <strong>Ручат</strong> — общайтесь в чатах с Мамой, Школьным чатом, Подругой и другими</li>
+                        <li>🎨 <strong>Новые темы оформления</strong>: Светлая, Тёмная, OLED-чёрная, Системная (авто)</li>
+                        <li>⭐ <strong>Тест на патриота</strong> — проверьте свои знания о России</li>
+                        <li>📢 <strong>Окно "Что нового"</strong> — всегда в курсе обновлений</li>
+                        <li>🔌 <strong>Поддержка расширений .Zanashix</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Тест на патриота -->
+        <div id="patriottest-window" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">⭐ Тест на патриота</span>
+                <div class="window-controls">
+                    <button class="window-btn minimize" data-win="patriottest-window">−</button>
+                    <button class="window-btn maximize" data-win="patriottest-window">□</button>
+                    <button class="window-btn close" data-win="patriottest-window">✖</button>
+                </div>
+            </div>
+            <div class="window-content test-content" id="test-content">
+                <div id="test-question">Загрузка...</div>
+                <div id="test-options"></div>
+                <div id="test-result"></div>
+                <button id="test-next" style="display: none;">Следующий вопрос</button>
+                <button id="test-restart" style="display: none;">Пройти заново</button>
+            </div>
+        </div>
+
         <!-- Настройки -->
         <div id="settings-window" class="window hidden">
             <div class="window-header">
@@ -284,6 +357,7 @@
                 <div class="settings-sidebar">
                     <div class="settings-tab active" data-tab="main">Основные</div>
                     <div class="settings-tab" data-tab="lang">Язык и время</div>
+                    <div class="settings-tab" data-tab="theme">Темы</div>
                     <div class="settings-tab" data-tab="wallpaper">Обои</div>
                     <div class="settings-tab" data-tab="sound">Звуки</div>
                     <div class="settings-tab" data-tab="dictor">Диктор</div>
