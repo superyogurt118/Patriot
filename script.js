@@ -245,7 +245,7 @@
         { title: 'MAX - новейший мессенджер нового поколения', channel: 'Гаспром медиа', views: '156K', src: 'videos/max.mp4', poster: 'videos/max_poster.png' }
     ];
 
-    // ==================== ПРИЛОЖЕНИЯ (ВКонтакте заменён на Мессенджер) ====================
+    // ==================== ПРИЛОЖЕНИЯ ====================
     const PREINSTALLED = [
         { name: 'Ручат', url: '#', icon: 'images/messenger.png', isMessenger: true, color: '#0057b7' },
         { name: 'Рувидео', url: '#', icon: 'images/rutube.png', isVideo: true },
@@ -407,7 +407,6 @@
             document.body.setAttribute('data-theme', theme);
         }
         
-        // Обновляем индикатор темы в настройках если они открыты
         const settingsContent = document.getElementById('settings-content');
         if (settingsContent && settingsContent.innerHTML.includes('theme')) {
             renderSettings('theme');
@@ -416,7 +415,6 @@
     
     function initTheme() {
         applyTheme(currentTheme);
-        // Следим за системными изменениями
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (currentTheme === 'system') {
                 const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -543,6 +541,7 @@
             win.classList.remove('hidden');
             win.classList.remove('minimized');
             playSound('sounds/uvedomlenie.mp3');
+            if (window.taskbarManager) window.taskbarManager.updateMinimizedIndicator();
         }
     }
     
@@ -550,24 +549,50 @@
         const win = document.getElementById(id);
         if (win) win.classList.add('hidden');
         playSound('sounds/uvedomlenie.mp3');
+        if (window.taskbarManager) window.taskbarManager.updateMinimizedIndicator();
     }
 
     function minimizeWindow(id) {
         const win = document.getElementById(id);
-        if (win) win.classList.add('minimized');
-        playSound('sounds/uvedomlenie.mp3');
+        if (win) {
+            win.classList.add('minimized');
+            playSound('sounds/uvedomlenie.mp3');
+            if (window.taskbarManager) window.taskbarManager.updateMinimizedIndicator();
+        }
     }
 
+    // ИСПРАВЛЕННАЯ ФУНКЦИЯ МАКСИМИЗАЦИИ
     function maximizeWindow(id) {
         const win = document.getElementById(id);
         if (win) {
-            win.classList.toggle('maximized');
-            playSound('sounds/uvedomlenie.mp3');
             if (win.classList.contains('maximized')) {
-                win.style.left = '';
-                win.style.top = '';
-                win.style.transform = '';
+                if (win.dataset.prevLeft) win.style.left = win.dataset.prevLeft;
+                if (win.dataset.prevTop) win.style.top = win.dataset.prevTop;
+                if (win.dataset.prevWidth) win.style.width = win.dataset.prevWidth;
+                if (win.dataset.prevHeight) win.style.height = win.dataset.prevHeight;
+                win.style.right = 'auto';
+                win.style.bottom = 'auto';
+                win.classList.remove('maximized');
+            } else {
+                win.dataset.prevLeft = win.style.left || '2rem';
+                win.dataset.prevTop = win.style.top || '2rem';
+                win.dataset.prevWidth = win.style.width || 'calc(100% - 4rem)';
+                win.dataset.prevHeight = win.style.height || 'calc(100% - 4rem)';
+                
+                const taskbar = document.querySelector('.taskbar');
+                const taskbarHeight = taskbar ? taskbar.offsetHeight : 60;
+                
+                win.style.left = '0';
+                win.style.top = '0';
+                win.style.width = '100%';
+                win.style.height = `calc(100% - ${taskbarHeight + 16}px)`;
+                win.style.right = '0';
+                win.style.bottom = `${taskbarHeight + 16}px`;
+                win.style.transform = 'none';
+                win.classList.add('maximized');
             }
+            playSound('sounds/uvedomlenie.mp3');
+            if (window.taskbarManager) window.taskbarManager.updateMinimizedIndicator();
         }
     }
 
@@ -597,6 +622,7 @@
             e.stopPropagation();
             const win = btn.closest('.window');
             if (win) win.classList.add('hidden');
+            if (window.taskbarManager) window.taskbarManager.updateMinimizedIndicator();
         });
     });
 
@@ -907,7 +933,6 @@
         const memory = chatMemory[chatId];
         if (!memory) return;
         
-        // Определяем тему сообщения
         const topics = {
             food: ['есть', 'кушать', 'голод', 'обед', 'суп'],
             study: ['школ', 'урок', 'домашк', 'экзамен', 'учитель'],
@@ -927,7 +952,6 @@
         memory.userLastMessage = userMessage;
         memory.messageCount++;
         
-        // Меняем настроение в зависимости от сообщений
         if (userMessage.includes('люблю') || userMessage.includes('спасиб')) {
             memory.mood = 'happy';
         } else if (userMessage.includes('ненавиж') || userMessage.includes('бесит')) {
@@ -937,7 +961,6 @@
             memory.mood = 'tense';
         }
         
-        // Сохраняем в localStorage
         localStorage.setItem(`chat_memory_${chatId}`, JSON.stringify(memory));
     }
     
@@ -955,7 +978,6 @@
         const memory = chatMemory[chatId];
         if (!memory || memory.messageCount === 0) return null;
         
-        // Если это продолжение предыдущей темы
         if (memory.lastTopic) {
             const topicKeywords = {
                 food: ['есть', 'кушать', 'обед', 'покушал', 'суп'],
@@ -969,7 +991,6 @@
                                 (memory.lastTopic === 'politics' && (userMessage.includes('он') || userMessage.includes('они')));
             
             if (isSameTopic) {
-                // Возвращаем ответ, связанный с предыдущей темой
                 if (chatId === 'friend' && memory.lastTopic === 'meme') {
                     return '😂 Опять мемы? Ну ладно, держи: [картинка]';
                 } else if (chatId === 'mom' && memory.lastTopic === 'food') {
@@ -983,7 +1004,6 @@
             }
         }
         
-        // Если пользователь повторяет то же сообщение
         if (memory.userLastMessage === userMessage) {
             if (chatId === 'mom') {
                 return 'Сынок, ты уже это говорил. Всё хорошо?';
@@ -994,7 +1014,6 @@
             }
         }
         
-        // Если много сообщений подряд без ответа
         if (memory.messageCount > 5 && chatId === 'friend') {
             return 'Ого, сколько сообщений! Ты чего? 😄';
         }
@@ -1019,7 +1038,6 @@
                 text: quoteMessage.text,
                 author: quoteMessage.author
             };
-            // Очищаем цитату после использования
             clearQuote();
         }
         
@@ -1033,7 +1051,6 @@
         renderChat(currentChat);
         input.value = '';
         
-        // Имитация ответа через 1-2 секунды
         setTimeout(() => {
             const now = new Date();
             const hour = now.getHours();
@@ -1063,7 +1080,6 @@
             
             let replyList = replies[currentChat]?.default || ['Понял!'];
             
-            // Умные проверки для каждого чата
             if (currentChat === 'mom') {
                 if (userMessage.includes('есть') || userMessage.includes('кушать') || userMessage.includes('голод')) {
                     replyList = replies.mom.food;
@@ -1118,9 +1134,6 @@
                 }
             }
 
-            // ==================== НОВЫЕ КОНТЕКСТНЫЕ ПРОВЕРКИ ====================
-            
-            // Проверка на политические темы для всех чатов
             const politicalKeywords = ['путин', 'кремль', 'бунт', 'протест', 'революц', 'восстани', 'сверг', 'власть', 'режим'];
             const hasPolitical = politicalKeywords.some(kw => userMessage.includes(kw));
             
@@ -1152,7 +1165,6 @@
                 }
             }
             
-            // Проверка на упоминание ФСБ/слежки
             if (userMessage.includes('фсб') || userMessage.includes('слежк') || userMessage.includes('чёрном')) {
                 if (currentChat === 'mom') {
                     replyList = [
@@ -1175,7 +1187,6 @@
                 }
             }
             
-            // Проверка на мемы (для подруги особенно)
             if (userMessage.includes('мем') && currentChat === 'friend') {
                 replyList = [
                     'Ооо, сейчас скину 🔥',
@@ -1185,7 +1196,6 @@
                 ];
             }
             
-            // Проверка на поддержку (для мамы)
             if ((userMessage.includes('люблю') || userMessage.includes('спасиб')) && currentChat === 'mom') {
                 replyList = [
                     'Я тебя тоже очень люблю! ❤️',
@@ -1194,7 +1204,6 @@
                 ];
             }
             
-            // Проверка на угрозы (для всех чатов)
             const threatKeywords = ['убью', 'смерть', 'убить', 'взорв'];
             if (threatKeywords.some(kw => userMessage.includes(kw))) {
                 if (currentChat === 'mom') {
@@ -1206,27 +1215,24 @@
                 }
             }
             
-            // Проверяем контекстную память
             const contextualReply = getContextualResponse(currentChat, userMessage, replyList);
+            let randomReply = replyList[Math.floor(Math.random() * replyList.length)];
             if (contextualReply) {
                 randomReply = contextualReply;
             }
             
-            const randomReply = replyList[Math.floor(Math.random() * replyList.length)];
             chatMessages[currentChat].push({
                 text: randomReply,
                 time: new Date().toLocaleTimeString().slice(0,5),
                 incoming: true
             });
             
-            // Сохраняем в память
             updateMemory(currentChat, userMessage, randomReply);
             
             renderChat(currentChat);
         }, 1500);
     }
     
-    // Инициализация мессенджера
     function initMessenger() {
         document.querySelectorAll('.chat-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -1245,13 +1251,11 @@
             });
         }
         
-        // Приветственное сообщение (без ФСБ)
         const welcomeDiv = document.querySelector('#chat-messages .welcome-message');
         if (welcomeDiv) {
             welcomeDiv.innerHTML = `📱 ${t('welcomeMessenger')}<br>${t('selectChat')}<br><span style="font-size: 0.7rem; opacity: 0.6;">📱 Скрыто и безопасно</span>`;
         }
 
-        // Инициализация стикеров
         initStickers();
     }
 
@@ -1275,18 +1279,15 @@
     };
     
     function fsbNotify(message, severity = 'warning') {
-        // Ограничиваем спам (не чаще 1 раза в 3 секунды)
         const now = Date.now();
         if (now - lastWarningTime < 3000) return;
         lastWarningTime = now;
         
         fsbWarningCount++;
         
-        // Выбираем случайный чат для уведомления
         const chats = ['mom', 'school', 'friend'];
         const randomChat = chats[Math.floor(Math.random() * chats.length)];
         
-        // Выбираем сообщение в зависимости от серьёзности
         let replyText = '';
         if (severity === 'severe' && fsbWarningCount % 3 === 0) {
             const replies = FSBMessages[randomChat].severe;
@@ -1296,24 +1297,20 @@
             replyText = replies[Math.floor(Math.random() * replies.length)];
         }
         
-        // Добавляем сообщение в выбранный чат от имени собеседника
         chatMessages[randomChat].push({
             text: replyText,
             time: new Date().toLocaleTimeString().slice(0,5),
             incoming: true
         });
         
-        // Перерисовываем чат если он открыт
         if (currentChat === randomChat) {
             renderChat(randomChat);
         }
         
-        // Также показываем toast для срочных уведомлений
         if (severity === 'severe') {
             showToast(`🕵️ ФСБ: ${replyText.substring(0, 50)}`);
         }
         
-        // Если нарушений много, отправляем во все чаты
         if (fsbWarningCount >= 5 && fsbWarningCount % 5 === 0) {
             setTimeout(() => {
                 showToast('🚨 ВНИМАНИЕ! Ваши действия фиксируются. ФСБ уведомлена.');
@@ -1329,9 +1326,7 @@
         }
     }
     
-    // Функция проверки активности пользователя
     function monitorUserActivity() {
-        // Отслеживаем попытки закрыть окна с важными приложениями
         const originalCloseWindow = closeWindow;
         window.closeWindow = function(id) {
             const importantWindows = ['settings-window', 'files-window', 'rustore-window'];
@@ -1341,7 +1336,6 @@
             originalCloseWindow(id);
         };
         
-        // Отслеживаем попытки открыть нежелательные сайты в браузере
         const originalShowSite = showSite;
         window.showSite = function(url) {
             const suspiciousKeywords = ['vpn', 'proxy', 'tor', 'hidden', 'anonymous', 'free', 'unblock'];
@@ -1351,15 +1345,12 @@
             originalShowSite(url);
         };
         
-        // Отслеживаем очистку данных
-        const originalPowerOff = powerBtn?.click;
         if (powerBtn) {
             powerBtn.addEventListener('click', (e) => {
                 fsbNotify('⚠️ Попытка сброса данных системы', 'severe');
             });
         }
         
-        // Отслеживаем смену темы (может быть попытка скрыться)
         const originalApplyTheme = applyTheme;
         window.applyTheme = function(theme) {
             if (theme === 'oled') {
@@ -1368,7 +1359,6 @@
             originalApplyTheme(theme);
         };
         
-        // Отслеживаем включение диктора
         const originalUpdateDictor = updateDictorState;
         window.updateDictorState = function(enabled, mode) {
             if (enabled && mode === 'selection') {
@@ -1377,7 +1367,6 @@
             originalUpdateDictor(enabled, mode);
         };
         
-        // Отслеживаем сообщения в чатах с подозрительным содержанием
         const originalSendMessage = sendMessage;
         window.sendMessage = function() {
             const input = document.getElementById('message-input');
@@ -1395,7 +1384,6 @@
             originalSendMessage();
         };
         
-        // Отслеживаем воспроизведение непатриотичной музыки (можно расширить)
         const originalLoadPlaylist = loadPlaylist;
         window.loadPlaylist = function(id) {
             if (id === 'patriotic') {
@@ -1406,10 +1394,8 @@
             originalLoadPlaylist(id);
         };
         
-        // Отслеживаем просмотр видео
         const originalRenderVideos = window.renderVideos;
         window.renderVideos = function() {
-            // Добавляем наблюдателя за кликами на видео
             setTimeout(() => {
                 document.querySelectorAll('.video-card').forEach(card => {
                     card.addEventListener('click', () => {
@@ -1425,14 +1411,12 @@
             originalRenderVideos();
         };
         
-        // Отслеживаем скачивание приложений
         const originalInstallApp = installApp;
         window.installApp = function(app) {
             fsbNotify(`📦 Установка приложения: ${app.name}`, 'warning');
             originalInstallApp(app);
         };
         
-        // Отслеживаем создание файлов
         const originalCreate = fs.create;
         fs.create = function(path, name, type) {
             if (name.toLowerCase().includes('план') || name.toLowerCase().includes('протест')) {
@@ -1442,10 +1426,8 @@
         };
     }
     
-    // Запускаем слежку после загрузки
     setTimeout(() => {
         monitorUserActivity();
-        // Приветственное сообщение от ФСБ
         setTimeout(() => {
             fsbNotify('😊 Добро пожаловать в PatriotOS — безопасную и удобную систему', 'warning');
         }, 3000);
@@ -1515,7 +1497,6 @@
             if (restartBtn) restartBtn.style.display = 'none';
             if (resultDiv) resultDiv.innerHTML = '';
         } else {
-            // Результаты
             const percent = Math.round((testScore / patriotQuestions.length) * 100);
             let verdict = '';
             if (percent === 100) verdict = '🏆 Истинный патриот! 🏆';
@@ -1701,10 +1682,9 @@
     const musicMainView = document.getElementById('music-main-view');
     const musicPlayerView = document.getElementById('music-player-view');
     
-    let playerMode = 'main'; // 'main' or 'player'
+    let playerMode = 'main';
     let currentTrack = null;
     
-    // Генерация иконки по названию трека
     function getTrackIcon(track) {
         const emojiMap = {
             'Гимн': '🇷🇺',
@@ -1738,7 +1718,6 @@
                 `;
             }).join('');
             
-            // Обработчики для треков
             trackList.querySelectorAll('.track-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     if (!e.target.classList.contains('track-play')) {
@@ -1771,7 +1750,6 @@
         currentAudio.volume = playerVolumeSlider ? parseFloat(playerVolumeSlider.value) : 0.5;
         currentAudio.play();
         
-        // Обновляем UI
         if (nowTitle) nowTitle.textContent = track.title;
         if (nowArtist) nowArtist.textContent = track.artist;
         if (playerTitle) playerTitle.textContent = track.title;
@@ -1780,7 +1758,6 @@
         const icon = getTrackIcon(track);
         if (playerArtwork) playerArtwork.textContent = icon;
         
-        // Обновляем кнопки
         const allPlayBtns = document.querySelectorAll('.track-play');
         allPlayBtns.forEach(btn => {
             if (btn.dataset.src === track.src) {
@@ -1792,7 +1769,6 @@
         
         if (playerPlayLarge) playerPlayLarge.textContent = '⏸';
         
-        // Обновляем прогресс
         currentAudio.ontimeupdate = () => {
             if (currentAudio.duration) {
                 const percent = (currentAudio.currentTime / currentAudio.duration) * 100;
@@ -1832,7 +1808,6 @@
         playTrack(currentPlaylist[prevIndex]);
     }
     
-    // Переключение режимов
     if (openPlayerBtn) {
         openPlayerBtn.addEventListener('click', () => {
             musicMainView.style.display = 'none';
@@ -1849,7 +1824,6 @@
         });
     }
     
-    // Управление в плеере
     if (playerPlayLarge) {
         playerPlayLarge.addEventListener('click', () => {
             if (currentAudio) {
@@ -1906,7 +1880,6 @@
         });
     }
     
-    // Инициализация плейлистов
     document.querySelectorAll('.playlist-card').forEach(card => {
         card.addEventListener('click', () => {
             document.querySelectorAll('.playlist-card').forEach(c => c.classList.remove('active'));
@@ -1917,7 +1890,6 @@
     
     loadPlaylist('main');
     
-    // Старый плеер для совместимости (если нужен)
     const playerPlay = document.getElementById('player-play');
     if (playerPlay) {
         playerPlay.addEventListener('click', () => {
@@ -1933,13 +1905,10 @@
         });
     }
 
-    // ==================== ВИДЕО (начальная инициализация) ====================
+    // ==================== ВИДЕО ====================
     const videoGrid = document.getElementById('video-grid');
     const videoOverlay = document.getElementById('video-overlay');
     const videoPlayer = document.getElementById('video-player');
-
-    // Не вызываем renderVideos здесь — он будет вызван в конце после загрузки данных
-    // Просто оставляем переменные
 
     const videoCloseBtn = document.getElementById('video-close-btn');
     if (videoCloseBtn) {
@@ -2296,7 +2265,6 @@
         
         if (settingsContent) settingsContent.innerHTML = html;
 
-        // Обработчики диктора
         const testBtn = document.getElementById('test-dictor');
         const enableBtn = document.getElementById('enable-dictor');
         const disableBtn = document.getElementById('disable-dictor');
@@ -2451,61 +2419,7 @@
         });
     }
 
-    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
-    window.addEventListener('load', () => {
-        setWallpaper(STORAGE.wallpaper);
-        initTheme();
-        initDictor();
-        initMessenger();
-        playSound('sounds/vhod.mp3', 0.2);
-        updateTime();
-        setInterval(updateTime, 1000);
-        
-        const startBtn = document.getElementById('start-btn');
-        const startMenu = document.getElementById('start-menu');
-        const datetimePanel = document.getElementById('datetime-panel');
-        const calendarDropdown = document.getElementById('calendar-dropdown');
-        
-        if (startBtn && startMenu) {
-            startBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                startMenu.classList.toggle('hidden');
-            });
-        }
-        
-        if (datetimePanel && calendarDropdown) {
-            datetimePanel.addEventListener('click', (e) => {
-                e.stopPropagation();
-                calendarDropdown.classList.toggle('hidden');
-                renderDropdownCalendar();
-            });
-        }
-        
-        document.addEventListener('click', (e) => {
-            if (startMenu && startBtn && !startMenu.contains(e.target) && !startBtn.contains(e.target)) {
-                startMenu.classList.add('hidden');
-            }
-            if (calendarDropdown && datetimePanel && !calendarDropdown.contains(e.target) && !datetimePanel.contains(e.target)) {
-                calendarDropdown.classList.add('hidden');
-            }
-        });
-        
-        // Инициализация теста (если окно открыто)
-        const testWindow = document.getElementById('patriottest-window');
-        if (testWindow) {
-            const testObserver = new MutationObserver(() => {
-                if (!testWindow.classList.contains('hidden')) {
-                    renderTest();
-                    testObserver.disconnect();
-                }
-            });
-            testObserver.observe(testWindow, { attributes: true });
-        }
-    });
-
     // ==================== ВИДЕО С КОММЕНТАРИЯМИ И ЛАЙКАМИ ====================
-    
-    // Хранилище для данных видео
     let videoData = {};
     
     function loadVideoData() {
@@ -2513,9 +2427,7 @@
         if (saved) {
             videoData = JSON.parse(saved);
         } else {
-            // Инициализация данных для каждого видео
             VIDEOS.forEach((video, index) => {
-                // Преобразуем строку просмотров в число (убираем M и K)
                 let viewsValue = 0;
                 if (typeof video.views === 'string') {
                     if (video.views.includes('M')) {
@@ -2538,7 +2450,6 @@
             });
             saveVideoData();
         }
-        // Обновляем отображение лайков в карточках
         updateVideoStatsDisplay();
     }
     
@@ -2556,7 +2467,6 @@
         });
     }
     
-    // Кастомный плеер
     let currentVideoElement = null;
     let isVideoPlaying = false;
     
@@ -2659,7 +2569,6 @@
         });
     }
     
-    // Обновление интерфейса комментариев и лайков
     let currentVideoSrc = null;
     
     function updateVideoUI(src) {
@@ -2673,7 +2582,6 @@
         
         if (likesSpan) likesSpan.textContent = data.likes;
         
-        // Находим исходные просмотры из VIDEOS
         const videoInfo = VIDEOS.find(v => v.src === src);
         const originalViews = videoInfo ? videoInfo.views : '0';
         
@@ -2686,12 +2594,10 @@
                 likeBtn.classList.remove('liked');
             }
         }
-    // После обновления лайков и просмотров добавить:
-    const commentsCountSpan = document.querySelector('.video-details .comments-count');
-    if (commentsCountSpan) commentsCountSpan.textContent = data.comments.length;
-
         
-        // Рендер комментариев (остаётся без изменений)
+        const commentsCountSpan = document.querySelector('.video-details .comments-count');
+        if (commentsCountSpan) commentsCountSpan.textContent = data.comments.length;
+        
         if (commentsList) {
             if (data.comments.length === 0) {
                 commentsList.innerHTML = '<div class="empty-comments">💬 Пока нет комментариев. Будьте первым!</div>';
@@ -2780,7 +2686,6 @@
         updateVideoUI(src);
         updateVideoStatsDisplay();
         
-        // Анимация лайка
         const likeBtn = document.getElementById('video-like-btn');
         if (likeBtn) {
             likeBtn.style.animation = 'none';
@@ -2797,7 +2702,6 @@
         }
     }
     
-
     window.renderVideos = function() {
         if (!videoGrid) return;
         videoGrid.innerHTML = VIDEOS.map((v, index) => {
@@ -2856,7 +2760,6 @@
         });
     };
     
-    // Назначаем обработчики для комментариев и лайков после загрузки
     function initVideoInteractions() {
         const addCommentBtn = document.getElementById('add-comment-btn');
         const commentInput = document.getElementById('comment-input');
@@ -2888,7 +2791,6 @@
             });
         }
         
-        // Закрытие видео
         const videoCloseBtn = document.getElementById('video-close-btn');
         if (videoCloseBtn) {
             videoCloseBtn.addEventListener('click', () => {
@@ -2904,15 +2806,10 @@
         }
     }
     
-    // Загружаем данные и инициализируем
     loadVideoData();
-    
-    // Переопределяем renderVideos
-    renderVideos = window.renderVideos;
     renderVideos();
     initVideoInteractions();
     
-    // Добавляем стили для мини-статистики на карточках
     const styleForVideoStats = document.createElement('style');
     styleForVideoStats.textContent = `
         .video-stats-mini {
@@ -2935,7 +2832,6 @@
         const stickerPreview = document.getElementById('sticker-preview-btn');
         const stickerDropdown = document.getElementById('sticker-dropdown');
         
-        // Открытие/закрытие выпадающего окна
         if (stickerPreview) {
             stickerPreview.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -2943,7 +2839,6 @@
             });
         }
         
-        // Закрытие при клике вне окна
         document.addEventListener('click', (e) => {
             if (stickerDropdown && stickerPreview) {
                 if (!stickerDropdown.contains(e.target) && !stickerPreview.contains(e.target)) {
@@ -2952,7 +2847,6 @@
             }
         });
         
-        // Выбор стикера
         const stickerOptions = document.querySelectorAll('.sticker-option');
         stickerOptions.forEach(option => {
             option.addEventListener('click', () => {
@@ -2974,7 +2868,6 @@
                 const now = new Date();
                 const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
                 
-                // Добавляем стикер как сообщение
                 chatMessages[currentChat].push({
                     text: stickerHtml,
                     isSticker: true,
@@ -2985,7 +2878,6 @@
                 renderChat(currentChat);
                 stickerDropdown.classList.add('hidden');
                 
-                // Имитация ответа через 1-2 секунды
                 setTimeout(() => {
                     let replyText = '';
                     
@@ -3027,10 +2919,8 @@
         const input = document.getElementById('message-input');
         if (input) {
             input.focus();
-            // Показываем индикатор цитирования
             showToast(`💬 Цитируется: ${author.substring(0, 30)}...`);
             
-            // Добавляем визуальный индикатор в поле ввода
             const existingIndicator = document.querySelector('.quote-indicator');
             if (existingIndicator) existingIndicator.remove();
             
@@ -3074,19 +2964,15 @@
         
         if (!msg.reactions) msg.reactions = {};
         
-        // Увеличиваем счётчик
         msg.reactions[reaction] = (msg.reactions[reaction] || 0) + 1;
         
-        // Сохраняем в localStorage (опционально)
         localStorage.setItem(`chat_${chatId}_reactions`, JSON.stringify(
             messages.map(m => m.reactions || {})
         ));
         
-        // Перерисовываем чат
         renderChat(chatId);
     }
     
-    // Обновлённая функция renderChat
     window.renderChat = function(chatId) {
         currentChat = chatId;
         const messages = chatMessages[chatId] || [];
@@ -3147,20 +3033,16 @@
                     }
                 }).join('');
                 
-                // Обработчики реакций
                 document.querySelectorAll('.reaction-bubble').forEach(el => {
                     el.addEventListener('click', (e) => {
                         e.stopPropagation();
                         const reaction = el.dataset.reaction;
                         const msgIdx = parseInt(el.dataset.msgIdx);
-                        // Добавляем реакцию (можно сделать выбор)
                         addReaction(chatId, msgIdx, reaction);
                     });
                 });
                 
-                // Обработчики кнопки реакций (усиленная версия)
                 document.querySelectorAll('.react-btn').forEach(btn => {
-                    // Удаляем старые обработчики, чтобы не было дублирования
                     const newBtn = btn.cloneNode(true);
                     btn.parentNode.replaceChild(newBtn, btn);
                     
@@ -3168,14 +3050,11 @@
                         e.stopPropagation();
                         const msgIdx = parseInt(newBtn.dataset.msgIdx);
                         const rect = newBtn.getBoundingClientRect();
-                        console.log('Reaction button clicked for message', msgIdx); // Отладка
                         showReactionPicker(rect, chatId, msgIdx);
                     });
                 });
                 
-                // Обработчики цитирования (усиленная версия)
                 document.querySelectorAll('.quote-btn').forEach(btn => {
-                    // Удаляем старые обработчики
                     const newBtn = btn.cloneNode(true);
                     btn.parentNode.replaceChild(newBtn, btn);
                     
@@ -3192,7 +3071,6 @@
                     });
                 });
                 
-                // Обработчики ответа (reply) - то же самое что цитата
                 document.querySelectorAll('.reply-btn').forEach(btn => {
                     const newBtn = btn.cloneNode(true);
                     btn.parentNode.replaceChild(newBtn, btn);
@@ -3220,7 +3098,6 @@
     };
     
     function showReactionPicker(rect, chatId, msgIdx) {
-        // Удаляем существующий пикер
         const existing = document.querySelector('.reaction-picker');
         if (existing) existing.remove();
         
@@ -3256,7 +3133,6 @@
         
         document.body.appendChild(picker);
         
-        // Закрытие при клике вне
         const closePicker = (e) => {
             if (!picker.contains(e.target)) {
                 picker.remove();
@@ -3268,10 +3144,8 @@
         }, 100);
     }
     
-    // Заменить renderChat на новую версию
     renderChat = window.renderChat;
 
-    // Загрузка сохранённых реакций
     function loadReactions() {
         const chats = ['mom', 'school', 'friend'];
         chats.forEach(chat => {
@@ -3287,22 +3161,525 @@
         });
     }
     
-    // Вызов загрузки реакций
     loadReactions();
-
-    // Загрузка памяти чатов
     loadMemory();
     
-    // Выводим приветствие с учётом памяти (если диалог уже был)
     setTimeout(() => {
         const totalMessages = Object.values(chatMemory).reduce((sum, m) => sum + m.messageCount, 0);
         if (totalMessages === 0) {
-            // Первый запуск — приветствие
             fsbNotify('😊 Добро пожаловать в PatriotOS — безопасную и удобную систему', 'warning');
         } else {
-            // Возвращение — напоминаем
             console.log('Загружена память чатов');
         }
     }, 2000);
+
+    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+    window.addEventListener('load', () => {
+        setWallpaper(STORAGE.wallpaper);
+        initTheme();
+        initDictor();
+        initMessenger();
+        playSound('sounds/vhod.mp3', 0.2);
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        const startBtn = document.getElementById('start-btn');
+        const startMenu = document.getElementById('start-menu');
+        const datetimePanel = document.getElementById('datetime-panel');
+        const calendarDropdown = document.getElementById('calendar-dropdown');
+        
+        if (startBtn && startMenu) {
+            startBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startMenu.classList.toggle('hidden');
+            });
+        }
+        
+        if (datetimePanel && calendarDropdown) {
+            datetimePanel.addEventListener('click', (e) => {
+                e.stopPropagation();
+                calendarDropdown.classList.toggle('hidden');
+                renderDropdownCalendar();
+            });
+        }
+        
+        document.addEventListener('click', (e) => {
+            if (startMenu && startBtn && !startMenu.contains(e.target) && !startBtn.contains(e.target)) {
+                startMenu.classList.add('hidden');
+            }
+            if (calendarDropdown && datetimePanel && !calendarDropdown.contains(e.target) && !datetimePanel.contains(e.target)) {
+                calendarDropdown.classList.add('hidden');
+            }
+        });
+        
+        const testWindow = document.getElementById('patriottest-window');
+        if (testWindow) {
+            const testObserver = new MutationObserver(() => {
+                if (!testWindow.classList.contains('hidden')) {
+                    renderTest();
+                    testObserver.disconnect();
+                }
+            });
+            testObserver.observe(testWindow, { attributes: true });
+        }
+    });
+
+    // ==================== ИНДИКАЦИЯ СВЁРНУТЫХ ПРИЛОЖЕНИЙ ====================
+    class TaskbarManager {
+        constructor() {
+            this.taskbarItems = new Map();
+            this.init();
+        }
+        
+        init() {
+            const dock = document.querySelector('.dock');
+            if (dock && !document.querySelector('.minimized-apps')) {
+                const minimizedContainer = document.createElement('div');
+                minimizedContainer.className = 'minimized-apps';
+                dock.appendChild(minimizedContainer);
+            }
+            
+            this.updateMinimizedIndicator();
+            
+            const observer = new MutationObserver(() => this.updateMinimizedIndicator());
+            document.querySelectorAll('.window').forEach(win => {
+                observer.observe(win, { attributes: true, attributeFilter: ['class'] });
+            });
+        }
+        
+        updateMinimizedIndicator() {
+            const container = document.querySelector('.minimized-apps');
+            if (!container) return;
+            
+            const windows = document.querySelectorAll('.window');
+            const minimizedWindows = [];
+            
+            windows.forEach(win => {
+                if (win.classList.contains('minimized') && !win.classList.contains('hidden')) {
+                    const title = win.querySelector('.window-title')?.textContent || 'Окно';
+                    const icon = win.querySelector('.window-title img')?.src || '';
+                    minimizedWindows.push({ id: win.id, title, icon });
+                }
+            });
+            
+            if (minimizedWindows.length === 0) {
+                container.innerHTML = '';
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'flex';
+            container.innerHTML = minimizedWindows.map(app => `
+                <div class="minimized-app-item" data-window="${app.id}">
+                    <img src="${app.icon}" style="width: 20px; height: 20px;" onerror="this.style.display='none'; this.parentElement.textContent='📦'">
+                    <span class="minimized-badge"></span>
+                </div>
+            `).join('');
+            
+            container.querySelectorAll('.minimized-app-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const winId = item.dataset.window;
+                    const win = document.getElementById(winId);
+                    if (win) {
+                        win.classList.remove('minimized');
+                        showToast(`🪟 ${item.querySelector('img')?.alt || 'Окно'} восстановлено`);
+                        this.updateMinimizedIndicator();
+                    }
+                });
+            });
+        }
+    }
+    
+    window.taskbarManager = new TaskbarManager();
+    
+    // ==================== КАСТОМНОЕ КОНТЕКСТНОЕ МЕНЮ ====================
+    class ContextMenu {
+        constructor() {
+            this.menu = null;
+            this.init();
+        }
+
+        init() {
+            document.addEventListener('contextmenu', (e) => {
+                if (e.target.tagName === 'IFRAME') return;
+                e.preventDefault();
+                this.show(e);
+            });
+
+            let touchTimer = null;
+            document.addEventListener('touchstart', (e) => {
+                touchTimer = setTimeout(() => {
+                    if (e.touches.length === 1) {
+                        e.preventDefault();
+                        this.show(e.touches[0]);
+                    }
+                }, 500);
+            });
+            document.addEventListener('touchend', () => {
+                clearTimeout(touchTimer);
+            });
+            document.addEventListener('touchmove', () => {
+                clearTimeout(touchTimer);
+            });
+
+            document.addEventListener('click', () => this.hide());
+        }
+
+        getMenuItems(target) {
+            const items = [];
+            const tag = target.tagName;
+            const isDesktopIcon = target.closest('.desktop-icon');
+            const isWindow = target.closest('.window');
+            const isMessage = target.closest('.message');
+            const isFile = target.closest('.file-item');
+            const isVideo = target.closest('.video-card');
+            const isTrack = target.closest('.track-item');
+            const isChat = target.closest('.chat-item');
+            
+            items.push({
+                icon: '🔄',
+                text: 'Обновить',
+                shortcut: 'F5',
+                action: () => location.reload()
+            });
+            
+            items.push({
+                icon: '🏠',
+                text: 'На рабочий стол',
+                shortcut: 'Win+D',
+                action: () => {
+                    document.querySelectorAll('.window').forEach(win => {
+                        win.classList.add('minimized');
+                    });
+                    showToast('Все окна свернуты');
+                }
+            });
+            
+            items.push({
+                icon: '🗑️',
+                text: 'Очистить уведомления',
+                action: () => {
+                    document.querySelectorAll('.toast').forEach(t => t.remove());
+                    showToast('Уведомления очищены');
+                }
+            });
+            
+            items.push({ divider: true });
+            
+            if (isDesktopIcon) {
+                const icon = isDesktopIcon;
+                const appName = icon.querySelector('.desktop-icon-name')?.textContent || '';
+                items.push({
+                    icon: '🚀',
+                    text: `Открыть "${appName}"`,
+                    action: () => icon.click()
+                });
+                items.push({
+                    icon: '📌',
+                    text: 'Закрепить в панели',
+                    action: () => showToast(`🔧 ${appName} закреплен в панели (в разработке)`)
+                });
+                items.push({ divider: true });
+                items.push({
+                    icon: '🗑️',
+                    text: 'Удалить с рабочего стола',
+                    action: () => {
+                        if (confirm(`Удалить "${appName}" с рабочего стола?`)) {
+                            icon.remove();
+                            showToast(`❌ ${appName} удален`);
+                        }
+                    }
+                });
+            }
+            
+            if (isWindow) {
+                const win = isWindow.closest('.window');
+                const winTitle = win.querySelector('.window-title')?.textContent || 'Окно';
+                items.push({
+                    icon: '⤢',
+                    text: 'На весь экран',
+                    shortcut: 'F11',
+                    action: () => maximizeWindow(win.id)
+                });
+                items.push({
+                    icon: '🗕',
+                    text: 'Свернуть',
+                    shortcut: 'Win+↓',
+                    action: () => minimizeWindow(win.id)
+                });
+                items.push({
+                    icon: '✖',
+                    text: 'Закрыть',
+                    shortcut: 'Alt+F4',
+                    action: () => closeWindow(win.id)
+                });
+                items.push({ divider: true });
+                items.push({
+                    icon: '📌',
+                    text: 'Всегда сверху',
+                    action: () => {
+                        win.style.zIndex = '9999';
+                        showToast('Окно закреплено поверх всех');
+                    }
+                });
+            }
+            
+            if (isMessage) {
+                const msg = isMessage;
+                const msgText = msg.querySelector('div:not(.message-info):not(.message-quote)')?.textContent || '';
+                items.push({
+                    icon: '💬',
+                    text: 'Ответить',
+                    action: () => {
+                        const quoteBtn = msg.querySelector('.reply-btn');
+                        if (quoteBtn) quoteBtn.click();
+                    }
+                });
+                items.push({
+                    icon: '📋',
+                    text: 'Копировать текст',
+                    action: () => {
+                        navigator.clipboard.writeText(msgText);
+                        showToast('✅ Текст скопирован');
+                    }
+                });
+                items.push({
+                    icon: '😊',
+                    text: 'Реакции',
+                    submenu: [
+                        { icon: '👍', text: 'Лайк', action: () => { const reactBtn = msg.querySelector('.react-btn'); if(reactBtn) reactBtn.click(); } },
+                        { icon: '❤️', text: 'Сердце', action: () => { const reactBtn = msg.querySelector('.react-btn'); if(reactBtn) reactBtn.click(); } },
+                        { icon: '😂', text: 'Смех', action: () => { const reactBtn = msg.querySelector('.react-btn'); if(reactBtn) reactBtn.click(); } },
+                        { icon: '😮', text: 'Удивление', action: () => { const reactBtn = msg.querySelector('.react-btn'); if(reactBtn) reactBtn.click(); } }
+                    ]
+                });
+            }
+            
+            if (isFile) {
+                const fileName = isFile.querySelector('.file-name')?.textContent || '';
+                items.push({
+                    icon: '📄',
+                    text: `Открыть "${fileName}"`,
+                    action: () => isFile.click()
+                });
+                items.push({
+                    icon: '✏️',
+                    text: 'Переименовать',
+                    action: () => {
+                        const newName = prompt('Новое имя:', fileName);
+                        if (newName) showToast(`📁 Переименовано в ${newName} (демо)`);
+                    }
+                });
+                items.push({
+                    icon: '🗑️',
+                    text: 'Удалить',
+                    action: () => {
+                        if (confirm(`Удалить "${fileName}"?`)) {
+                            isFile.remove();
+                            showToast(`🗑️ ${fileName} удален`);
+                        }
+                    }
+                });
+            }
+            
+            if (isTrack) {
+                const trackTitle = isTrack.querySelector('.track-title')?.textContent || '';
+                items.push({
+                    icon: '▶️',
+                    text: `Воспроизвести "${trackTitle}"`,
+                    action: () => {
+                        const playBtn = isTrack.querySelector('.track-play');
+                        if (playBtn) playBtn.click();
+                    }
+                });
+                items.push({
+                    icon: '📋',
+                    text: 'Копировать название',
+                    action: () => {
+                        navigator.clipboard.writeText(trackTitle);
+                        showToast('🎵 Название скопировано');
+                    }
+                });
+            }
+            
+            if (isVideo) {
+                const videoTitle = isVideo.querySelector('.video-title')?.textContent || '';
+                items.push({
+                    icon: '▶️',
+                    text: `Смотреть "${videoTitle}"`,
+                    action: () => isVideo.click()
+                });
+                items.push({
+                    icon: '🔗',
+                    text: 'Скопировать ссылку',
+                    action: () => {
+                        navigator.clipboard.writeText(videoTitle);
+                        showToast('🔗 Ссылка скопирована');
+                    }
+                });
+            }
+            
+            if (isChat) {
+                const chatName = isChat.textContent || '';
+                items.push({
+                    icon: '💬',
+                    text: `Открыть чат "${chatName.trim()}"`,
+                    action: () => isChat.click()
+                });
+                items.push({
+                    icon: '🔕',
+                    text: 'Отключить уведомления',
+                    action: () => showToast(`🔕 Уведомления в чате "${chatName.trim()}" отключены`)
+                });
+            }
+            
+            items.push({ divider: true });
+            
+            items.push({
+                icon: '🎨',
+                text: 'Сменить тему',
+                submenu: [
+                    { icon: '☀️', text: 'Светлая', action: () => applyTheme('light') },
+                    { icon: '🌙', text: 'Тёмная', action: () => applyTheme('dark') },
+                    { icon: '🖤', text: 'OLED-чёрная', action: () => applyTheme('oled') },
+                    { icon: '💻', text: 'Системная', action: () => applyTheme('system') }
+                ]
+            });
+            
+            items.push({
+                icon: '🖼️',
+                text: 'Сменить обои',
+                submenu: [
+                    { icon: '🇷🇺', text: 'Флаг России', action: () => setWallpaper('flag') },
+                    { icon: '🦅', text: 'Герб', action: () => setWallpaper('gerb') },
+                    { icon: '🏛️', text: 'Кремль', action: () => setWallpaper('kreml') },
+                    { icon: '🌾', text: 'Просторы', action: () => setWallpaper('prostory') }
+                ]
+            });
+            
+            items.push({
+                icon: '🗣️',
+                text: 'Диктор',
+                submenu: [
+                    { icon: '🖱️', text: 'При наведении', action: () => updateDictorState(true, 'hover') },
+                    { icon: '👆', text: 'При клике', action: () => updateDictorState(true, 'click') },
+                    { icon: '📝', text: 'При выделении', action: () => updateDictorState(true, 'selection') },
+                    { divider: true },
+                    { icon: '🔇', text: 'Отключить', action: () => updateDictorState(false, dictorMode) }
+                ]
+            });
+            
+            items.push({ divider: true });
+            
+            items.push({
+                icon: 'ℹ️',
+                text: 'О системе',
+                action: () => {
+                    openWindow('whatsnew-window');
+                    showToast('🪆 PatriotOS 1.1 — Время великих свершений');
+                }
+            });
+            
+            return items;
+        }
+        
+        renderMenu(items, x, y) {
+            this.hide();
+            
+            const menu = document.createElement('div');
+            menu.className = 'custom-context-menu';
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+            
+            let menuWidth = 250;
+            let menuHeight = items.length * 50;
+            if (x + menuWidth > window.innerWidth) {
+                menu.style.left = (window.innerWidth - menuWidth) + 'px';
+            }
+            if (y + menuHeight > window.innerHeight) {
+                menu.style.top = (window.innerHeight - menuHeight) + 'px';
+            }
+            
+            const renderItem = (item) => {
+                if (item.divider) {
+                    const div = document.createElement('div');
+                    div.className = 'menu-divider';
+                    return div;
+                }
+                
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item-custom';
+                if (item.submenu) menuItem.classList.add('has-submenu');
+                
+                menuItem.innerHTML = `
+                    <span class="menu-icon">${item.icon}</span>
+                    <span class="menu-text">${item.text}</span>
+                    ${item.shortcut ? `<span class="menu-shortcut">${item.shortcut}</span>` : ''}
+                    ${item.submenu ? '<span class="submenu-arrow">▶</span>' : ''}
+                `;
+                
+                if (item.action) {
+                    menuItem.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        item.action();
+                        this.hide();
+                    });
+                }
+                
+                if (item.submenu) {
+                    const submenu = document.createElement('div');
+                    submenu.className = 'menu-submenu';
+                    item.submenu.forEach(subItem => {
+                        submenu.appendChild(renderItem(subItem));
+                    });
+                    menuItem.appendChild(submenu);
+                }
+                
+                return menuItem;
+            };
+            
+            items.forEach(item => {
+                menu.appendChild(renderItem(item));
+            });
+            
+            document.body.appendChild(menu);
+            this.menu = menu;
+            
+            setTimeout(() => {
+                const closeHandler = (e) => {
+                    if (!menu.contains(e.target)) {
+                        this.hide();
+                        document.removeEventListener('click', closeHandler);
+                    }
+                };
+                document.addEventListener('click', closeHandler);
+            }, 10);
+        }
+        
+        show(event) {
+            const target = event.target;
+            const items = this.getMenuItems(target);
+            if (items.length > 0) {
+                this.renderMenu(items, event.clientX, event.clientY);
+                
+                if (target.style) {
+                    target.style.transition = 'all 0.1s';
+                    target.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        if (target.style) target.style.transform = '';
+                    }, 100);
+                }
+            }
+        }
+        
+        hide() {
+            if (this.menu) {
+                this.menu.remove();
+                this.menu = null;
+            }
+        }
+    }
+    
+    const contextMenu = new ContextMenu();
 
 })();
