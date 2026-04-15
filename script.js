@@ -291,7 +291,7 @@
                         type: 'folder',
                         children: {
                             'Приказ.txt': { name: 'Приказ.txt', type: 'file', content: 'Служить России!' },
-                            'Обновление.zanashix': { name: 'Обновление.zanashix', type: 'file', content: 'PatriotOS 1.1 - Новый мессенджер, темы, тест на патриота!' }
+                            'Обновление.zanashix': { name: 'Обновление.zanashix', type: 'file', content: 'PatriotOS - Новый мессенджер, темы, тест на патриота!' }
                         }
                     },
                     'Изображения': {
@@ -2255,7 +2255,7 @@
             html = `
                 <div class="settings-card">
                     <h3>${t('system')}</h3>
-                    <p><strong>${t('version')}:</strong> 1.1.0</p>
+                    <p><strong>${t('version')}:</strong> 1.2.0</p>
                     <p><strong>${t('security')}:</strong> ${t('active')} ✓</p>
                     <button id="check-updates">${t('updates')}</button>
                     <button id="clear-all">${t('clear')}</button>
@@ -3576,7 +3576,7 @@
                 text: 'О системе',
                 action: () => {
                     openWindow('whatsnew-window');
-                    showToast('🪆 PatriotOS 1.1 — Время великих свершений');
+                    showToast('🪆 PatriotOS 1.2');
                 }
             });
             
